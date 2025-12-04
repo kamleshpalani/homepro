@@ -1,7 +1,7 @@
 // src/pages/AdminLogin.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MainLayout from "../layouts/MainLayout.jsx";
+import AdminLoginView from "./AdminLoginView.jsx";
 
 const TOKEN_KEY = "HOMECAREPRO_ADMIN_TOKEN"; // same as in Bookings.jsx
 
@@ -63,50 +63,14 @@ export default function AdminLogin() {
   };
 
   return (
-    <MainLayout>
-      <div className="max-w-md mx-auto my-20 p-8 bg-white shadow-md rounded-md">
-        <h2 className="text-2xl font-bold text-center mb-6">Admin Login</h2>
-
-        {error && (
-          <p className="text-red-600 text-center mb-4 font-medium">{error}</p>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="font-medium">Email</label>
-            <input
-              type="email"
-              required
-              className="w-full p-2 border rounded-md mt-1"
-              placeholder="admin@homecarepro.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="username"
-            />
-          </div>
-
-          <div>
-            <label className="font-medium">Password</label>
-            <input
-              type="password"
-              required
-              className="w-full p-2 border rounded-md mt-1"
-              placeholder="Enter admin password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 disabled:opacity-60"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-      </div>
-    </MainLayout>
+    <AdminLoginView
+      email={email}
+      password={password}
+      error={error}
+      loading={loading}
+      onChangeEmail={(e) => setEmail(e.target.value)}
+      onChangePassword={(e) => setPassword(e.target.value)}
+      onSubmit={handleSubmit}
+    />
   );
 }
