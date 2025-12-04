@@ -3,19 +3,12 @@ import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import "./MainLayout.css";
 
-function MainLayoutView({ children, isAdminLoggedIn, onLogout }) {
+function MainLayoutView({ children }) {
   return (
     <div className="main-layout-root">
-      {/* Top Bar with Navbar and Logout */}
+      {/* Top Bar with Navbar */}
       <div className="main-layout-topbar">
         <Navbar />
-
-        {/* 🔥 Logout button ONLY for admins */}
-        {isAdminLoggedIn && (
-          <button onClick={onLogout} className="main-layout-logout">
-            Logout
-          </button>
-        )}
       </div>
 
       {/* Main Page Content */}

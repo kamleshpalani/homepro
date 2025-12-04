@@ -7,6 +7,21 @@ const SERVICES = [
   "Kitchen & Chimney Deep Clean",
   "Bathroom Deep Cleaning",
   "Office / Shop Cleaning",
+  "Sofa / Upholstery Cleaning",
+  "Mattress Deep Cleaning",
+  "Carpet / Rug Cleaning",
+  "Fridge & Microwave Cleaning",
+  "Move-in / Move-out Deep Cleaning",
+  "Post-renovation Cleaning",
+  "Regular Weekly / Bi-weekly Cleaning",
+  "Only Bathroom Cleaning",
+  "Only Kitchen Cleaning",
+  "Glass & Window Cleaning",
+  "Ceiling Fan & Cobweb Cleaning",
+  "Floor Polishing / Scrubbing",
+  "Car Interior Cleaning",
+  "Garden / Outdoor Cleaning",
+  "Others / Not listed",
 ];
 
 const AREAS = [
@@ -18,6 +33,48 @@ const AREAS = [
   "Saravanampatti",
   "Vadavalli",
   "Town Hall",
+  "Ramanathapuram",
+  "Race Course",
+  "Ukkadam",
+  "Koundampalayam",
+  "Thudiyalur",
+  "Ganapathy",
+  "Sitra",
+  "Kalapatti",
+  "Ondipudur",
+  "Podanur",
+  "Madukkarai",
+  "Kovaipudur",
+  "Perur",
+  "Kuniyamuthur",
+  "Nava India",
+  "Hope College",
+  "Lakshmi Mills",
+  "Rathinapuri",
+  "Telungupalayam",
+  "Periyanaickenpalayam",
+  "Neelambur",
+  "Eachanari",
+  "Kurichi",
+  "Sulur",
+  "Chinniampalayam",
+  "Cheran Ma Nagar",
+  "Keeranatham",
+  "Pappampatti",
+  "Thondamuthur",
+  "Veerakeralam",
+  "Perks School Road",
+  "Avinashi Road",
+  "Trichy Road",
+  "Mettupalayam Road",
+  "Pollachi Road",
+  "Sundarapuram",
+  "P N Palayam",
+  "Sivananda Colony",
+  "Nanjundapuram",
+  "Velandipalayam",
+  "Ondipudur Pirivu",
+  "Others / Not listed",
 ];
 
 export default function BookView({ form, message, onChange, onSubmit }) {
@@ -30,21 +87,39 @@ export default function BookView({ form, message, onChange, onSubmit }) {
       </p>
 
       <form onSubmit={onSubmit} className="book-form">
-        {/* Name */}
+        {/* First name */}
         <div className="book-form-field-half">
-          <label className="book-label">Full Name *</label>
+          <label className="book-label">
+            First Name <span style={{ color: "red" }}>*</span>
+          </label>
           <input
             type="text"
-            name="name"
-            value={form.name}
+            name="firstName"
+            value={form.firstName}
+            onChange={onChange}
+            className="book-input"
+          />
+        </div>
+
+        {/* Last name */}
+        <div className="book-form-field-half-right">
+          <label className="book-label">
+            Last Name <span style={{ color: "red" }}>*</span>
+          </label>
+          <input
+            type="text"
+            name="lastName"
+            value={form.lastName}
             onChange={onChange}
             className="book-input"
           />
         </div>
 
         {/* Phone */}
-        <div className="book-form-field-half-right">
-          <label className="book-label">Mobile Number *</label>
+        <div className="book-form-field-half">
+          <label className="book-label">
+            Mobile Number <span style={{ color: "red" }}>*</span>
+          </label>
           <input
             type="tel"
             name="phone"
@@ -54,9 +129,62 @@ export default function BookView({ form, message, onChange, onSubmit }) {
           />
         </div>
 
+        {/* Email */}
+        <div className="book-form-field-half-right">
+          <label className="book-label">
+            Email address <span style={{ color: "red" }}>*</span>
+          </label>
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={onChange}
+            className="book-input"
+            placeholder="We'll send booking details here"
+            required
+          />
+        </div>
+
+        {/* Preferred contact method & time */}
+        <div className="book-form-field-half">
+          <label className="book-label">Preferred method of contact</label>
+          <select
+            name="preferredContactMethod"
+            value={form.preferredContactMethod}
+            onChange={onChange}
+            className="book-select"
+          >
+            <option value="whatsapp">WhatsApp</option>
+            <option value="call">Phone call</option>
+            <option value="sms">SMS</option>
+            <option value="email">Email</option>
+          </select>
+        </div>
+
+        <div className="book-form-field-half-right">
+          <label className="book-label">Preferred time to contact</label>
+          <select
+            name="preferredContactTime"
+            value={form.preferredContactTime}
+            onChange={onChange}
+            className="book-select"
+          >
+            <option value="">Any time</option>
+            <option value="8-10am">8 – 10 AM</option>
+            <option value="10am-12pm">10 AM – 12 PM</option>
+            <option value="12-2pm">12 – 2 PM</option>
+            <option value="2-4pm">2 – 4 PM</option>
+            <option value="4-6pm">4 – 6 PM</option>
+            <option value="6-8pm">6 – 8 PM</option>
+          </select>
+        </div>
+
         {/* Area */}
         <div className="book-form-field-half">
-          <label className="book-label">Area / Locality in Coimbatore *</label>
+          <label className="book-label">
+            Area / Locality in Coimbatore{" "}
+            <span style={{ color: "red" }}>*</span>
+          </label>
           <select
             name="area"
             value={form.area}
@@ -72,9 +200,28 @@ export default function BookView({ form, message, onChange, onSubmit }) {
           </select>
         </div>
 
+        {form.area === "Others / Not listed" && (
+          <div className="book-form-field-half">
+            <label className="book-label">
+              Enter your exact area / landmark{" "}
+              <span style={{ color: "red" }}>*</span>
+            </label>
+            <input
+              type="text"
+              name="areaOther"
+              value={form.areaOther}
+              onChange={onChange}
+              className="book-input"
+              placeholder="Type your locality or nearest landmark"
+            />
+          </div>
+        )}
+
         {/* Service */}
         <div className="book-form-field-half-right">
-          <label className="book-label">Service required *</label>
+          <label className="book-label">
+            Service required <span style={{ color: "red" }}>*</span>
+          </label>
           <select
             name="service"
             value={form.service}
@@ -90,9 +237,28 @@ export default function BookView({ form, message, onChange, onSubmit }) {
           </select>
         </div>
 
+        {form.service === "Others / Not listed" && (
+          <div className="book-form-field-half-right">
+            <label className="book-label">
+              Describe the type of service required{" "}
+              <span style={{ color: "red" }}>*</span>
+            </label>
+            <input
+              type="text"
+              name="serviceOther"
+              value={form.serviceOther}
+              onChange={onChange}
+              className="book-input"
+              placeholder="e.g. only balcony cleaning, move-out cleaning, etc."
+            />
+          </div>
+        )}
+
         {/* Date */}
         <div className="book-form-field-half">
-          <label className="book-label">Preferred Date *</label>
+          <label className="book-label">
+            Preferred Date <span style={{ color: "red" }}>*</span>
+          </label>
           <input
             type="date"
             name="date"
@@ -112,9 +278,164 @@ export default function BookView({ form, message, onChange, onSubmit }) {
             className="book-select"
           >
             <option value="">Any time</option>
-            <option value="8–11am">8–11 AM</option>
-            <option value="11–2pm">11 AM – 2 PM</option>
-            <option value="2–5pm">2–5 PM</option>
+            <option value="8-10am">8 – 10 AM</option>
+            <option value="10am-12pm">10 AM – 12 PM</option>
+            <option value="12-2pm">12 – 2 PM</option>
+            <option value="2-4pm">2 – 4 PM</option>
+            <option value="4-6pm">4 – 6 PM</option>
+            <option value="6-8pm">6 – 8 PM</option>
+          </select>
+        </div>
+
+        {/* Address: line 1, line 2, city, state, country */}
+        <div className="book-form-field-half">
+          <label className="book-label">Address line 1 *</label>
+          <input
+            type="text"
+            name="address1"
+            value={form.address1}
+            onChange={onChange}
+            className="book-input"
+            placeholder="Flat / house number and street name"
+          />
+        </div>
+
+        <div className="book-form-field-half-right">
+          <label className="book-label">Address line 2</label>
+          <input
+            type="text"
+            name="address2"
+            value={form.address2}
+            onChange={onChange}
+            className="book-input"
+            placeholder="Area, landmark, or additional details (optional)"
+          />
+        </div>
+
+        <div className="book-form-field-half">
+          <label className="book-label">City *</label>
+          <input
+            type="text"
+            name="city"
+            value={form.city}
+            readOnly
+            className="book-input"
+          />
+        </div>
+
+        <div className="book-form-field-half">
+          <label className="book-label">State *</label>
+          <select
+            name="state"
+            value={form.state}
+            onChange={onChange}
+            className="book-select"
+          >
+            <option value="">Select state</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+          </select>
+        </div>
+
+        <div className="book-form-field-half">
+          <label className="book-label">Country *</label>
+          <input
+            type="text"
+            name="country"
+            value={form.country}
+            onChange={onChange}
+            className="book-input"
+          />
+        </div>
+
+        <div className="book-form-field-half">
+          <label className="book-label">Pincode *</label>
+          <input
+            type="text"
+            name="pincode"
+            value={form.pincode}
+            onChange={onChange}
+            className="book-input"
+            placeholder="e.g. 641001"
+          />
+        </div>
+
+        {/* Property details */}
+        <div className="book-form-field-half">
+          <label className="book-label">Property type</label>
+          <select
+            name="propertyType"
+            value={form.propertyType}
+            onChange={onChange}
+            className="book-select"
+          >
+            <option value="">Select type</option>
+            <option value="apartment">1BHK Apartment</option>
+            <option value="apartment-2bhk">2BHK Apartment</option>
+            <option value="apartment-3bhk">3BHK Apartment</option>
+            <option value="independent-house">Independent house / villa</option>
+            <option value="gated-community-villa">Gated community villa</option>
+            <option value="row-house">Row house / townhouse</option>
+            <option value="office">Office</option>
+            <option value="shop">Shop / showroom</option>
+            <option value="warehouse">Warehouse / godown</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        {form.propertyType === "other" && (
+          <div className="book-form-field-half">
+            <label className="book-label">
+              Tell us more about the property *
+            </label>
+            <input
+              type="text"
+              name="propertyTypeOther"
+              value={form.propertyTypeOther}
+              onChange={onChange}
+              className="book-input"
+              placeholder="e.g. PG, small warehouse, clinic, etc."
+            />
+          </div>
+        )}
+
+        <div className="book-form-field-half">
+          <label className="book-label">No. of floors</label>
+          <input
+            type="number"
+            min="1"
+            max="10"
+            name="floorCount"
+            value={form.floorCount}
+            onChange={onChange}
+            className="book-input"
+            placeholder="e.g. 1, 2"
+          />
+        </div>
+
+        <div className="book-form-field-half">
+          <label className="book-label">Approx. area (sq ft)</label>
+          <input
+            type="number"
+            min="100"
+            step="50"
+            name="approxAreaSqft"
+            value={form.approxAreaSqft}
+            onChange={onChange}
+            className="book-input"
+            placeholder="e.g. 800"
+          />
+        </div>
+
+        <div className="book-form-field-half">
+          <label className="book-label">Pets at home?</label>
+          <select
+            name="petsAtHome"
+            value={form.petsAtHome}
+            onChange={onChange}
+            className="book-select"
+          >
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
           </select>
         </div>
 

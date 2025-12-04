@@ -1,18 +1,25 @@
 .admin-section {
-  background-color: #ffffff;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+  position: relative;
+  border-radius: 22px;
+  padding: 22px 20px 20px;
+  background: radial-gradient(circle at top left, #f9fafb, #e0f2fe);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+  border: 1px solid rgba(148, 163, 184, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .admin-title {
   font-size: 22px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #020617;
 }
 
 .admin-subtitle {
   font-size: 14px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   color: #4b5563;
 }
 
@@ -36,10 +43,13 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 14px;
+  overflow: hidden;
 }
 
 .admin-table thead tr {
-  background-color: #f3f4f6;
+  background-color: #eff6ff;
   text-align: left;
 }
 
@@ -51,4 +61,12 @@
 
 .admin-status-cell {
   font-weight: 600;
+}
+
+.admin-table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.admin-table tbody tr:hover {
+  background-color: #e0f2fe;
 }

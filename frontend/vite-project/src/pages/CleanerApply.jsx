@@ -1,14 +1,32 @@
 // src/pages/CleanerApply.jsx
 import { useState } from "react";
+import MainLayout from "../layouts/MainLayout.jsx";
 import CleanerApplyView from "./CleanerApplyView.jsx";
 
 export default function CleanerApply() {
   const [form, setForm] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     phone: "",
+    email: "",
+    preferredContactMethod: "whatsapp",
+    preferredContactTime: "",
     area: "",
+    areaOther: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    country: "",
+    pincode: "",
     experienceYears: "",
+    typeOfWork: "",
+    languagesKnown: "",
     servicesOffered: "",
+    serviceOther: "",
+    idProofType: "",
+    idProofNumber: "",
+    idProofFile: null,
     notes: "",
   });
   const [submitting, setSubmitting] = useState(false);
@@ -16,8 +34,12 @@ export default function CleanerApply() {
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, files } = e.target;
+    if (type === "file") {
+      setForm((prev) => ({ ...prev, [name]: files[0] || null }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -29,10 +51,16 @@ export default function CleanerApply() {
     try {
       console.log("➡ Sending cleaner application:", form);
 
+      const formData = new FormData();
+      Object.entries(form).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(key, value);
+        }
+      });
+
       const res = await fetch("http://localhost:4000/api/cleaners/apply", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: formData,
       });
 
       const data = await res.json().catch(() => ({}));
@@ -41,17 +69,31 @@ export default function CleanerApply() {
         throw new Error(data.message || "Failed to submit application");
       }
 
-      setMessage(
-        data.message ||
-          "Thank you! Your application was submitted successfully."
-      );
+      setMessage(data.message || "Thank you! Your application was submitted successfully.");
 
       setForm({
-        name: "",
+        firstName: "",
+        lastName: "",
         phone: "",
+        email: "",
+        preferredContactMethod: "whatsapp",
+        preferredContactTime: "",
         area: "",
+        areaOther: "",
+        address1: "",
+        address2: "",
+        city: "",
+        state: "",
+        country: "",
+        pincode: "",
         experienceYears: "",
+        typeOfWork: "",
+        languagesKnown: "",
         servicesOffered: "",
+        serviceOther: "",
+        idProofType: "",
+        idProofNumber: "",
+        idProofFile: null,
         notes: "",
       });
     } catch (err) {
@@ -63,13 +105,15 @@ export default function CleanerApply() {
   };
 
   return (
-    <CleanerApplyView
-      form={form}
-      message={message}
-      error={error}
-      submitting={submitting}
-      onChange={handleChange}
-      onSubmit={handleSubmit}
-    />
+    <MainLayout>
+      <CleanerApplyView
+        form={form}
+        message={message}
+        error={error}
+        submitting={submitting}
+        onChange={handleChange}
+        onSubmit={handleSubmit}
+      />
+    </MainLayout>
   );
 }

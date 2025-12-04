@@ -1,7 +1,12 @@
+import MainLayout from "../layouts/MainLayout.jsx";
 import AboutView from "./AboutView.jsx";
 
 function About() {
-  return <AboutView />;
+  return (
+    <MainLayout>
+      <AboutView />
+    </MainLayout>
+  );
 }
 
 export default About;

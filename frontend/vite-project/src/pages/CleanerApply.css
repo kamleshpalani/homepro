@@ -1,21 +1,28 @@
 .cleaner-apply-section {
-  background-color: #ffffff;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
-  max-width: 720px;
-  margin: 0 auto;
+  position: relative;
+  border-radius: 22px;
+  padding: 22px 20px 20px;
+  background: radial-gradient(circle at top left, #f9fafb, #e0f2fe);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+  border: 1px solid rgba(148, 163, 184, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  width: 100%;
 }
 
 .cleaner-apply-title {
-  font-size: 22px;
-  margin-bottom: 4px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+  color: #020617;
 }
 
 .cleaner-apply-subtitle {
   font-size: 14px;
   margin-bottom: 16px;
   color: #4b5563;
+  line-height: 1.6;
 }
 
 .cleaner-apply-message-success {
@@ -37,24 +44,40 @@
 }
 
 .cleaner-apply-form {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
+.cleaner-apply-field-full {
+  grid-column: 1 / -1;
+}
+
+.cleaner-apply-field-half {
+  grid-column: span 2;
+}
+
+.cleaner-apply-field-quarter {
+  grid-column: span 1;
+}
+
 .cleaner-apply-label {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
+  display: block;
   margin-bottom: 4px;
+  color: #0f172a;
 }
 
 .cleaner-apply-input,
 .cleaner-apply-textarea {
   width: 100%;
   padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
+  border-radius: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.8);
   font-size: 14px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
 }
 
 .cleaner-apply-textarea {
@@ -62,15 +85,35 @@
 }
 
 .cleaner-apply-submit-button {
-  padding: 8px 16px;
+  padding: 10px 18px;
   border-radius: 999px;
   font-weight: 600;
-  color: #ffffff;
+  color: #ecfdf5;
   border: none;
   cursor: pointer;
-  background-color: #059669;
+  background: linear-gradient(135deg, #0f766e, #22c55e);
+  box-shadow: 0 16px 36px rgba(16, 185, 129, 0.55);
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.cleaner-apply-submit-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 46px rgba(16, 185, 129, 0.65);
 }
 
 .cleaner-apply-submit-button:disabled {
-  background-color: #6b7280;
+  background: #6b7280;
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  .cleaner-apply-form {
+    grid-template-columns: 1fr;
+  }
+
+  .cleaner-apply-field-full,
+  .cleaner-apply-field-half,
+  .cleaner-apply-field-quarter {
+    grid-column: 1 / -1;
+  }
 }
