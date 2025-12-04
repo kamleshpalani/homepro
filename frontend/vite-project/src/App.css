@@ -2,10 +2,11 @@
 
 .hcp-nav-wrapper {
   position: sticky;
-  top: 12px;
+  top: 0;
   z-index: 50;
-  max-width: 960px;
+  max-width: 1200px;
   margin: 0 auto 20px;
+  padding: 12px 20px 0;
 }
 
 /* Floating + glassmorphism navbar */
@@ -13,18 +14,14 @@
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 10px 18px;
   border-radius: 999px;
-  background: linear-gradient(
-    135deg,
-    rgba(15, 23, 42, 0.85),
-    rgba(30, 64, 175, 0.78)
-  );
-  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.5);
-  border: 1px solid rgba(148, 163, 184, 0.45);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: radial-gradient(circle at top left, #0f172a, #1d4ed8);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  backdrop-filter: blur(20px) saturate(130%);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
 }
 
 /* Logo styles */
@@ -32,28 +29,40 @@
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .hcp-logo-main {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 800;
-  letter-spacing: 0.05em;
-  color: #f9fafb;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #e5f2ff;
 }
 
 .hcp-logo-sub {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 800;
-  letter-spacing: 0.14em;
-  color: #22d3ee;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #a5f3fc;
 }
 
 /* Links container */
 .hcp-nav-links {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
+  flex: 1;
+  justify-content: flex-end;
+  margin-left: 24px;
+}
+
+.hcp-nav-links a {
+  border-radius: 999px;
+  white-space: nowrap;
+  line-height: 1.2;
 }
 
 /* Logout button */
@@ -94,6 +103,8 @@
   background-color: rgba(15, 23, 42, 0.7);
   padding: 0;
   cursor: pointer;
+  order: 3;
+  margin-left: auto;
 }
 
 .hcp-nav-menu-toggle span {
@@ -125,6 +136,7 @@
 
   .hcp-nav-menu-toggle {
     display: flex;
+    margin-left: 0;
   }
 
   .hcp-nav-links {

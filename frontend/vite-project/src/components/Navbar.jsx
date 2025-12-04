@@ -28,9 +28,9 @@ function Navbar() {
   const baseLinkStyle = {
     textDecoration: "none",
     fontSize: "14px",
-    fontWeight: 500,
-    color: "#e5e7eb",
-    padding: "6px 10px",
+    fontWeight: 600,
+    color: "#1e40af",
+    padding: "8px 14px",
     borderRadius: "999px",
     transition: "all 0.2s ease",
   };
@@ -44,18 +44,6 @@ function Navbar() {
           <span className="hcp-logo-sub">Pro</span>
         </Link>
 
-        {/* Hamburger button (mobile) */}
-        <button
-          type="button"
-          className={`hcp-nav-menu-toggle ${isMenuOpen ? "active" : ""}`}
-          onClick={() => setIsMenuOpen((prev) => !prev)}
-          aria-label="Toggle navigation menu"
-        >
-          <span />
-          <span />
-          <span />
-        </button>
-
         {/* Links */}
         <div className={`hcp-nav-links ${isMenuOpen ? "open" : ""}`}>
           {/* Public navigation */}
@@ -64,7 +52,7 @@ function Navbar() {
             style={{
               ...baseLinkStyle,
               backgroundColor: isActive("/services")
-                ? "rgba(248,250,252,0.14)"
+                ? "rgba(37, 99, 235, 0.12)"
                 : "transparent",
             }}
           >
@@ -75,7 +63,7 @@ function Navbar() {
             style={{
               ...baseLinkStyle,
               backgroundColor: isActive("/about")
-                ? "rgba(248,250,252,0.14)"
+                ? "rgba(37, 99, 235, 0.12)"
                 : "transparent",
             }}
           >
@@ -86,7 +74,7 @@ function Navbar() {
             style={{
               ...baseLinkStyle,
               backgroundColor: isActive("/contact")
-                ? "rgba(248,250,252,0.14)"
+                ? "rgba(37, 99, 235, 0.12)"
                 : "transparent",
             }}
           >
@@ -99,7 +87,7 @@ function Navbar() {
               to="/cleaners/apply"
               style={{
                 ...baseLinkStyle,
-                padding: "6px 14px",
+                padding: "7px 16px",
                 background:
                   "linear-gradient(135deg, rgba(45,212,191,0.9), rgba(56,189,248,0.95))",
                 color: "#0f172a",
@@ -115,7 +103,7 @@ function Navbar() {
             to="/book"
             style={{
               ...baseLinkStyle,
-              padding: "6px 16px",
+              padding: "7px 18px",
               background:
                 "linear-gradient(135deg, rgba(74,222,128,0.95), rgba(22,163,74,0.98))",
               color: "#022c22",
@@ -162,6 +150,18 @@ function Navbar() {
             </>
           )}
         </div>
+
+        {/* Hamburger button (mobile) */}
+        <button
+          type="button"
+          className={`hcp-nav-menu-toggle ${isMenuOpen ? "active" : ""}`}
+          onClick={() => setIsMenuOpen((prev) => !prev)}
+          aria-label="Toggle navigation menu"
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </nav>
     </header>
   );
