@@ -1,18 +1,158 @@
-# React + Vite
+HomeCarePro – Cleaning Service Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+HomeCarePro is a full-stack web application for managing home cleaning service bookings.
+It includes a customer booking form, admin dashboard, cleaner registration, and secure authentication.
 
-Currently, two official plugins are available:
+Technologies Used
+Frontend
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+React (Vite)
 
-## React Compiler
+React Router DOM
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+Tailwind / Custom CSS
 
-Note: This will impact Vite dev & build performances.
+Backend
 
-## Expanding the ESLint configuration
+Node.js + Express
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+MongoDB + Mongoose
+
+JSON Web Token (JWT)
+
+CORS
+
+Project Structure
+homecarepro/
+│
+├── backend/
+│ ├── server.js
+│ ├── models/
+│ ├── controllers/
+│ ├── .env
+│ └── package.json
+│
+├── frontend/
+│ ├── src/
+│ ├── public/
+│ ├── index.html
+│ ├── .env
+│ ├── package.json
+│ └── vite.config.js
+│
+└── README.md
+
+Environment Variables
+
+Create a .env file inside backend/:
+
+PORT=4000
+MONGODB_URI=your_mongodb_connection_string
+ADMIN_EMAIL=admin@homecarepro.com
+ADMIN_PASSWORD=your_admin_password
+JWT_SECRET=super_secret_key
+
+Optional .env inside frontend/:
+
+VITE_API_URL=http://localhost:4000
+
+Running the Project Locally
+
+1. Backend
+   cd backend
+   npm install
+   npm start
+
+Backend runs on:
+
+http://localhost:4000
+
+2. Frontend
+   cd frontend
+   npm install
+   npm run dev
+
+Frontend runs on:
+
+http://localhost:5173
+
+Admin Login
+
+Access admin login:
+
+http://localhost:5173/admin/login
+
+Credentials come from .env.
+
+Features
+Customer Features
+
+Book cleaning services
+
+View service details
+
+Fully responsive UI
+
+Admin Features
+
+Secure login using JWT
+
+View all bookings
+
+Update booking status
+
+Assign cleaners
+
+View registered cleaners
+
+Cleaner Features
+
+Public cleaner registration form
+
+Cleaner data saved to MongoDB
+
+API Endpoints
+Auth
+
+POST /api/admin/login
+
+Bookings
+
+POST /api/bookings
+GET /api/bookings
+PATCH /api/bookings/:id
+
+Cleaners
+
+POST /api/cleaners/apply
+POST /api/cleaners
+GET /api/cleaners
+
+Deployment
+
+Frontend can be deployed on:
+
+Vercel
+
+Netlify
+
+GitHub Pages
+
+Backend can be deployed on:
+
+Render
+
+Railway
+
+DigitalOcean
+
+AWS EC2
+
+Contributing
+
+Pull requests are welcome.
+For major changes, open an issue first.
+
+License
+
+MIT License

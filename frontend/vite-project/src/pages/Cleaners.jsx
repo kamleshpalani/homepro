@@ -1,12 +1,12 @@
-// src/pages/Bookings.jsx
+// src/pages/Cleaners.jsx  (ADMIN view only)
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout.jsx";
 
 const TOKEN_KEY = "HOMECAREPRO_ADMIN_TOKEN";
 
-function Bookings() {
-  const [bookings, setBookings] = useState([]);
+function Cleaners() {
+  const [cleaners, setCleaners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -14,27 +14,24 @@ function Bookings() {
   useEffect(() => {
     const controller = new AbortController();
 
-    async function loadBookings() {
+    async function loadCleaners() {
       try {
         setLoading(true);
         setError("");
 
         const token = localStorage.getItem(TOKEN_KEY);
-
-        // ❌ No token → send to login
         if (!token) {
           navigate("/admin/login", { replace: true });
           return;
         }
 
-        const res = await fetch("http://localhost:4000/api/bookings", {
+        const res = await fetch("http://localhost:4000/api/cleaners", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
           signal: controller.signal,
         });
 
-        // ❌ Token invalid / expired
         if (res.status === 401) {
           localStorage.removeItem(TOKEN_KEY);
           navigate("/admin/login", { replace: true });
@@ -42,22 +39,21 @@ function Bookings() {
         }
 
         if (!res.ok) {
-          throw new Error("Failed to load bookings");
+          throw new Error("Failed to load cleaners");
         }
 
         const data = await res.json();
-        setBookings(Array.isArray(data) ? data : []);
+        setCleaners(Array.isArray(data) ? data : []);
       } catch (err) {
         if (err.name === "AbortError") return;
-        console.error("Error loading bookings:", err);
-        setError("Unable to load bookings from backend.");
+        console.error("Error loading cleaners:", err);
+        setError("Unable to load cleaner list from backend.");
       } finally {
         setLoading(false);
       }
     }
 
-    loadBookings();
-
+    loadCleaners();
     return () => controller.abort();
   }, [navigate]);
 
@@ -72,28 +68,22 @@ function Bookings() {
         }}
       >
         <h1 style={{ fontSize: "22px", marginBottom: "8px" }}>
-          Booking Requests (Admin View)
+          Registered Cleaners (Admin)
         </h1>
+        <p style={{ fontSize: "14px", marginBottom: "12px", color: "#4b5563" }}>
+          Only admins can see and manage this list of approved / applied
+          cleaners.
+        </p>
 
-        {loading && <p style={{ fontSize: "14px" }}>Loading bookings…</p>}
+        {loading && <p style={{ fontSize: "14px" }}>Loading cleaners…</p>}
+        {error && <p style={{ fontSize: "14px", color: "#b91c1c" }}>{error}</p>}
 
-        {error && (
-          <p style={{ fontSize: "14px", color: "#b91c1c", marginTop: "4px" }}>
-            {error}
-          </p>
+        {!loading && !error && cleaners.length === 0 && (
+          <p style={{ fontSize: "14px" }}>No cleaners registered yet.</p>
         )}
 
-        {!loading && !error && bookings.length === 0 && (
-          <p style={{ fontSize: "14px", marginTop: "8px" }}>No bookings yet.</p>
-        )}
-
-        {!loading && !error && bookings.length > 0 && (
-          <div
-            style={{
-              marginTop: "12px",
-              overflowX: "auto",
-            }}
-          >
+        {!loading && !error && cleaners.length > 0 && (
+          <div style={{ marginTop: "12px", overflowX: "auto" }}>
             <table
               style={{
                 width: "100%",
@@ -146,7 +136,7 @@ function Bookings() {
                       borderBottom: "1px solid #e5e7eb",
                     }}
                   >
-                    Service
+                    Experience
                   </th>
                   <th
                     style={{
@@ -154,7 +144,7 @@ function Bookings() {
                       borderBottom: "1px solid #e5e7eb",
                     }}
                   >
-                    Date
+                    Services Offered
                   </th>
                   <th
                     style={{
@@ -162,7 +152,7 @@ function Bookings() {
                       borderBottom: "1px solid #e5e7eb",
                     }}
                   >
-                    Time Slot
+                    Notes
                   </th>
                   <th
                     style={{
@@ -170,15 +160,7 @@ function Bookings() {
                       borderBottom: "1px solid #e5e7eb",
                     }}
                   >
-                    Status
-                  </th>
-                  <th
-                    style={{
-                      padding: "8px",
-                      borderBottom: "1px solid #e5e7eb",
-                    }}
-                  >
-                    Assigned To
+                    Active?
                   </th>
                   <th
                     style={{
@@ -191,8 +173,8 @@ function Bookings() {
                 </tr>
               </thead>
               <tbody>
-                {bookings.map((b, index) => (
-                  <tr key={b._id || index}>
+                {cleaners.map((c, index) => (
+                  <tr key={c._id || index}>
                     <td
                       style={{
                         padding: "8px",
@@ -207,7 +189,7 @@ function Bookings() {
                         borderBottom: "1px solid #e5e7eb",
                       }}
                     >
-                      {b.name}
+                      {c.name}
                     </td>
                     <td
                       style={{
@@ -215,7 +197,7 @@ function Bookings() {
                         borderBottom: "1px solid #e5e7eb",
                       }}
                     >
-                      {b.phone}
+                      {c.phone}
                     </td>
                     <td
                       style={{
@@ -223,7 +205,7 @@ function Bookings() {
                         borderBottom: "1px solid #e5e7eb",
                       }}
                     >
-                      {b.area}
+                      {c.area}
                     </td>
                     <td
                       style={{
@@ -231,7 +213,7 @@ function Bookings() {
                         borderBottom: "1px solid #e5e7eb",
                       }}
                     >
-                      {b.service}
+                      {c.experienceYears ? `${c.experienceYears} yrs` : "—"}
                     </td>
                     <td
                       style={{
@@ -239,7 +221,7 @@ function Bookings() {
                         borderBottom: "1px solid #e5e7eb",
                       }}
                     >
-                      {b.date}
+                      {c.servicesOffered || "—"}
                     </td>
                     <td
                       style={{
@@ -247,16 +229,7 @@ function Bookings() {
                         borderBottom: "1px solid #e5e7eb",
                       }}
                     >
-                      {b.timeSlot || "-"}
-                    </td>
-                    <td
-                      style={{
-                        padding: "8px",
-                        borderBottom: "1px solid #e5e7eb",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {b.status || "New"}
+                      {c.notes || "—"}
                     </td>
                     <td
                       style={{
@@ -264,9 +237,7 @@ function Bookings() {
                         borderBottom: "1px solid #e5e7eb",
                       }}
                     >
-                      {b.assignedCleaner && b.assignedCleaner.trim()
-                        ? b.assignedCleaner
-                        : "-"}
+                      {c.isActive ? "Yes" : "No"}
                     </td>
                     <td
                       style={{
@@ -274,9 +245,9 @@ function Bookings() {
                         borderBottom: "1px solid #e5e7eb",
                       }}
                     >
-                      {b.createdAt
-                        ? new Date(b.createdAt).toLocaleString()
-                        : "-"}
+                      {c.createdAt
+                        ? new Date(c.createdAt).toLocaleString()
+                        : "—"}
                     </td>
                   </tr>
                 ))}
@@ -289,4 +260,4 @@ function Bookings() {
   );
 }
 
-export default Bookings;
+export default Cleaners;

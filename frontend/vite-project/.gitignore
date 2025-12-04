@@ -1,5 +1,36 @@
-# Logs
-logs
+# -----------------------------------
+# 🔐 ENVIRONMENT FILES (VERY IMPORTANT)
+# -----------------------------------
+.env
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
+
+# -----------------------------------
+# 📦 NODE MODULES (backend + frontend)
+# -----------------------------------
+node_modules/
+**/node_modules/
+
+# -----------------------------------
+# 🔨 BUILD OUTPUT (frontend + backend)
+# -----------------------------------
+dist/
+build/
+dist-ssr/
+coverage/
+.tmp/
+
+# Vite & React cache
+vite.cache/
+.vite/
+.cache/
+
+# -----------------------------------
+# 📝 LOG FILES
+# -----------------------------------
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -7,18 +38,31 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
+# -----------------------------------
+# 💻 EDITOR / OS FILES
+# -----------------------------------
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
+Thumbs.db
+
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# -----------------------------------
+# ⚙️ OPTIONAL: BACKEND TEMP FILES
+# -----------------------------------
+*.pid
+*.seed
+*.sqlite
+*.db
+
+# -----------------------------------
+# ⚙️ OPTIONAL: ENVIRONMENT MOCKS
+# -----------------------------------
+.env.example
+
