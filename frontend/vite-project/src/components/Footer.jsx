@@ -1,16 +1,9 @@
 // src/components/Footer.jsx
+import "./Footer.css";
 
 function Footer() {
   return (
-    <footer
-      style={{
-        maxWidth: "960px",
-        margin: "32px auto 0 auto",
-        fontSize: "12px",
-        color: "#6b7280",
-        textAlign: "center",
-      }}
-    >
+    <footer className="hcp-footer">
       © {new Date().getFullYear()} HomeCare Pro. Launching first in Coimbatore.
     </footer>
   );
