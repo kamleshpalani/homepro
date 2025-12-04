@@ -1,0 +1,90 @@
+.book-section {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+}
+
+.book-title {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.book-subtitle {
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 16px;
+}
+
+.book-form {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.book-form-field-half {
+  grid-column: 1 / span 1;
+}
+
+.book-form-field-half-right {
+  grid-column: 2 / span 1;
+}
+
+.book-form-field-full {
+  grid-column: 1 / span 2;
+}
+
+.book-label {
+  font-size: 13px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.book-input,
+.book-select,
+.book-textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 13px;
+}
+
+.book-textarea {
+  resize: vertical;
+}
+
+.book-submit-wrapper {
+  grid-column: 1 / span 2;
+  margin-top: 4px;
+}
+
+.book-submit-button {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  background-color: #0f766e;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.book-message {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #065f46;
+}
+
+@media (max-width: 640px) {
+  .book-form {
+    grid-template-columns: 1fr;
+  }
+
+  .book-form-field-half,
+  .book-form-field-half-right,
+  .book-form-field-full,
+  .book-submit-wrapper {
+    grid-column: 1 / span 1;
+  }
+}

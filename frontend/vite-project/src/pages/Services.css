@@ -1,0 +1,99 @@
+.services-page-title-section {
+  margin-bottom: 20px;
+}
+
+.services-page-title {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+.services-page-subtitle {
+  font-size: 14px;
+  color: #4b5563;
+  max-width: 620px;
+}
+
+.services-categories {
+  margin-bottom: 18px;
+}
+
+.services-categories-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.services-category-pill {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.services-category-pill--primary {
+  border: none;
+  background-color: #0f766e;
+  color: #ffffff;
+}
+
+.services-category-pill--secondary {
+  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  color: #111827;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.services-card {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.services-card-title {
+  font-size: 16px;
+  margin: 0;
+}
+
+.services-card-text {
+  margin: 0;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.services-card-text-muted {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.services-card-footer {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.services-card-price {
+  font-weight: 700;
+  font-size: 14px;
+  color: #065f46;
+}
+
+.services-card-button {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: none;
+  background-color: #0f766e;
+  color: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
+}

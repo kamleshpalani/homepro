@@ -1,0 +1,76 @@
+.cleaner-apply-section {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.cleaner-apply-title {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.cleaner-apply-subtitle {
+  font-size: 14px;
+  margin-bottom: 16px;
+  color: #4b5563;
+}
+
+.cleaner-apply-message-success {
+  font-size: 14px;
+  color: #065f46;
+  background: #ecfdf3;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.cleaner-apply-message-error {
+  font-size: 14px;
+  color: #b91c1c;
+  background: #fef2f2;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.cleaner-apply-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cleaner-apply-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.cleaner-apply-input,
+.cleaner-apply-textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+
+.cleaner-apply-textarea {
+  resize: vertical;
+}
+
+.cleaner-apply-submit-button {
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  background-color: #059669;
+}
+
+.cleaner-apply-submit-button:disabled {
+  background-color: #6b7280;
+}

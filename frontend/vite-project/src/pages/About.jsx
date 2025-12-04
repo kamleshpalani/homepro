@@ -1,15 +1,7 @@
-import MainLayout from "../layouts/MainLayout.jsx";
+import AboutView from "./AboutView.jsx";
 
 function About() {
-  return (
-    <MainLayout>
-      <h1>About HomeCare Pro</h1>
-      <p>
-        HomeCare Pro connects customers with trusted freelance home cleaners in
-        Coimbatore. We focus on quality, safety, and transparent pricing.
-      </p>
-    </MainLayout>
-  );
+  return <AboutView />;
 }
 
 export default About;

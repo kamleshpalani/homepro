@@ -1,0 +1,54 @@
+.admin-section {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+}
+
+.admin-title {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.admin-subtitle {
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: #4b5563;
+}
+
+.admin-loading,
+.admin-error,
+.admin-empty {
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.admin-error {
+  color: #b91c1c;
+}
+
+.admin-table-wrapper {
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.admin-table thead tr {
+  background-color: #f3f4f6;
+  text-align: left;
+}
+
+.admin-th,
+.admin-td {
+  padding: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.admin-status-cell {
+  font-weight: 600;
+}
