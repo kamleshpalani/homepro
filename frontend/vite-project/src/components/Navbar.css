@@ -1,5 +1,3 @@
-/* ===== HomeCare Pro Glass Navbar ===== */
-
 .hcp-nav-wrapper {
   position: sticky;
   top: 0;
@@ -9,7 +7,6 @@
   padding: 12px 20px 0;
 }
 
-/* Floating + glassmorphism navbar */
 .hcp-nav {
   position: relative;
   display: flex;
@@ -24,7 +21,6 @@
   -webkit-backdrop-filter: blur(20px) saturate(130%);
 }
 
-/* Logo styles */
 .hcp-logo {
   text-decoration: none;
   display: flex;
@@ -42,19 +38,19 @@
 }
 
 .hcp-logo-sub {
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.3em;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   color: #7dd3fc;
 }
 
-/* Links container */
 .hcp-nav-links {
   display: flex;
   align-items: center;
-  gap: 20px;
-  margin-left: 32px;
+  gap: 18px;
+  margin-left: 24px;
+  flex-wrap: nowrap;
 }
 
 .hcp-nav-links a {
@@ -95,7 +91,6 @@
   opacity: 1;
 }
 
-/* Logout button */
 .hcp-nav-logout-btn {
   border: none;
   outline: none;
@@ -119,7 +114,6 @@
   box-shadow: 0 12px 28px rgba(239, 68, 68, 0.7);
 }
 
-/* Simple responsive tweaks (no hamburger) */
 @media (max-width: 768px) {
   .hcp-nav {
     border-radius: 16px;
