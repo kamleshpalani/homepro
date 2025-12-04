@@ -49,6 +49,46 @@ const SERVICES = [
     duration: "Custom based on size",
     price: "Custom quote",
   },
+  {
+    id: 7,
+    name: "Glass & Window Cleaning",
+    area: "Any Home / Office",
+    idealFor: "Balconies, large windows, display glass",
+    duration: "2–4 hours",
+    price: "₹899 onwards",
+  },
+  {
+    id: 8,
+    name: "Ceiling Fan & Cobweb Cleaning",
+    area: "Any Home",
+    idealFor: "Removing cobwebs, cleaning ceiling fans",
+    duration: "1–3 hours",
+    price: "₹699 onwards",
+  },
+  {
+    id: 9,
+    name: "Floor Polishing / Scrubbing",
+    area: "Apartments & Villas",
+    idealFor: "Marble / tile floor restoration & shine",
+    duration: "4–6 hours",
+    price: "₹3,499 onwards",
+  },
+  {
+    id: 10,
+    name: "Car Interior Cleaning",
+    area: "Parking / Garage",
+    idealFor: "Full interior vacuum, seats & mat cleaning",
+    duration: "2–3 hours",
+    price: "₹1,499 onwards",
+  },
+  {
+    id: 11,
+    name: "Garden / Outdoor Cleaning",
+    area: "Independent Houses & Villas",
+    idealFor: "Portico, sit-out, and small garden areas",
+    duration: "3–5 hours",
+    price: "₹1,999 onwards",
+  },
 ];
 
 const CATEGORIES = [

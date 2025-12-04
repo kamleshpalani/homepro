@@ -1,6 +1,7 @@
 // src/pages/AdminLogin.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import MainLayout from "../layouts/MainLayout.jsx";
 import AdminLoginView from "./AdminLoginView.jsx";
 
 const TOKEN_KEY = "HOMECAREPRO_ADMIN_TOKEN"; // same as in Bookings.jsx
@@ -63,14 +64,16 @@ export default function AdminLogin() {
   };
 
   return (
-    <AdminLoginView
-      email={email}
-      password={password}
-      error={error}
-      loading={loading}
-      onChangeEmail={(e) => setEmail(e.target.value)}
-      onChangePassword={(e) => setPassword(e.target.value)}
-      onSubmit={handleSubmit}
-    />
+    <MainLayout>
+      <AdminLoginView
+        email={email}
+        password={password}
+        error={error}
+        loading={loading}
+        onChangeEmail={(e) => setEmail(e.target.value)}
+        onChangePassword={(e) => setPassword(e.target.value)}
+        onSubmit={handleSubmit}
+      />
+    </MainLayout>
   );
 }

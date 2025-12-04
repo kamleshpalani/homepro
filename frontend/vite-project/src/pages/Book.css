@@ -1,43 +1,54 @@
 .book-section {
-  background-color: #ffffff;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+  position: relative;
+  border-radius: 22px;
+  padding: 22px 20px 20px;
+  background: radial-gradient(circle at top left, #f9fafb, #e0f2fe);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+  border: 1px solid rgba(148, 163, 184, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .book-title {
-  font-size: 22px;
-  margin-bottom: 4px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+  color: #020617;
 }
 
 .book-subtitle {
   font-size: 14px;
+  line-height: 1.6;
   color: #4b5563;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  max-width: 580px;
 }
 
 .book-form {
   display: grid;
   gap: 12px;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .book-form-field-half {
-  grid-column: 1 / span 1;
+  grid-column: span 1;
 }
 
 .book-form-field-half-right {
-  grid-column: 2 / span 1;
+  grid-column: span 1;
 }
 
 .book-form-field-full {
-  grid-column: 1 / span 2;
+  grid-column: 1 / -1;
 }
 
 .book-label {
   font-size: 13px;
+  font-weight: 600;
   display: block;
   margin-bottom: 4px;
+  color: #0f172a;
 }
 
 .book-input,
@@ -45,9 +56,11 @@
 .book-textarea {
   width: 100%;
   padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
+  border-radius: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.8);
   font-size: 13px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
 }
 
 .book-textarea {
@@ -55,19 +68,26 @@
 }
 
 .book-submit-wrapper {
-  grid-column: 1 / span 2;
-  margin-top: 4px;
+  grid-column: 1 / -1;
+  margin-top: 6px;
 }
 
 .book-submit-button {
   padding: 10px 18px;
   border-radius: 999px;
   border: none;
-  background-color: #0f766e;
-  color: #ffffff;
+  background: linear-gradient(135deg, #0f766e, #22c55e);
+  color: #ecfdf5;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  box-shadow: 0 16px 36px rgba(16, 185, 129, 0.55);
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.book-submit-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 46px rgba(16, 185, 129, 0.65);
 }
 
 .book-message {
@@ -77,6 +97,10 @@
 }
 
 @media (max-width: 640px) {
+  .book-section {
+    padding: 20px 18px 18px;
+  }
+
   .book-form {
     grid-template-columns: 1fr;
   }

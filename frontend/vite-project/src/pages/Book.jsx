@@ -4,12 +4,29 @@ import BookView from "./BookView.jsx";
 
 function Book() {
   const [form, setForm] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     phone: "",
+    email: "",
     area: "",
+    areaOther: "",
     service: "",
+    serviceOther: "",
     date: "",
     timeSlot: "",
+    address1: "",
+    address2: "",
+    city: "Coimbatore",
+    state: "Tamil Nadu",
+    country: "India",
+    pincode: "",
+    preferredContactMethod: "whatsapp",
+    preferredContactTime: "",
+    propertyType: "",
+    propertyTypeOther: "",
+    floorCount: "",
+    approxAreaSqft: "",
+    petsAtHome: "no",
     notes: "",
   });
 
@@ -26,7 +43,7 @@ function Book() {
 
     // very simple validation
     if (
-      !form.name ||
+      !form.firstName ||
       !form.phone ||
       !form.area ||
       !form.service ||
@@ -58,12 +75,29 @@ function Book() {
 
       // Optional: clear form after success
       // setForm({
-      //   name: "",
+      //   firstName: "",
+      //   lastName: "",
       //   phone: "",
+      //   email: "",
       //   area: "",
+      //   areaOther: "",
       //   service: "",
+      //   serviceOther: "",
       //   date: "",
       //   timeSlot: "",
+      //   address1: "",
+      //   address2: "",
+      //   city: "Coimbatore",
+      //   state: "Tamil Nadu",
+      //   country: "India",
+      //   pincode: "",
+      //   preferredContactMethod: "whatsapp",
+      //   preferredContactTime: "",
+      //   propertyType: "",
+      //   propertyTypeOther: "",
+      //   floorCount: "",
+      //   approxAreaSqft: "",
+      //   petsAtHome: "no",
       //   notes: "",
       // });
     } catch (err) {
