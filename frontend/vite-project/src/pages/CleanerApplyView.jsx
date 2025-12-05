@@ -3,6 +3,7 @@ import "./CleanerApply.css";
 const SERVICES = [
   "1BHK Home Deep Cleaning",
   "2BHK Home Deep Cleaning",
+  "3BHK Home Deep Cleaning",
   "Villa / Individual House Cleaning",
   "Kitchen & Chimney Deep Clean",
   "Bathroom Deep Cleaning",
@@ -312,6 +313,20 @@ export default function CleanerApplyView({
             onChange={onChange}
             className="cleaner-apply-input"
             placeholder="e.g. 2 years"
+          />
+        </div>
+
+        <div className="cleaner-apply-field-quarter">
+          <label className="cleaner-apply-label">
+            Expected salary per hour <span style={{ color: "red" }}>*</span>
+          </label>
+          <input
+            name="expectedSalaryPerJob"
+            value={form.expectedSalaryPerJob}
+            onChange={onChange}
+            className="cleaner-apply-input"
+            placeholder="e.g. ₹200 per hour"
+            required
           />
         </div>
 

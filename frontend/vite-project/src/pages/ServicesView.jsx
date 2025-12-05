@@ -3,27 +3,27 @@ import "./Services.css";
 const SERVICES = [
   {
     id: 1,
-    name: "1BHK Home Deep Cleaning",
-    area: "Flats / Apartments",
-    idealFor: "Tenants moving in / out, yearly deep clean",
-    duration: "4–5 hours",
-    price: "₹2,499 onwards",
+    name: "Quick Refresh (1 hour)",
+    area: "Any Home / Office",
+    idealFor: "Light touch-up of living room, 1 bathroom, and kitchen surfaces",
+    duration: "~1 hour",
+    price: "₹650  →  ₹450",
   },
   {
     id: 2,
-    name: "2BHK Home Deep Cleaning",
-    area: "Flats / Apartments",
-    idealFor: "Families, festival cleaning, repaint prep",
-    duration: "5–6 hours",
-    price: "₹3,499 onwards",
+    name: "Standard Clean (2 hours)",
+    area: "1BHK / Small Homes",
+    idealFor: "Regular cleaning for 1BHK or focused deep clean of key areas",
+    duration: "~2 hours",
+    price: "₹1,200  →  ₹849",
   },
   {
     id: 3,
-    name: "Villa / Individual House Cleaning",
+    name: "Deep Clean (3 hours)",
     area: "Independent Houses",
-    idealFor: "Ground + 1 floor homes, full property clean",
-    duration: "6–8 hours",
-    price: "₹4,999 onwards",
+    idealFor: "2BHK homes or full kitchen + 2 bathrooms",
+    duration: "~3 hours",
+    price: "₹1,600  →  ₹1,199",
   },
   {
     id: 4,
@@ -31,7 +31,7 @@ const SERVICES = [
     area: "Any Home",
     idealFor: "Heavy oil / grease in kitchen & tiles",
     duration: "3–4 hours",
-    price: "₹1,799 onwards",
+    price: "₹600 per cleaner hour",
   },
   {
     id: 5,
@@ -39,7 +39,7 @@ const SERVICES = [
     area: "Any Home",
     idealFor: "Hard water stains, tiles & fittings cleanup",
     duration: "1–2 hours per bathroom",
-    price: "₹599 per bathroom",
+    price: "₹600 per cleaner hour",
   },
   {
     id: 6,
@@ -47,7 +47,7 @@ const SERVICES = [
     area: "Commercial Spaces",
     idealFor: "Small offices, showrooms & shops",
     duration: "Custom based on size",
-    price: "Custom quote",
+    price: "₹600 per cleaner hour (estimate)",
   },
   {
     id: 7,
@@ -55,7 +55,7 @@ const SERVICES = [
     area: "Any Home / Office",
     idealFor: "Balconies, large windows, display glass",
     duration: "2–4 hours",
-    price: "₹899 onwards",
+    price: "₹600 per cleaner hour",
   },
   {
     id: 8,
@@ -63,7 +63,7 @@ const SERVICES = [
     area: "Any Home",
     idealFor: "Removing cobwebs, cleaning ceiling fans",
     duration: "1–3 hours",
-    price: "₹699 onwards",
+    price: "₹600 per cleaner hour",
   },
   {
     id: 9,
@@ -71,7 +71,7 @@ const SERVICES = [
     area: "Apartments & Villas",
     idealFor: "Marble / tile floor restoration & shine",
     duration: "4–6 hours",
-    price: "₹3,499 onwards",
+    price: "₹600 per cleaner hour",
   },
   {
     id: 10,
@@ -79,7 +79,7 @@ const SERVICES = [
     area: "Parking / Garage",
     idealFor: "Full interior vacuum, seats & mat cleaning",
     duration: "2–3 hours",
-    price: "₹1,499 onwards",
+    price: "₹600 per cleaner hour",
   },
   {
     id: 11,
@@ -87,7 +87,7 @@ const SERVICES = [
     area: "Independent Houses & Villas",
     idealFor: "Portico, sit-out, and small garden areas",
     duration: "3–5 hours",
-    price: "₹1,999 onwards",
+    price: "₹600 per cleaner hour",
   },
 ];
 

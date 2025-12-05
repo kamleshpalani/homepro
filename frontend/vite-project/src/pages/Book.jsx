@@ -28,13 +28,33 @@ function Book() {
     approxAreaSqft: "",
     petsAtHome: "no",
     notes: "",
+    hours: 1,
+    estimatedPrice: 450,
   });
 
   const [message, setMessage] = useState("");
 
+  const HOUR_PRICING = {
+    1: { label: "Quick Refresh (1 hour)", original: 650, offer: 450 },
+    2: { label: "Standard Clean (2 hours)", original: 1200, offer: 849 },
+    3: { label: "Deep Clean (3 hours)", original: 1600, offer: 1199 },
+    4: { label: "Extended Deep Clean (4 hours)", original: 2000, offer: 1499 },
+  };
+
   function handleChange(e) {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    // Special handling for hours so we can recalculate estimated price
+    if (name === "hours") {
+      const hoursValue = Number(value);
+      const priceInfo = HOUR_PRICING[hoursValue];
+      setForm((prev) => ({
+        ...prev,
+        hours: hoursValue,
+        estimatedPrice: priceInfo ? priceInfo.offer : prev.estimatedPrice,
+      }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
   }
 
   // 👉 NEW VERSION: sends data to backend
@@ -99,6 +119,8 @@ function Book() {
       //   approxAreaSqft: "",
       //   petsAtHome: "no",
       //   notes: "",
+      //   hours: 1,
+      //   estimatedPrice: 450,
       // });
     } catch (err) {
       console.error(err);
@@ -115,6 +137,7 @@ function Book() {
         message={message}
         onChange={handleChange}
         onSubmit={handleSubmit}
+        hourPricing={HOUR_PRICING}
       />
     </MainLayout>
   );
