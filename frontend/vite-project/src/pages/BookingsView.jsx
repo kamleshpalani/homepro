@@ -23,6 +23,8 @@ export default function BookingsView({ bookings, loading, error }) {
                 <th className="admin-th">Phone</th>
                 <th className="admin-th">Area</th>
                 <th className="admin-th">Service</th>
+                <th className="admin-th">Hours</th>
+                <th className="admin-th">Estimated Price</th>
                 <th className="admin-th">Date</th>
                 <th className="admin-th">Time Slot</th>
                 <th className="admin-th">Status</th>
@@ -38,6 +40,14 @@ export default function BookingsView({ bookings, loading, error }) {
                   <td className="admin-td">{b.phone}</td>
                   <td className="admin-td">{b.area}</td>
                   <td className="admin-td">{b.service}</td>
+                  <td className="admin-td">{b.hours ?? "-"}</td>
+                  <td className="admin-td">
+                    {typeof b.estimatedPrice === "number"
+                      ? `₹${b.estimatedPrice}`
+                      : b.estimatedPrice
+                      ? `₹${b.estimatedPrice}`
+                      : "-"}
+                  </td>
                   <td className="admin-td">{b.date}</td>
                   <td className="admin-td">{b.timeSlot || "-"}</td>
                   <td className="admin-td admin-status-cell">

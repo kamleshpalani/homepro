@@ -22,6 +22,7 @@ export default function CleanerApply() {
     experienceYears: "",
     typeOfWork: "",
     languagesKnown: "",
+    expectedSalaryPerJob: "",
     servicesOffered: "",
     serviceOther: "",
     idProofType: "",
@@ -69,7 +70,10 @@ export default function CleanerApply() {
         throw new Error(data.message || "Failed to submit application");
       }
 
-      setMessage(data.message || "Thank you! Your application was submitted successfully.");
+      setMessage(
+        data.message ||
+          "Thank you! Your application was submitted successfully."
+      );
 
       setForm({
         firstName: "",
@@ -89,6 +93,7 @@ export default function CleanerApply() {
         experienceYears: "",
         typeOfWork: "",
         languagesKnown: "",
+        expectedSalaryPerJob: "",
         servicesOffered: "",
         serviceOther: "",
         idProofType: "",

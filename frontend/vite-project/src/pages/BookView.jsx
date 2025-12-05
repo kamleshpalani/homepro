@@ -3,6 +3,7 @@ import "./Book.css";
 const SERVICES = [
   "1BHK Home Deep Cleaning",
   "2BHK Home Deep Cleaning",
+  "3BHK Home Deep Cleaning",
   "Villa / Individual House Cleaning",
   "Kitchen & Chimney Deep Clean",
   "Bathroom Deep Cleaning",
@@ -77,7 +78,13 @@ const AREAS = [
   "Others / Not listed",
 ];
 
-export default function BookView({ form, message, onChange, onSubmit }) {
+export default function BookView({
+  form,
+  message,
+  onChange,
+  onSubmit,
+  hourPricing,
+}) {
   return (
     <section className="book-section">
       <h1 className="book-title">Book a cleaning in Coimbatore</h1>
@@ -253,6 +260,43 @@ export default function BookView({ form, message, onChange, onSubmit }) {
             />
           </div>
         )}
+
+        {/* Hours & estimated price */}
+        <div className="book-form-field-half">
+          <label className="book-label">
+            Estimated cleaning hours <span style={{ color: "red" }}>*</span>
+          </label>
+          <select
+            name="hours"
+            value={form.hours}
+            onChange={onChange}
+            className="book-select"
+            required
+          >
+            {/* Use labels from hourPricing if provided, otherwise fallback strings */}
+            <option value={1}>
+              {hourPricing?.[1]?.label ||
+                "1 hour – Quick Refresh (₹650 → ₹450)"}
+            </option>
+            <option value={2}>
+              {hourPricing?.[2]?.label ||
+                "2 hours – Standard Clean (₹1,200 → ₹849)"}
+            </option>
+            <option value={3}>
+              {hourPricing?.[3]?.label ||
+                "3 hours – Deep Clean (₹1,600 → ₹1,199)"}
+            </option>
+            <option value={4}>
+              {hourPricing?.[4]?.label ||
+                "4 hours – Extended Deep Clean (₹2,000 → ₹1,499)"}
+            </option>
+          </select>
+
+          <div className="book-price-hint">
+            Estimated price: <strong>₹{form.estimatedPrice}</strong>{" "}
+            (introductory offer)
+          </div>
+        </div>
 
         {/* Date */}
         <div className="book-form-field-half">
