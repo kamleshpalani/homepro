@@ -1,135 +1,239 @@
-.hcp-nav-wrapper {
+/* === NEW HEADER DESIGN === */
+
+.header-new {
   position: sticky;
   top: 0;
-  z-index: 50;
-  width: 100%;
-  margin: 0 0 20px 0;
-  padding: 8px 16px 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
-.hcp-nav {
-  position: relative;
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 24px;
-  border-radius: 18px;
-  background: radial-gradient(circle at top left, #0f172a, #1d4ed8);
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.45);
-  border: 1px solid rgba(148, 163, 184, 0.6);
-  backdrop-filter: blur(20px) saturate(130%);
-  -webkit-backdrop-filter: blur(20px) saturate(130%);
+  gap: 32px;
 }
 
-.hcp-logo {
-  text-decoration: none;
+.nav-logo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  text-decoration: none;
   flex-shrink: 0;
 }
 
-.hcp-logo-main {
-  font-size: 18px;
+.nav-logo-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.nav-logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.nav-logo-name {
+  font-size: 20px;
   font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #e5f2ff;
+  color: #0f172a;
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
-.hcp-logo-sub {
+.nav-logo-pro {
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.25em;
+  font-weight: 600;
+  color: #10b981;
   text-transform: uppercase;
-  color: #7dd3fc;
+  letter-spacing: 0.1em;
+  line-height: 1;
 }
 
-.hcp-nav-links {
+.nav-menu {
   display: flex;
   align-items: center;
-  gap: 18px;
-  margin-left: 24px;
-  flex-wrap: nowrap;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
 }
 
-.hcp-nav-links a {
-  position: relative;
-  padding: 6px 10px;
-  border-radius: 999px;
-  white-space: nowrap;
-  line-height: 1.2;
-  font-size: 14px;
+.nav-link {
+  padding: 10px 16px;
+  font-size: 15px;
   font-weight: 500;
-  color: #e5f2ff;
+  color: #475569;
   text-decoration: none;
-  transition: color 0.15s ease;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
-.hcp-nav-links a::after {
-  content: "";
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  bottom: 2px;
-  height: 2px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #38bdf8, #a5b4fc);
-  transform-origin: center;
-  transform: scaleX(0);
-  opacity: 0;
-  transition: transform 0.18s ease-out, opacity 0.18s ease-out;
+.nav-link:hover {
+  color: #0f172a;
+  background: #f8fafc;
 }
 
-.hcp-nav-links a:hover {
-  color: #e0f2fe;
+.nav-link-active {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
 }
 
-.hcp-nav-links a:hover::after,
-.hcp-nav-links a.active::after {
-  transform: scaleX(1);
-  opacity: 1;
+.nav-link-active:hover {
+  background: rgba(16, 185, 129, 0.12);
 }
 
-.hcp-nav-logout-btn {
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.nav-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  text-decoration: none;
   border: none;
-  outline: none;
-  padding: 6px 14px;
-  border-radius: 999px;
-  cursor: pointer;
-  font-size: 13px;
+  border-radius: 10px;
+  font-size: 15px;
   font-weight: 600;
-  color: #fef2f2;
-  background: linear-gradient(
-    135deg,
-    rgba(248, 113, 113, 0.98),
-    rgba(220, 38, 38, 0.98)
-  );
-  box-shadow: 0 10px 24px rgba(239, 68, 68, 0.5);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+  transition: all 0.2s ease;
 }
 
-.hcp-nav-logout-btn:hover {
+.nav-btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 28px rgba(239, 68, 68, 0.7);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+}
+
+.nav-btn-arrow {
+  font-size: 16px;
+  transition: transform 0.2s ease;
+}
+
+.nav-btn-primary:hover .nav-btn-arrow {
+  transform: translateX(3px);
+}
+
+.nav-btn-logout {
+  padding: 10px 20px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-btn-logout:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+/* Login Button */
+.nav-btn-login {
+  padding: 10px 20px;
+  background: white;
+  color: #10b981;
+  border: 2px solid #10b981;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-btn-login:hover {
+  background: rgba(16, 185, 129, 0.08);
+  transform: translateY(-1px);
+}
+
+/* User Button (logged in customer) */
+.nav-user-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 6px;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-user-btn:hover {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.nav-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.nav-user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+@media (max-width: 1024px) {
+  .nav-container {
+    padding: 14px 24px;
+  }
+
+  .nav-menu {
+    gap: 2px;
+  }
+
+  .nav-link {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 768px) {
-  .hcp-nav {
-    border-radius: 16px;
-    padding: 8px 14px;
+  .nav-container {
+    flex-wrap: wrap;
+    gap: 16px;
   }
 
-  .hcp-nav-links {
-    gap: 12px;
-    margin-left: 16px;
+  .nav-menu {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .hcp-logo-main {
-    font-size: 16px;
+  .nav-link {
+    white-space: nowrap;
   }
 
-  .hcp-logo-sub {
-    display: none;
+  .nav-btn-primary {
+    padding: 10px 20px;
+    font-size: 14px;
   }
 }

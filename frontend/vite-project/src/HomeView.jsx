@@ -84,227 +84,188 @@ const WHY_CHOOSE_POINTS = [
 export default function HomeView() {
   return (
     <div className="home-page">
-      {/* Hero */}
-      <section className="home-hero">
-        <div className="home-hero-left">
-          <div className="home-hero-badge">
-            <span className="home-hero-badge-dot" />
-            <span className="home-hero-badge-text">
-              Cleaning services in Coimbatore
-            </span>
+      {/* Redesigned Hero - Full Width Impact */}
+      <section className="home-hero-new">
+        <div className="home-hero-content">
+          <div className="home-hero-tag">
+            <span className="home-hero-tag-icon">✨</span>
+            <span>Trusted by 500+ Coimbatore families</span>
           </div>
 
-          <h1 className="home-hero-title">
-            5-star home cleaning at <span>fair local prices</span>
+          <h1 className="home-hero-headline">
+            Your home deserves
+            <br />
+            <span className="home-hero-gradient">professional care</span>
           </h1>
 
-          <p className="home-hero-text">
-            Instantly book trusted cleaners for your flat, villa, or office in
-            Coimbatore. Deep cleaning, kitchen & bathroom focus, and move-in /
-            move-out packages all from one simple platform.
+          <p className="home-hero-desc">
+            Book verified cleaners in minutes. Transparent pricing, flexible
+            scheduling, and 100% satisfaction guaranteed across Coimbatore.
           </p>
 
-          <div className="home-hero-highlights">
-            <div className="home-hero-highlight-pill">
-              <span className="home-hero-highlight-dot" /> Top-rated local
-              cleaners
-            </div>
-            <div className="home-hero-highlight-pill">
-              <span className="home-hero-highlight-dot" /> Transparent, upfront
-              pricing
-            </div>
-            <div className="home-hero-highlight-pill">
-              <span className="home-hero-highlight-dot" /> Easy online booking
-            </div>
+          <div className="home-hero-actions">
+            <button className="home-btn-primary">
+              <span>Book your first clean</span>
+              <span className="home-btn-arrow">→</span>
+            </button>
+            <button className="home-btn-secondary">
+              <span className="home-btn-play">▶</span>
+              <span>See how it works</span>
+            </button>
           </div>
 
-          <div className="home-hero-cta-row">
-            <button className="home-hero-primary">Book a cleaning</button>
-            <button className="home-hero-secondary">Apply as a cleaner</button>
-          </div>
-
-          <div className="home-hero-meta">
-            <div className="home-hero-rating">
-              <span className="home-hero-stars">★★★★★</span>
-              <span>4.8/5 average rating</span>
+          <div className="home-hero-stats">
+            <div className="home-stat">
+              <div className="home-stat-number">4.9★</div>
+              <div className="home-stat-label">Average rating</div>
             </div>
-            <span>Trusted by families across Coimbatore</span>
+            <div className="home-stat-divider"></div>
+            <div className="home-stat">
+              <div className="home-stat-number">2,500+</div>
+              <div className="home-stat-label">Homes cleaned</div>
+            </div>
+            <div className="home-stat-divider"></div>
+            <div className="home-stat">
+              <div className="home-stat-number">50+</div>
+              <div className="home-stat-label">Verified cleaners</div>
+            </div>
           </div>
         </div>
 
-        <div className="home-hero-right">
-          <div className="home-hero-sidecard">
-            <div className="home-hero-card-title">Quick quote preview</div>
-            <p className="home-hero-card-subtitle">
-              Intro hourly packages for your first clean in Coimbatore.
-            </p>
-
-            <div className="home-quick-rows">
-              <div className="home-quick-row">
-                <div className="home-quick-row-main">
-                  <span className="home-quick-name">Quick Refresh</span>
-                  <span className="home-quick-hours">
-                    1 hour · Light tidy up
-                  </span>
-                </div>
-                <div className="home-quick-price-tag">
-                  <span className="home-quick-original">₹650</span>
-                  <span className="home-quick-offer">₹450</span>
-                </div>
-              </div>
-
-              <div className="home-quick-row">
-                <div className="home-quick-row-main">
-                  <span className="home-quick-name">Standard Clean</span>
-                  <span className="home-quick-hours">
-                    2 hours · Full 1BHK or focused deep clean
-                  </span>
-                </div>
-                <div className="home-quick-price-tag">
-                  <span className="home-quick-original">₹1,200</span>
-                  <span className="home-quick-offer">₹849</span>
-                </div>
-              </div>
-
-              <div className="home-quick-row">
-                <div className="home-quick-row-main">
-                  <span className="home-quick-name">Deep Clean</span>
-                  <span className="home-quick-hours">
-                    3 hours · 2BHK / kitchen + 2 bathrooms
-                  </span>
-                </div>
-                <div className="home-quick-price-tag">
-                  <span className="home-quick-original">₹1,600</span>
-                  <span className="home-quick-offer">₹1,199</span>
-                </div>
-              </div>
-
-              <div className="home-quick-row">
-                <div className="home-quick-row-main">
-                  <span className="home-quick-name">Extended Deep Clean</span>
-                  <span className="home-quick-hours">
-                    4 hours · Larger homes / move-in move-out
-                  </span>
-                </div>
-                <div className="home-quick-price-tag">
-                  <span className="home-quick-original">₹2,000</span>
-                  <span className="home-quick-offer">₹1,499</span>
-                </div>
-              </div>
+        <div className="home-hero-visual">
+          <div className="home-hero-card home-hero-card-1">
+            <div className="home-card-header">
+              <span className="home-card-icon">🏠</span>
+              <span className="home-card-badge">Most Popular</span>
             </div>
+            <h3 className="home-card-title">Standard Clean</h3>
+            <p className="home-card-desc">Perfect for 1-2 BHK apartments</p>
+            <div className="home-card-pricing">
+              <span className="home-card-price-old">₹1,200</span>
+              <span className="home-card-price-new">₹849</span>
+              <span className="home-card-duration">2 hours</span>
+            </div>
+          </div>
 
-            <div className="home-hero-card-footer">
-              <span>
-                <span className="home-hero-highlight-dot" /> No advance payment
-                needed
-              </span>
-              <span>Reschedule easily if plans change</span>
+          <div className="home-hero-card home-hero-card-2">
+            <div className="home-card-header">
+              <span className="home-card-icon">✨</span>
+            </div>
+            <h3 className="home-card-title">Deep Clean</h3>
+            <p className="home-card-desc">Detailed cleaning for 2-3 BHK</p>
+            <div className="home-card-pricing">
+              <span className="home-card-price-old">₹1,600</span>
+              <span className="home-card-price-new">₹1,199</span>
+              <span className="home-card-duration">3 hours</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="home-section">
-        <h2 className="home-section-title">
-          Book a top-rated cleaner in 3 easy steps
-        </h2>
-        <p className="home-section-subtitle">How HomeCare Pro works</p>
-
-        <div className="home-steps-grid">
-          {HOW_IT_WORKS_STEPS.map((step, index) => (
-            <div key={step.title} className="home-step-card">
-              <div className="home-step-number">{index + 1}</div>
-              <h3 className="home-step-title">{step.title}</h3>
-              <p className="home-step-text">{step.text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Popular services */}
-      <section className="home-section">
-        <h2 className="home-section-title">
-          Popular cleaning packages in Coimbatore
-        </h2>
-        <p className="home-section-subtitle">
-          Choose a package that suits your home. You can always add extra
-          services in the booking form.
-        </p>
-
-        <div className="home-services-grid">
-          {POPULAR_SERVICES.map((service) => (
-            <div key={service.name} className="home-service-card">
-              {service.name.includes("Standard") && (
-                <div className="home-service-pill">Most Popular</div>
-              )}
-              <h3 className="home-service-name">{service.name}</h3>
-              <p className="home-service-highlight">{service.highlight}</p>
-              <div className="home-service-meta">
-                <span className="home-service-duration">
-                  {service.duration}
-                </span>
-                <span className="home-service-price-tag">
-                  <span className="home-service-price-original">
-                    {service.originalPrice}
-                  </span>
-                  <span className="home-service-price-offer">
-                    {service.offerPrice}
-                  </span>
-                </span>
-              </div>
-              <button className="home-service-button">Book this package</button>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Why choose us */}
-      <section className="home-section home-why">
-        <h2 className="home-section-title">
-          Why Coimbatore families choose HomeCare Pro
-        </h2>
-
-        <div className="home-why-grid">
-          {WHY_CHOOSE_POINTS.map((item) => (
-            <div key={item.title} className="home-why-card">
-              <h3 className="home-why-title">{item.title}</h3>
-              <p className="home-why-text">{item.text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Areas we serve */}
-      <section className="home-section">
-        <h2 className="home-section-title">Areas we serve in Coimbatore</h2>
-        <p className="home-section-subtitle">
-          We are gradually expanding coverage. If your area is not listed, you
-          can still submit a booking request.
-        </p>
-
-        <div className="home-areas-list">
-          {AREAS.map((area) => (
-            <div key={area} className="home-area-pill">
-              {area}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Cleaner CTA */}
-      <section className="home-section home-cleaner-cta">
-        <div className="home-cleaner-cta-inner">
+      {/* Services Grid - Horizontal Scroll */}
+      <section className="home-services-new">
+        <div className="home-services-header">
           <div>
-            <h2 className="home-section-title">
-              Earn by cleaning homes in Coimbatore
-            </h2>
-            <p className="home-section-subtitle">
-              Set your availability, get regular bookings, and receive payouts
-              on time. Ideal for part-time and full-time cleaners.
+            <h2 className="home-section-heading">Choose your package</h2>
+            <p className="home-section-subtext">
+              Flexible hourly rates for every home size
             </p>
           </div>
-          <button className="home-hero-primary-btn">Apply as a cleaner</button>
+        </div>
+
+        <div className="home-services-scroll">
+          {POPULAR_SERVICES.map((service, idx) => (
+            <div key={service.name} className="home-service-new-card">
+              {idx === 1 && <div className="home-service-badge">Popular</div>}
+              <div className="home-service-icon">
+                {idx === 0 && "⚡"}
+                {idx === 1 && "🏠"}
+                {idx === 2 && "✨"}
+                {idx === 3 && "🌟"}
+              </div>
+              <h3 className="home-service-new-title">{service.name}</h3>
+              <p className="home-service-new-desc">{service.highlight}</p>
+              <div className="home-service-new-price">
+                <span className="home-service-strike">
+                  {service.originalPrice}
+                </span>
+                <span className="home-service-final">{service.offerPrice}</span>
+              </div>
+              <button className="home-service-new-btn">Select package</button>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* How It Works - Timeline Style */}
+      <section className="home-how-new">
+        <h2 className="home-section-heading-center">How it works</h2>
+        <p className="home-section-subtext-center">
+          Get your home cleaned in 3 simple steps
+        </p>
+
+        <div className="home-how-timeline">
+          {HOW_IT_WORKS_STEPS.map((step, index) => (
+            <div key={step.title} className="home-how-step">
+              <div className="home-how-number">
+                <span>{index + 1}</span>
+              </div>
+              <div className="home-how-content">
+                <h3 className="home-how-title">{step.title}</h3>
+                <p className="home-how-text">{step.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Why Choose - Feature Grid */}
+      <section className="home-why-new">
+        <h2 className="home-section-heading-center">Why choose us</h2>
+        <p className="home-section-subtext-center">
+          Trusted by Coimbatore families for quality and reliability
+        </p>
+
+        <div className="home-why-new-grid">
+          {WHY_CHOOSE_POINTS.map((item, idx) => (
+            <div key={item.title} className="home-why-new-card">
+              <div className="home-why-icon">
+                {idx === 0 && "📍"}
+                {idx === 1 && "💰"}
+                {idx === 2 && "🤝"}
+                {idx === 3 && "📱"}
+              </div>
+              <h3 className="home-why-new-title">{item.title}</h3>
+              <p className="home-why-new-text">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Areas + CTA Combined Section */}
+      <section className="home-areas-cta-new">
+        <div className="home-areas-box">
+          <h3 className="home-areas-heading">Serving across Coimbatore</h3>
+          <div className="home-areas-tags">
+            {AREAS.map((area) => (
+              <span key={area} className="home-area-tag">
+                {area}
+              </span>
+            ))}
+          </div>
+          <p className="home-areas-note">
+            Don't see your area? <a href="#">Contact us</a> and we'll help!
+          </p>
+        </div>
+
+        <div className="home-cta-box">
+          <div className="home-cta-icon">💼</div>
+          <h3 className="home-cta-heading">Join our team</h3>
+          <p className="home-cta-text">
+            Earn flexible income by joining our network of professional cleaners
+            in Coimbatore
+          </p>
+          <button className="home-cta-btn">Apply as a cleaner</button>
         </div>
       </section>
     </div>

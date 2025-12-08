@@ -87,388 +87,363 @@ export default function CleanerApplyView({
   onSubmit,
 }) {
   return (
-    <section className="cleaner-apply-section">
-      <h1 className="cleaner-apply-title">Cleaner Registration</h1>
-      <p className="cleaner-apply-subtitle">
-        Apply as a freelance cleaner in Coimbatore. Our team will verify your
-        details and contact you.
-      </p>
-
-      {message && <p className="cleaner-apply-message-success">{message}</p>}
-      {error && <p className="cleaner-apply-message-error">{error}</p>}
-
-      <form className="cleaner-apply-form" onSubmit={onSubmit}>
-        {/* Name */}
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">
-            First name <span style={{ color: "red" }}>*</span>
-          </label>
-          <input
-            name="firstName"
-            value={form.firstName}
-            onChange={onChange}
-            required
-            className="cleaner-apply-input"
-            placeholder="Enter first name"
-          />
+    <div className="cleaner-apply-page-new">
+      {/* Hero Section */}
+      <section className="cleaner-apply-hero">
+        <div className="cleaner-apply-hero-content">
+          <div className="cleaner-apply-hero-badge">💼 Join Our Team</div>
+          <h1 className="cleaner-apply-hero-title">
+            Become a <span className="cleaner-apply-gradient">verified cleaner</span>
+          </h1>
+          <p className="cleaner-apply-hero-desc">
+            Join our network of professional cleaners in Coimbatore. Flexible work hours, fair pay, and consistent opportunities.
+          </p>
         </div>
+      </section>
 
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">
-            Last name <span style={{ color: "red" }}>*</span>
-          </label>
-          <input
-            name="lastName"
-            value={form.lastName}
-            onChange={onChange}
-            required
-            className="cleaner-apply-input"
-            placeholder="Enter last name"
-          />
-        </div>
-
-        {/* Contact */}
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">
-            Mobile Number <span style={{ color: "red" }}>*</span>
-          </label>
-          <input
-            name="phone"
-            value={form.phone}
-            onChange={onChange}
-            required
-            className="cleaner-apply-input"
-            placeholder="e.g. 9876543210"
-          />
-        </div>
-
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">
-            Email address <span style={{ color: "red" }}>*</span>
-          </label>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={onChange}
-            className="cleaner-apply-input"
-            placeholder="We will send updates here"
-            required
-          />
-        </div>
-
-        <div className="cleaner-apply-field-quarter">
-          <label className="cleaner-apply-label">
-            Preferred method of contact
-          </label>
-          <select
-            name="preferredContactMethod"
-            value={form.preferredContactMethod}
-            onChange={onChange}
-            className="cleaner-apply-input"
-          >
-            <option value="whatsapp">WhatsApp</option>
-            <option value="call">Phone call</option>
-            <option value="sms">SMS</option>
-            <option value="email">Email</option>
-          </select>
-        </div>
-
-        <div className="cleaner-apply-field-quarter">
-          <label className="cleaner-apply-label">Prefer time for work</label>
-          <select
-            name="preferredContactTime"
-            value={form.preferredContactTime}
-            onChange={onChange}
-            className="cleaner-apply-input"
-          >
-            <option value="">Any time</option>
-            <option value="8-10am">8 – 10 AM</option>
-            <option value="10am-12pm">10 AM – 12 PM</option>
-            <option value="12-2pm">12 – 2 PM</option>
-            <option value="2-4pm">2 – 4 PM</option>
-            <option value="4-6pm">4 – 6 PM</option>
-            <option value="6-8pm">6 – 8 PM</option>
-          </select>
-        </div>
-
-        {/* Area */}
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">
-            Area <span style={{ color: "red" }}>*</span>
-          </label>
-          <select
-            name="area"
-            value={form.area}
-            onChange={onChange}
-            required
-            className="cleaner-apply-input"
-          >
-            <option value="">Select area</option>
-            {AREAS.map((a) => (
-              <option key={a} value={a}>
-                {a}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {form.area === "Others / Not listed" && (
-          <div className="cleaner-apply-field-half">
-            <label className="cleaner-apply-label">
-              Enter your exact area / landmark *
-            </label>
-            <input
-              name="areaOther"
-              value={form.areaOther}
-              onChange={onChange}
-              required
-              className="cleaner-apply-input"
-              placeholder="Type your locality or nearest landmark"
-            />
+      {/* Benefits Section */}
+      <section className="cleaner-apply-benefits">
+        <div className="cleaner-apply-benefits-grid">
+          <div className="cleaner-apply-benefit-card">
+            <div className="cleaner-apply-benefit-icon">💰</div>
+            <h3 className="cleaner-apply-benefit-title">Competitive Pay</h3>
+            <p className="cleaner-apply-benefit-text">Earn fair wages with timely payments</p>
           </div>
-        )}
-
-        {/* Address */}
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">
-            Address line 1 <span style={{ color: "red" }}>*</span>
-          </label>
-          <input
-            name="address1"
-            value={form.address1}
-            onChange={onChange}
-            required
-            className="cleaner-apply-input"
-            placeholder="Flat / house number and street name"
-          />
-        </div>
-
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">Address line 2</label>
-          <input
-            name="address2"
-            value={form.address2}
-            onChange={onChange}
-            className="cleaner-apply-input"
-            placeholder="Area, landmark, or additional details (optional)"
-          />
-        </div>
-
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">
-            City <span style={{ color: "red" }}>*</span>
-          </label>
-          <input
-            name="city"
-            value={form.city}
-            onChange={onChange}
-            className="cleaner-apply-input"
-            placeholder="e.g. Coimbatore"
-            required
-          />
-        </div>
-
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">State</label>
-          <input
-            name="state"
-            value={form.state}
-            onChange={onChange}
-            className="cleaner-apply-input"
-            placeholder="e.g. Tamil Nadu"
-          />
-        </div>
-
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">Country</label>
-          <input
-            name="country"
-            value={form.country}
-            onChange={onChange}
-            className="cleaner-apply-input"
-            placeholder="e.g. India"
-          />
-        </div>
-
-        <div className="cleaner-apply-field-quarter">
-          <label className="cleaner-apply-label">Pincode</label>
-          <input
-            name="pincode"
-            value={form.pincode}
-            onChange={onChange}
-            className="cleaner-apply-input"
-            placeholder="e.g. 641002"
-          />
-        </div>
-
-        {/* Experience & services */}
-        <div className="cleaner-apply-field-quarter">
-          <label className="cleaner-apply-label">
-            Years of cleaning experience
-          </label>
-          <input
-            name="experienceYears"
-            value={form.experienceYears}
-            onChange={onChange}
-            className="cleaner-apply-input"
-            placeholder="e.g. 2 years"
-          />
-        </div>
-
-        <div className="cleaner-apply-field-quarter">
-          <label className="cleaner-apply-label">
-            Expected salary per hour <span style={{ color: "red" }}>*</span>
-          </label>
-          <input
-            name="expectedSalaryPerJob"
-            value={form.expectedSalaryPerJob}
-            onChange={onChange}
-            className="cleaner-apply-input"
-            placeholder="e.g. ₹200 per hour"
-            required
-          />
-        </div>
-
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">Languages known</label>
-          <input
-            name="languagesKnown"
-            value={form.languagesKnown}
-            onChange={onChange}
-            className="cleaner-apply-input"
-            placeholder="e.g. Tamil, English, Hindi"
-          />
-        </div>
-
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">
-            Type of work <span style={{ color: "red" }}>*</span>
-          </label>
-          <select
-            name="typeOfWork"
-            value={form.typeOfWork}
-            onChange={onChange}
-            className="cleaner-apply-input"
-            required
-          >
-            <option value="">Select type of work</option>
-            <option value="full-time">Full time</option>
-            <option value="part-time">Part time</option>
-            <option value="freelance">Freelance</option>
-            <option value="any">Any</option>
-          </select>
-        </div>
-
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">
-            Services you can offer <span style={{ color: "red" }}>*</span>
-          </label>
-          <select
-            name="servicesOffered"
-            value={form.servicesOffered}
-            onChange={onChange}
-            className="cleaner-apply-input"
-            required
-          >
-            <option value="">Select one</option>
-            {SERVICES.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {form.servicesOffered === "Others / Not listed" && (
-          <div className="cleaner-apply-field-half">
-            <label className="cleaner-apply-label">
-              Describe the services you can provide
-            </label>
-            <input
-              name="serviceOther"
-              value={form.serviceOther}
-              onChange={onChange}
-              className="cleaner-apply-input"
-              placeholder="Eg: Window cleaning, car cleaning, etc."
-            />
+          <div className="cleaner-apply-benefit-card">
+            <div className="cleaner-apply-benefit-icon">⏰</div>
+            <h3 className="cleaner-apply-benefit-title">Flexible Hours</h3>
+            <p className="cleaner-apply-benefit-text">Choose your own working schedule</p>
           </div>
-        )}
-
-        {/* ID proof */}
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">
-            ID proof type <span style={{ color: "red" }}>*</span>
-          </label>
-          <select
-            name="idProofType"
-            value={form.idProofType}
-            onChange={onChange}
-            required
-            className="cleaner-apply-input"
-          >
-            <option value="">Select ID type</option>
-            <option value="aadhaar">Aadhaar Card</option>
-            <option value="pan">PAN Card</option>
-            <option value="voter">Voter ID</option>
-            <option value="passport">Passport</option>
-            <option value="other">Other government ID</option>
-          </select>
+          <div className="cleaner-apply-benefit-card">
+            <div className="cleaner-apply-benefit-icon">🎯</div>
+            <h3 className="cleaner-apply-benefit-title">Regular Work</h3>
+            <p className="cleaner-apply-benefit-text">Get consistent cleaning assignments</p>
+          </div>
+          <div className="cleaner-apply-benefit-card">
+            <div className="cleaner-apply-benefit-icon">🤝</div>
+            <h3 className="cleaner-apply-benefit-title">Full Support</h3>
+            <p className="cleaner-apply-benefit-text">Our team is here to help you succeed</p>
+          </div>
         </div>
+      </section>
 
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">
-            ID proof number <span style={{ color: "red" }}>*</span>
-          </label>
-          <input
-            name="idProofNumber"
-            value={form.idProofNumber}
-            onChange={onChange}
-            required
-            className="cleaner-apply-input"
-            placeholder="Enter the ID number as on the card"
-          />
-        </div>
+      {/* Application Form */}
+      <section className="cleaner-apply-form-section">
+        <div className="cleaner-apply-form-container">
+          <div className="cleaner-apply-form-header">
+            <h2 className="cleaner-apply-form-title">Application Form</h2>
+            <p className="cleaner-apply-form-desc">
+              Fill out the details below. We'll verify your information and get back to you soon.
+            </p>
+          </div>
 
-        <div className="cleaner-apply-field-half">
-          <label className="cleaner-apply-label">
-            Upload ID proof (photo or PDF){" "}
-            <span style={{ color: "red" }}>*</span>
-          </label>
-          <input
-            type="file"
-            name="idProofFile"
-            accept="image/*,application/pdf"
-            onChange={onChange}
-            required
-            className="cleaner-apply-input"
-          />
-        </div>
+          {message && <div className="cleaner-apply-message-success">{message}</div>}
+          {error && <div className="cleaner-apply-message-error">{error}</div>}
 
-        {/* Notes */}
-        <div className="cleaner-apply-field-full">
-          <label className="cleaner-apply-label">Additional details</label>
-          <textarea
-            name="notes"
-            value={form.notes}
-            onChange={onChange}
-            rows={3}
-            className="cleaner-apply-input"
-            placeholder="Tell us anything important we should know (timings, restrictions, etc.)"
-          />
-        </div>
+          <form className="cleaner-apply-form-new" onSubmit={onSubmit}>
+            {/* Personal Information */}
+            <div className="cleaner-apply-section-title">Personal Information</div>
 
-        {/* Submit */}
-        <div className="cleaner-apply-field-full">
-          <button
-            type="submit"
-            className="cleaner-apply-submit-button"
-            disabled={submitting}
-          >
-            {submitting ? "Submitting..." : "Submit application"}
-          </button>
+            <div className="cleaner-apply-form-row">
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">First name *</label>
+                <input
+                  name="firstName"
+                  value={form.firstName}
+                  onChange={onChange}
+                  required
+                  className="cleaner-apply-input"
+                  placeholder="Enter first name"
+                />
+              </div>
+
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">Last name *</label>
+                <input
+                  name="lastName"
+                  value={form.lastName}
+                  onChange={onChange}
+                  required
+                  className="cleaner-apply-input"
+                  placeholder="Enter last name"
+                />
+              </div>
+            </div>
+
+            <div className="cleaner-apply-form-row">
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">Mobile Number *</label>
+                <input
+                  name="phone"
+                  value={form.phone}
+                  onChange={onChange}
+                  required
+                  className="cleaner-apply-input"
+                  placeholder="e.g. 9876543210"
+                />
+              </div>
+
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">Email address *</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={onChange}
+                  className="cleaner-apply-input"
+                  placeholder="your.email@example.com"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Location */}
+            <div className="cleaner-apply-section-title">Location Details</div>
+
+            <div className="cleaner-apply-form-row">
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">Area *</label>
+                <select
+                  name="area"
+                  value={form.area}
+                  onChange={onChange}
+                  required
+                  className="cleaner-apply-input"
+                >
+                  <option value="">Select your area</option>
+                  {AREAS.map((a) => (
+                    <option key={a} value={a}>{a}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">City *</label>
+                <input
+                  name="city"
+                  value={form.city}
+                  onChange={onChange}
+                  className="cleaner-apply-input"
+                  placeholder="e.g. Coimbatore"
+                  required
+                />
+              </div>
+            </div>
+
+            {form.area === "Others / Not listed" && (
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">Enter your exact area *</label>
+                <input
+                  name="areaOther"
+                  value={form.areaOther}
+                  onChange={onChange}
+                  required
+                  className="cleaner-apply-input"
+                  placeholder="Type your locality or nearest landmark"
+                />
+              </div>
+            )}
+
+            <div className="cleaner-apply-field">
+              <label className="cleaner-apply-label">Address line 1 *</label>
+              <input
+                name="address1"
+                value={form.address1}
+                onChange={onChange}
+                required
+                className="cleaner-apply-input"
+                placeholder="Flat / house number and street name"
+              />
+            </div>
+
+            <div className="cleaner-apply-form-row">
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">State</label>
+                <input
+                  name="state"
+                  value={form.state}
+                  onChange={onChange}
+                  className="cleaner-apply-input"
+                  placeholder="e.g. Tamil Nadu"
+                />
+              </div>
+
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">Pincode</label>
+                <input
+                  name="pincode"
+                  value={form.pincode}
+                  onChange={onChange}
+                  className="cleaner-apply-input"
+                  placeholder="e.g. 641002"
+                />
+              </div>
+            </div>
+
+            {/* Work Details */}
+            <div className="cleaner-apply-section-title">Work Preferences</div>
+
+            <div className="cleaner-apply-form-row">
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">Years of experience</label>
+                <input
+                  name="experienceYears"
+                  value={form.experienceYears}
+                  onChange={onChange}
+                  className="cleaner-apply-input"
+                  placeholder="e.g. 2 years"
+                />
+              </div>
+
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">Expected salary per hour *</label>
+                <input
+                  name="expectedSalaryPerJob"
+                  value={form.expectedSalaryPerJob}
+                  onChange={onChange}
+                  className="cleaner-apply-input"
+                  placeholder="e.g. ₹200 per hour"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="cleaner-apply-form-row">
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">Type of work *</label>
+                <select
+                  name="typeOfWork"
+                  value={form.typeOfWork}
+                  onChange={onChange}
+                  className="cleaner-apply-input"
+                  required
+                >
+                  <option value="">Select type</option>
+                  <option value="full-time">Full time</option>
+                  <option value="part-time">Part time</option>
+                  <option value="freelance">Freelance</option>
+                  <option value="any">Any</option>
+                </select>
+              </div>
+
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">Preferred contact method</label>
+                <select
+                  name="preferredContactMethod"
+                  value={form.preferredContactMethod}
+                  onChange={onChange}
+                  className="cleaner-apply-input"
+                >
+                  <option value="whatsapp">WhatsApp</option>
+                  <option value="call">Phone call</option>
+                  <option value="sms">SMS</option>
+                  <option value="email">Email</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="cleaner-apply-form-row">
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">Services you can offer *</label>
+                <select
+                  name="servicesOffered"
+                  value={form.servicesOffered}
+                  onChange={onChange}
+                  className="cleaner-apply-input"
+                  required
+                >
+                  <option value="">Select service</option>
+                  {SERVICES.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">Languages known</label>
+                <input
+                  name="languagesKnown"
+                  value={form.languagesKnown}
+                  onChange={onChange}
+                  className="cleaner-apply-input"
+                  placeholder="e.g. Tamil, English, Hindi"
+                />
+              </div>
+            </div>
+
+            {/* ID Proof */}
+            <div className="cleaner-apply-section-title">Identity Verification</div>
+
+            <div className="cleaner-apply-form-row">
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">ID proof type *</label>
+                <select
+                  name="idProofType"
+                  value={form.idProofType}
+                  onChange={onChange}
+                  required
+                  className="cleaner-apply-input"
+                >
+                  <option value="">Select ID type</option>
+                  <option value="aadhaar">Aadhaar Card</option>
+                  <option value="pan">PAN Card</option>
+                  <option value="voter">Voter ID</option>
+                  <option value="passport">Passport</option>
+                  <option value="other">Other government ID</option>
+                </select>
+              </div>
+
+              <div className="cleaner-apply-field">
+                <label className="cleaner-apply-label">ID proof number *</label>
+                <input
+                  name="idProofNumber"
+                  value={form.idProofNumber}
+                  onChange={onChange}
+                  required
+                  className="cleaner-apply-input"
+                  placeholder="Enter ID number"
+                />
+              </div>
+            </div>
+
+            <div className="cleaner-apply-field">
+              <label className="cleaner-apply-label">Upload ID proof (photo or PDF) *</label>
+              <input
+                type="file"
+                name="idProofFile"
+                accept="image/*,application/pdf"
+                onChange={onChange}
+                required
+                className="cleaner-apply-input cleaner-apply-file-input"
+              />
+            </div>
+
+            {/* Additional Notes */}
+            <div className="cleaner-apply-field">
+              <label className="cleaner-apply-label">Additional details (optional)</label>
+              <textarea
+                name="notes"
+                value={form.notes}
+                onChange={onChange}
+                rows={4}
+                className="cleaner-apply-input cleaner-apply-textarea"
+                placeholder="Tell us anything important we should know..."
+              />
+            </div>
+
+            {/* Submit Button */}
+            <div className="cleaner-apply-field">
+              <button
+                type="submit"
+                className="cleaner-apply-submit-btn"
+                disabled={submitting}
+              >
+                {submitting ? "Submitting..." : "Submit Application"}
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
-    </section>
+      </section>
+    </div>
   );
 }
