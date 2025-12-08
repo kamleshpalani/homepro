@@ -1,119 +1,288 @@
-.cleaner-apply-section {
-  position: relative;
-  border-radius: 22px;
-  padding: 22px 20px 20px;
-  background: radial-gradient(circle at top left, #f9fafb, #e0f2fe);
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
-  border: 1px solid rgba(148, 163, 184, 0.55);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  width: 100%;
+/* Cleaner Apply Page - Modern Design */
+.cleaner-apply-page-new {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f8fafc, #ffffff);
 }
 
-.cleaner-apply-title {
-  font-size: 24px;
+/* Hero Section */
+.cleaner-apply-hero {
+  padding: 4rem 2rem 3rem;
+  text-align: center;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: white;
+}
+
+.cleaner-apply-hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.cleaner-apply-hero-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #10b981;
+}
+
+.cleaner-apply-hero-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.cleaner-apply-gradient {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cleaner-apply-hero-desc {
+  font-size: 1.15rem;
+  color: #cbd5e1;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Benefits Section */
+.cleaner-apply-benefits {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cleaner-apply-benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.cleaner-apply-benefit-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 2px solid #f1f5f9;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.cleaner-apply-benefit-card:hover {
+  transform: translateY(-5px);
+  border-color: #10b981;
+  box-shadow: 0 12px 30px rgba(16, 185, 129, 0.15);
+}
+
+.cleaner-apply-benefit-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.cleaner-apply-benefit-title {
+  font-size: 1.15rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  margin-bottom: 6px;
-  color: #020617;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
 }
 
-.cleaner-apply-subtitle {
-  font-size: 14px;
-  margin-bottom: 16px;
-  color: #4b5563;
+.cleaner-apply-benefit-text {
+  color: #64748b;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Form Section */
+.cleaner-apply-form-section {
+  padding: 4rem 2rem;
+  background: #f8fafc;
+}
+
+.cleaner-apply-form-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  padding: 3rem;
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid #f1f5f9;
+}
+
+.cleaner-apply-form-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.cleaner-apply-form-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.75rem;
+}
+
+.cleaner-apply-form-desc {
+  color: #64748b;
+  font-size: 1rem;
   line-height: 1.6;
 }
 
+/* Messages */
 .cleaner-apply-message-success {
-  font-size: 14px;
+  padding: 1rem 1.5rem;
+  background: #d1fae5;
   color: #065f46;
-  background: #ecfdf3;
-  padding: 8px 10px;
-  border-radius: 8px;
-  margin-bottom: 10px;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  font-weight: 500;
+  border-left: 4px solid #10b981;
 }
 
 .cleaner-apply-message-error {
-  font-size: 14px;
-  color: #b91c1c;
-  background: #fef2f2;
-  padding: 8px 10px;
-  border-radius: 8px;
-  margin-bottom: 10px;
+  padding: 1rem 1.5rem;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  font-weight: 500;
+  border-left: 4px solid #ef4444;
 }
 
-.cleaner-apply-form {
+/* Form Styles */
+.cleaner-apply-form-new {
+  width: 100%;
+}
+
+.cleaner-apply-section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 2rem 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.cleaner-apply-section-title:first-child {
+  margin-top: 0;
+}
+
+.cleaner-apply-form-row {
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
-.cleaner-apply-field-full {
-  grid-column: 1 / -1;
-}
-
-.cleaner-apply-field-half {
-  grid-column: span 2;
-}
-
-.cleaner-apply-field-quarter {
-  grid-column: span 1;
+.cleaner-apply-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .cleaner-apply-label {
-  font-size: 13px;
   font-weight: 600;
-  display: block;
-  margin-bottom: 4px;
   color: #0f172a;
+  font-size: 0.95rem;
 }
 
-.cleaner-apply-input,
-.cleaner-apply-textarea {
-  width: 100%;
-  padding: 8px 10px;
-  border-radius: 9px;
-  border: 1px solid rgba(148, 163, 184, 0.8);
-  font-size: 14px;
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+.cleaner-apply-input {
+  padding: 0.875rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.cleaner-apply-input:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
 .cleaner-apply-textarea {
   resize: vertical;
+  min-height: 100px;
 }
 
-.cleaner-apply-submit-button {
-  padding: 10px 18px;
-  border-radius: 999px;
-  font-weight: 600;
-  color: #ecfdf5;
-  border: none;
+.cleaner-apply-file-input {
+  padding: 0.75rem;
   cursor: pointer;
-  background: linear-gradient(135deg, #0f766e, #22c55e);
-  box-shadow: 0 16px 36px rgba(16, 185, 129, 0.55);
-  transition: transform 0.16s ease, box-shadow 0.16s ease;
 }
 
-.cleaner-apply-submit-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 20px 46px rgba(16, 185, 129, 0.65);
+.cleaner-apply-file-input::-webkit-file-upload-button {
+  padding: 0.5rem 1rem;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #0f172a;
+  transition: all 0.2s ease;
 }
 
-.cleaner-apply-submit-button:disabled {
-  background: #6b7280;
-  box-shadow: none;
+.cleaner-apply-file-input::-webkit-file-upload-button:hover {
+  background: #e2e8f0;
 }
 
+.cleaner-apply-submit-btn {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  margin-top: 1rem;
+}
+
+.cleaner-apply-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.cleaner-apply-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-  .cleaner-apply-form {
+  .cleaner-apply-hero {
+    padding: 3rem 1.5rem 2rem;
+  }
+
+  .cleaner-apply-hero-title {
+    font-size: 2rem;
+  }
+
+  .cleaner-apply-hero-desc {
+    font-size: 1rem;
+  }
+
+  .cleaner-apply-benefits-grid {
     grid-template-columns: 1fr;
   }
 
-  .cleaner-apply-field-full,
-  .cleaner-apply-field-half,
-  .cleaner-apply-field-quarter {
-    grid-column: 1 / -1;
+  .cleaner-apply-form-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .cleaner-apply-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .cleaner-apply-form-title {
+    font-size: 1.75rem;
   }
 }

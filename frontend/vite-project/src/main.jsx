@@ -12,6 +12,11 @@ import Book from "./pages/Book.jsx";
 // Public cleaner registration page
 import CleanerApply from "./pages/CleanerApply.jsx";
 
+// Customer Account pages
+import Signup from "./pages/Signup.jsx";
+import CustomerLogin from "./pages/CustomerLogin.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+
 // Admin pages
 import Bookings from "./pages/Bookings.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
@@ -34,6 +39,11 @@ root.render(
 
         {/* Public Cleaner Registration */}
         <Route path="/cleaners/apply" element={<CleanerApply />} />
+
+        {/* Customer Account Pages */}
+        <Route path="/account/signup" element={<Signup />} />
+        <Route path="/account/login" element={<CustomerLogin />} />
+        <Route path="/account/dashboard" element={<Dashboard />} />
 
         {/* Admin Pages */}
         <Route path="/admin/login" element={<AdminLogin />} />

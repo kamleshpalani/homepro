@@ -88,6 +88,48 @@ const cleanerSchema = new mongoose.Schema(
 
 const Cleaner = mongoose.model("Cleaner", cleanerSchema);
 
+// ---- CUSTOMER USER SCHEMA & MODEL ----
+const bcrypt = require("bcryptjs");
+
+const userSchema = new mongoose.Schema(
+  {
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true, unique: true, lowercase: true },
+    phone: { type: String, required: true },
+    password: { type: String, required: true },
+    addresses: [
+      {
+        label: { type: String, default: "Home" }, // Home, Office, etc.
+        address1: String,
+        address2: String,
+        city: String,
+        state: String,
+        pincode: String,
+        isDefault: { type: Boolean, default: false },
+      },
+    ],
+    isActive: { type: Boolean, default: true },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+// Hash password before saving
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
+
+// Compare password method
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};
+
+const User = mongoose.model("User", userSchema);
+
 // ---- MIDDLEWARES ----
 // allow both Vite ports while developing
 app.use(
@@ -156,6 +198,256 @@ app.post("/api/admin/login", (req, res) => {
     message: "Admin login successful (TEMP OVERRIDE)",
     token,
   });
+});
+
+// ---- CUSTOMER AUTH ROUTES ----
+
+// Customer Signup
+app.post("/api/auth/signup", async (req, res) => {
+  const { firstName, lastName, email, phone, password } = req.body || {};
+
+  if (!firstName || !lastName || !email || !phone || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  if (password.length < 6) {
+    return res
+      .status(400)
+      .json({ message: "Password must be at least 6 characters" });
+  }
+
+  try {
+    // Check if user already exists
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ message: "An account with this email already exists" });
+    }
+
+    // Create new user
+    const user = await User.create({
+      firstName,
+      lastName,
+      email: email.toLowerCase(),
+      phone,
+      password,
+    });
+
+    // Generate token
+    const token = jwt.sign(
+      { userId: user._id, email: user.email, role: "customer" },
+      JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    console.log("👤 New customer registered:", user.email);
+
+    return res.status(201).json({
+      message: "Account created successfully",
+      token,
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+      },
+    });
+  } catch (err) {
+    console.error("Error creating user:", err);
+    return res.status(500).json({ message: "Failed to create account" });
+  }
+});
+
+// Customer Login
+app.post("/api/auth/login", async (req, res) => {
+  const { email, password } = req.body || {};
+
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
+
+  try {
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    if (!user.isActive) {
+      return res
+        .status(401)
+        .json({ message: "Your account has been deactivated" });
+    }
+
+    // Generate token
+    const token = jwt.sign(
+      { userId: user._id, email: user.email, role: "customer" },
+      JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    console.log("👤 Customer logged in:", user.email);
+
+    return res.json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+      },
+    });
+  } catch (err) {
+    console.error("Error during login:", err);
+    return res.status(500).json({ message: "Login failed" });
+  }
+});
+
+// Middleware to verify customer token
+function requireCustomer(req, res, next) {
+  const authHeader = req.headers.authorization || "";
+
+  if (!authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Unauthorized: missing token" });
+  }
+
+  const token = authHeader.slice(7);
+
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    req.user = payload;
+    next();
+  } catch (err) {
+    console.error("JWT error:", err.message);
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+}
+
+// Get customer profile
+app.get("/api/auth/profile", requireCustomer, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.json(user);
+  } catch (err) {
+    console.error("Error fetching profile:", err);
+    return res.status(500).json({ message: "Failed to fetch profile" });
+  }
+});
+
+// Update customer profile
+app.put("/api/auth/profile", requireCustomer, async (req, res) => {
+  const { firstName, lastName, phone } = req.body;
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user.userId,
+      { firstName, lastName, phone },
+      { new: true }
+    ).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.json({ message: "Profile updated successfully", user });
+  } catch (err) {
+    console.error("Error updating profile:", err);
+    return res.status(500).json({ message: "Failed to update profile" });
+  }
+});
+
+// Add address
+app.post("/api/auth/addresses", requireCustomer, async (req, res) => {
+  const { label, address1, address2, city, state, pincode, isDefault } =
+    req.body;
+
+  try {
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // If this is default, unset other defaults
+    if (isDefault) {
+      user.addresses.forEach((addr) => (addr.isDefault = false));
+    }
+
+    user.addresses.push({
+      label,
+      address1,
+      address2,
+      city,
+      state,
+      pincode,
+      isDefault,
+    });
+    await user.save();
+
+    return res.json({
+      message: "Address added successfully",
+      addresses: user.addresses,
+    });
+  } catch (err) {
+    console.error("Error adding address:", err);
+    return res.status(500).json({ message: "Failed to add address" });
+  }
+});
+
+// Delete address
+app.delete(
+  "/api/auth/addresses/:addressId",
+  requireCustomer,
+  async (req, res) => {
+    try {
+      const user = await User.findById(req.user.userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      user.addresses = user.addresses.filter(
+        (addr) => addr._id.toString() !== req.params.addressId
+      );
+      await user.save();
+
+      return res.json({
+        message: "Address deleted",
+        addresses: user.addresses,
+      });
+    } catch (err) {
+      console.error("Error deleting address:", err);
+      return res.status(500).json({ message: "Failed to delete address" });
+    }
+  }
+);
+
+// Get customer's bookings
+app.get("/api/auth/bookings", requireCustomer, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Find bookings by phone number (since bookings use phone)
+    const bookings = await Booking.find({ phone: user.phone }).sort({
+      createdAt: -1,
+    });
+    return res.json(bookings);
+  } catch (err) {
+    console.error("Error fetching user bookings:", err);
+    return res.status(500).json({ message: "Failed to fetch bookings" });
+  }
 });
 
 // ---- BOOKINGS ROUTES ----
