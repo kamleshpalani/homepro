@@ -117,7 +117,7 @@ export default function BookView({
   // Calculate filled fields percentage
   const calculateProgress = () => {
     const allFields = Object.entries(form);
-    const filledFields = allFields.filter(([key, value]) => {
+    const filledFields = allFields.filter(([, value]) => {
       if (typeof value === "boolean") return true; // Checkboxes count as filled
       if (typeof value === "string") return value.trim() !== "";
       if (typeof value === "number") return true; // Numbers always count
@@ -328,6 +328,44 @@ export default function BookView({
                       <option value="4-6pm">4 – 6 PM</option>
                       <option value="6-8pm">6 – 8 PM</option>
                     </select>
+                  </div>
+
+                  <div className="book-field">
+                    <label className="book-label">Quiet Hours</label>
+                    <select
+                      name="quietHours"
+                      value={form.quietHours}
+                      onChange={onChange}
+                      className="book-input"
+                    >
+                      <option value="">None</option>
+                      <option value="before-9am">Avoid before 9 AM</option>
+                      <option value="after-8pm">Avoid after 8 PM</option>
+                    </select>
+                  </div>
+
+                  <div className="book-field">
+                    <label className="book-label">Onsite Contact Name</label>
+                    <input
+                      type="text"
+                      name="onsiteContactName"
+                      value={form.onsiteContactName}
+                      onChange={onChange}
+                      className="book-input"
+                      placeholder="If different from booker"
+                    />
+                  </div>
+
+                  <div className="book-field">
+                    <label className="book-label">Onsite Contact Phone</label>
+                    <input
+                      type="tel"
+                      name="onsiteContactPhone"
+                      value={form.onsiteContactPhone}
+                      onChange={onChange}
+                      className="book-input"
+                      placeholder="Alternate number on the day"
+                    />
                   </div>
                 </div>
               </div>
@@ -638,6 +676,22 @@ export default function BookView({
                       <option value="6-8pm">6 – 8 PM</option>
                     </select>
                   </div>
+
+                  <div className="book-field">
+                    <label className="book-label">Flexibility</label>
+                    <select
+                      name="flexibilityWindow"
+                      value={form.flexibilityWindow}
+                      onChange={onChange}
+                      className="book-input"
+                    >
+                      <option value="">Exact slot only</option>
+                      <option value="plus-minus-1hr">Flexible ±1 hour</option>
+                      <option value="alternate-slot-ok">
+                        Alternate nearby slot is okay
+                      </option>
+                    </select>
+                  </div>
                 </div>
               </div>
             )}
@@ -723,6 +777,30 @@ export default function BookView({
                       className="book-input"
                       placeholder="e.g. 641001"
                       required
+                    />
+                  </div>
+
+                  <div className="book-field book-field-full">
+                    <label className="book-label">Access Instructions</label>
+                    <textarea
+                      name="accessInstructions"
+                      rows={3}
+                      value={form.accessInstructions}
+                      onChange={onChange}
+                      className="book-input book-textarea"
+                      placeholder="Gate code, security name/number, parking notes"
+                    />
+                  </div>
+
+                  <div className="book-field book-field-full">
+                    <label className="book-label">Onsite Contact Notes</label>
+                    <textarea
+                      name="onsiteContactNotes"
+                      rows={2}
+                      value={form.onsiteContactNotes}
+                      onChange={onChange}
+                      className="book-input book-textarea"
+                      placeholder="Any details to help reach the onsite contact"
                     />
                   </div>
                 </div>
@@ -853,6 +931,36 @@ export default function BookView({
                     </select>
                   </div>
 
+                  <div className="book-field">
+                    <label className="book-label">Elevator Available?</label>
+                    <select
+                      name="elevatorAvailable"
+                      value={form.elevatorAvailable}
+                      onChange={onChange}
+                      className="book-input"
+                    >
+                      <option value="">Select</option>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </div>
+
+                  <div className="book-field">
+                    <label className="book-label">Parking Availability</label>
+                    <select
+                      name="parkingAvailability"
+                      value={form.parkingAvailability}
+                      onChange={onChange}
+                      className="book-input"
+                    >
+                      <option value="">Select</option>
+                      <option value="onsite">On-site parking</option>
+                      <option value="street">Street parking</option>
+                      <option value="paid">Paid parking nearby</option>
+                      <option value="none">No parking</option>
+                    </select>
+                  </div>
+
                   {/* Cleaner Preferences */}
                   <div className="book-field book-field-full">
                     <h3 className="book-subsection-title">
@@ -962,6 +1070,66 @@ export default function BookView({
                         <span>Malayalam</span>
                       </label>
                     </div>
+                  </div>
+
+                  <div className="book-field">
+                    <label className="book-label">Budget Range</label>
+                    <select
+                      name="budgetRange"
+                      value={form.budgetRange}
+                      onChange={onChange}
+                      className="book-input"
+                    >
+                      <option value="">Flexible</option>
+                      <option value="economy">Economy</option>
+                      <option value="standard">Standard</option>
+                      <option value="premium">Premium</option>
+                    </select>
+                  </div>
+
+                  <div className="book-field">
+                    <label className="book-label">
+                      Power / Water Constraints
+                    </label>
+                    <textarea
+                      name="powerWaterConstraints"
+                      rows={2}
+                      value={form.powerWaterConstraints}
+                      onChange={onChange}
+                      className="book-input book-textarea"
+                      placeholder="Low pressure after 5 PM, water tanker timing, etc."
+                    />
+                  </div>
+
+                  <div className="book-field">
+                    <label className="book-label">Do-Not-Clean Areas</label>
+                    <textarea
+                      name="doNotCleanAreas"
+                      rows={2}
+                      value={form.doNotCleanAreas}
+                      onChange={onChange}
+                      className="book-input book-textarea"
+                      placeholder="Rooms or items to avoid"
+                    />
+                  </div>
+
+                  <div className="book-field book-field-full">
+                    <label className="book-checkbox-label book-checkbox-inline">
+                      <input
+                        type="checkbox"
+                        name="postServiceProof"
+                        checked={form.postServiceProof || false}
+                        onChange={(e) =>
+                          onChange({
+                            target: {
+                              name: e.target.name,
+                              value: e.target.checked,
+                            },
+                          })
+                        }
+                      />
+                      <span>Require post-service photo proof</span>
+                    </label>
                   </div>
 
                   <div className="book-field book-field-full">

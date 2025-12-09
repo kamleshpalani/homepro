@@ -194,6 +194,57 @@ export default function ServicesView() {
         </div>
       </section>
 
+      {/* Premium Experience Section */}
+      <section className="services-experience-section">
+        <div className="services-experience-content">
+          <div className="services-experience-copy">
+            <p className="services-eyebrow">Premium experience</p>
+            <h2 className="services-experience-title">
+              White-glove cleaning designed for busy homes and offices
+            </h2>
+            <p className="services-experience-desc">
+              We combine vetted professionals, hospital-grade supplies, and live
+              support to deliver a consistently delightful clean. Choose a plan,
+              set your schedule, and we handle the rest.
+            </p>
+            <div className="services-experience-tags">
+              <span className="services-experience-tag">Same-day slots</span>
+              <span className="services-experience-tag">Supplies included</span>
+              <span className="services-experience-tag">Real-time updates</span>
+            </div>
+          </div>
+
+          <div className="services-experience-cards">
+            <div className="services-experience-card">
+              <div className="services-experience-icon">🧽</div>
+              <h3 className="services-experience-heading">
+                Deep-clean playbook
+              </h3>
+              <p className="services-experience-text">
+                Structured checklists tailored to each room so nothing gets
+                missed, from fans to floor edges.
+              </p>
+            </div>
+            <div className="services-experience-card">
+              <div className="services-experience-icon">🛡️</div>
+              <h3 className="services-experience-heading">Trusted & insured</h3>
+              <p className="services-experience-text">
+                Background-checked cleaners, verified IDs, and damage protection
+                for complete peace of mind.
+              </p>
+            </div>
+            <div className="services-experience-card">
+              <div className="services-experience-icon">⚡</div>
+              <h3 className="services-experience-heading">Fast coordination</h3>
+              <p className="services-experience-text">
+                Lightning-fast scheduling and support on chat or call when you
+                need to adjust your booking.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Category Filter */}
       <section className="services-filter-section">
         <div className="services-filter-container">

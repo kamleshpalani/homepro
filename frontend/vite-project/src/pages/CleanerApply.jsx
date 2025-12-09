@@ -10,6 +10,7 @@ export default function CleanerApply() {
     lastName: "",
     phone: "",
     email: "",
+    whatsappNumber: "",
 
     // Step 2: Location Details
     area: "",
@@ -18,18 +19,24 @@ export default function CleanerApply() {
     address1: "",
     state: "",
     pincode: "",
+    serviceRadiusKm: "",
 
     // Step 3: Professional Details
     experienceYears: "",
     educationLevel: "",
     expectedSalaryPerJob: "",
-    typeOfWork: "",
+    typeOfWork: [],
     preferredContactMethod: "whatsapp",
     gender: "",
     dateOfBirth: "",
     ownVehicle: "no",
-    servicesOffered: "",
+    transportationMode: "",
+    servicesOffered: [],
     languagesKnown: "",
+    languageTamil: false,
+    languageEnglish: false,
+    languageHindi: false,
+    languageMalayalam: false,
     previousEmployment: "",
 
     // Step 4: Skills & Equipment
@@ -44,6 +51,8 @@ export default function CleanerApply() {
     equipmentCleaningSupplies: false,
     equipmentSteamCleaner: false,
     equipmentPressureWasher: false,
+    equipmentPPE: false,
+    equipmentLadder: false,
     certifications: "",
 
     // Step 5: Availability
@@ -56,6 +65,10 @@ export default function CleanerApply() {
     availableFriday: false,
     availableSaturday: false,
     availableSunday: false,
+    availableMorning: false,
+    availableAfternoon: false,
+    availableEvening: false,
+    availableOvernight: false,
 
     // Step 6: Banking & References
     bankName: "",
@@ -99,6 +112,17 @@ export default function CleanerApply() {
     }
   };
 
+  const handleToggleMulti = (field, option) => {
+    setForm((prev) => {
+      const current = Array.isArray(prev[field]) ? prev[field] : [];
+      const exists = current.includes(option);
+      const updated = exists
+        ? current.filter((item) => item !== option)
+        : [...current, option];
+      return { ...prev, [field]: updated };
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
@@ -110,7 +134,10 @@ export default function CleanerApply() {
 
       const formData = new FormData();
       Object.entries(form).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
+        if (value === undefined || value === null) return;
+        if (Array.isArray(value)) {
+          formData.append(key, JSON.stringify(value));
+        } else {
           formData.append(key, value);
         }
       });
@@ -161,6 +188,7 @@ export default function CleanerApply() {
         submitting={submitting}
         currentStep={currentStep}
         onChange={handleChange}
+        onToggleMulti={handleToggleMulti}
         onSubmit={handleSubmit}
         onNext={handleNext}
         onPrev={handlePrev}
