@@ -26,6 +26,17 @@ const SERVICES = [
   "Others / Not listed",
 ];
 
+// Popular areas in Coimbatore (highlighted in UI)
+const POPULAR_AREAS = [
+  "RS Puram",
+  "Saibaba Colony",
+  "Gandhipuram",
+  "Peelamedu",
+  "Singanallur",
+  "Saravanampatti",
+  "Race Course",
+];
+
 const AREAS = [
   "RS Puram",
   "Saibaba Colony",
@@ -103,23 +114,84 @@ export default function BookView({
     if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
+  // Calculate filled fields percentage
+  const calculateProgress = () => {
+    const allFields = Object.entries(form);
+    const filledFields = allFields.filter(([key, value]) => {
+      if (typeof value === "boolean") return true; // Checkboxes count as filled
+      if (typeof value === "string") return value.trim() !== "";
+      if (typeof value === "number") return true; // Numbers always count
+      return value !== null && value !== undefined;
+    });
+    return Math.round((filledFields.length / allFields.length) * 100);
+  };
+
+  const progressPercentage = calculateProgress();
+
   return (
     <div className="book-page-new">
+      {/* Animated Background */}
+      <div className="book-bg">
+        <div className="book-bg-shape-1"></div>
+        <div className="book-bg-shape-2"></div>
+        <div className="book-bg-shape-3"></div>
+      </div>
+
       {/* Hero Section */}
       <section className="book-hero">
         <div className="book-hero-content">
-          <div className="book-hero-badge">📅 Book Now</div>
+          <div className="book-hero-badge">
+            <div className="book-hero-badge-dot"></div>
+            📅 Book Now
+          </div>
           <h1 className="book-hero-title">
             Book your <span className="book-gradient">cleaning service</span>
           </h1>
           <p className="book-hero-desc">
-            Fill in the details below and we'll match you with a verified cleaner in your area.
+            Fill in the details below and we'll match you with a verified
+            cleaner in your area.
           </p>
+
+          {/* Hero Stats */}
+          <div className="book-hero-stats">
+            <div className="book-stat">
+              <div className="book-stat-value">500+</div>
+              <div className="book-stat-label">Happy Customers</div>
+            </div>
+            <div className="book-stat-divider"></div>
+            <div className="book-stat">
+              <div className="book-stat-value">4.8★</div>
+              <div className="book-stat-label">Average Rating</div>
+            </div>
+            <div className="book-stat-divider"></div>
+            <div className="book-stat">
+              <div className="book-stat-value">24hr</div>
+              <div className="book-stat-label">Quick Response</div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Booking Form */}
       <section className="book-form-section">
+        {/* Progress Bar */}
+        <div className="book-progress-section">
+          <div className="book-progress-container">
+            <div className="book-progress-label">
+              <span className="book-progress-text">Progress</span>
+              <span className="book-progress-percentage">
+                {progressPercentage}%
+              </span>
+            </div>
+            <div className="book-progress-bar">
+              <div
+                className="book-progress-fill"
+                style={{ width: `${progressPercentage}%` }}
+              ></div>
+            </div>
+          </div>
+        </div>
+
         <div className="book-form-container">
           {/* Progress Steps */}
           <div className="book-steps">
@@ -130,7 +202,25 @@ export default function BookView({
                   currentStep === step.num ? "book-step-active" : ""
                 } ${currentStep > step.num ? "book-step-completed" : ""}`}
               >
-                <div className="book-step-icon">{step.icon}</div>
+                {currentStep > step.num ? (
+                  <div className="book-step-icon-wrapper">
+                    <svg
+                      className="book-step-checkmark"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="white"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                  </div>
+                ) : (
+                  <div className="book-step-icon">{step.icon}</div>
+                )}
                 <div className="book-step-text">
                   <div className="book-step-number">Step {step.num}</div>
                   <div className="book-step-title">{step.title}</div>
@@ -206,7 +296,9 @@ export default function BookView({
                   </div>
 
                   <div className="book-field">
-                    <label className="book-label">Preferred Contact Method</label>
+                    <label className="book-label">
+                      Preferred Contact Method
+                    </label>
                     <select
                       name="preferredContactMethod"
                       value={form.preferredContactMethod}
@@ -246,7 +338,7 @@ export default function BookView({
               <div className="book-form-step">
                 <h2 className="book-form-step-title">Service Details</h2>
                 <p className="book-form-step-desc">
-                  Choose the service you need
+                  Choose the service you need and specify your requirements
                 </p>
 
                 <div className="book-form-grid">
@@ -270,7 +362,9 @@ export default function BookView({
 
                   {form.service === "Others / Not listed" && (
                     <div className="book-field book-field-full">
-                      <label className="book-label">Describe Your Service *</label>
+                      <label className="book-label">
+                        Describe Your Service *
+                      </label>
                       <input
                         type="text"
                         name="serviceOther"
@@ -283,21 +377,178 @@ export default function BookView({
                     </div>
                   )}
 
+                  {/* Enhanced Fields for Coimbatore */}
+                  <div className="book-field">
+                    <label className="book-label">Number of Bedrooms</label>
+                    <select
+                      name="numBedrooms"
+                      value={form.numBedrooms || ""}
+                      onChange={onChange}
+                      className="book-input"
+                    >
+                      <option value="">Select</option>
+                      <option value="1">1 Bedroom</option>
+                      <option value="2">2 Bedrooms</option>
+                      <option value="3">3 Bedrooms</option>
+                      <option value="4">4 Bedrooms</option>
+                      <option value="5+">5+ Bedrooms</option>
+                    </select>
+                  </div>
+
+                  <div className="book-field">
+                    <label className="book-label">Number of Bathrooms</label>
+                    <select
+                      name="numBathrooms"
+                      value={form.numBathrooms || ""}
+                      onChange={onChange}
+                      className="book-input"
+                    >
+                      <option value="">Select</option>
+                      <option value="1">1 Bathroom</option>
+                      <option value="2">2 Bathrooms</option>
+                      <option value="3">3 Bathrooms</option>
+                      <option value="4+">4+ Bathrooms</option>
+                    </select>
+                  </div>
+
+                  <div className="book-field">
+                    <label className="book-label">Service Frequency *</label>
+                    <select
+                      name="serviceFrequency"
+                      value={form.serviceFrequency || "one-time"}
+                      onChange={onChange}
+                      className="book-input"
+                      required
+                    >
+                      <option value="one-time">One-time Service</option>
+                      <option value="weekly">Weekly (Every week)</option>
+                      <option value="biweekly">
+                        Bi-weekly (Every 2 weeks)
+                      </option>
+                      <option value="monthly">Monthly</option>
+                    </select>
+                    <p className="book-field-hint">
+                      Regular bookings get 15% discount!
+                    </p>
+                  </div>
+
+                  <div className="book-field">
+                    <label className="book-label">Cleaning Materials *</label>
+                    <select
+                      name="cleaningMaterials"
+                      value={form.cleaningMaterials || "cleaner-provides"}
+                      onChange={onChange}
+                      className="book-input"
+                      required
+                    >
+                      <option value="cleaner-provides">
+                        Cleaner brings materials (+₹100)
+                      </option>
+                      <option value="customer-provides">
+                        I'll provide materials
+                      </option>
+                      <option value="both">Mix (discuss with cleaner)</option>
+                    </select>
+                  </div>
+
+                  <div className="book-field book-field-full">
+                    <label className="book-label">
+                      Special Areas to Clean (Coimbatore homes)
+                    </label>
+                    <div className="book-checkbox-group">
+                      <label className="book-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="cleanBalcony"
+                          checked={form.cleanBalcony || false}
+                          onChange={(e) =>
+                            onChange({
+                              target: {
+                                name: e.target.name,
+                                value: e.target.checked,
+                              },
+                            })
+                          }
+                        />
+                        <span>Balcony / Sit-out</span>
+                      </label>
+                      <label className="book-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="cleanTerrace"
+                          checked={form.cleanTerrace || false}
+                          onChange={(e) =>
+                            onChange({
+                              target: {
+                                name: e.target.name,
+                                value: e.target.checked,
+                              },
+                            })
+                          }
+                        />
+                        <span>Terrace / Rooftop</span>
+                      </label>
+                      <label className="book-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="cleanStaircase"
+                          checked={form.cleanStaircase || false}
+                          onChange={(e) =>
+                            onChange({
+                              target: {
+                                name: e.target.name,
+                                value: e.target.checked,
+                              },
+                            })
+                          }
+                        />
+                        <span>Staircase / Common areas</span>
+                      </label>
+                      <label className="book-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="cleanParking"
+                          checked={form.cleanParking || false}
+                          onChange={(e) =>
+                            onChange({
+                              target: {
+                                name: e.target.name,
+                                value: e.target.checked,
+                              },
+                            })
+                          }
+                        />
+                        <span>Parking area / Garage</span>
+                      </label>
+                    </div>
+                  </div>
+
                   <div className="book-field">
                     <label className="book-label">Area in Coimbatore *</label>
                     <select
                       name="area"
                       value={form.area}
                       onChange={onChange}
-                      className="book-input"
+                      className="book-input book-input-with-badge"
                       required
                     >
                       <option value="">Select your area</option>
-                      {AREAS.map((a) => (
-                        <option key={a} value={a}>
-                          {a}
-                        </option>
-                      ))}
+                      <optgroup label="🌟 Popular Areas">
+                        {POPULAR_AREAS.map((a) => (
+                          <option key={a} value={a}>
+                            {a} ⭐
+                          </option>
+                        ))}
+                      </optgroup>
+                      <optgroup label="All Areas">
+                        {AREAS.filter((a) => !POPULAR_AREAS.includes(a)).map(
+                          (a) => (
+                            <option key={a} value={a}>
+                              {a}
+                            </option>
+                          )
+                        )}
+                      </optgroup>
                     </select>
                   </div>
 
@@ -310,7 +561,7 @@ export default function BookView({
                         value={form.areaOther}
                         onChange={onChange}
                         className="book-input"
-                        placeholder="Enter your locality"
+                        placeholder="Enter your locality in Coimbatore"
                         required
                       />
                     </div>
@@ -326,16 +577,26 @@ export default function BookView({
                       required
                     >
                       <option value={1}>
-                        {hourPricing?.[1]?.label || "1 hour – Quick Refresh (₹650 → ₹450)"}
+                        {hourPricing?.[1]?.label ||
+                          "1 hour – Quick Refresh (₹650 → ₹450)"}
                       </option>
                       <option value={2}>
-                        {hourPricing?.[2]?.label || "2 hours – Standard Clean (₹1,200 → ₹849)"}
+                        {hourPricing?.[2]?.label ||
+                          "2 hours – Standard Clean (₹1,200 → ₹849)"}
                       </option>
                       <option value={3}>
-                        {hourPricing?.[3]?.label || "3 hours – Deep Clean (₹1,600 → ₹1,199)"}
+                        {hourPricing?.[3]?.label ||
+                          "3 hours – Deep Clean (₹1,600 → ₹1,199)"}
                       </option>
                       <option value={4}>
-                        {hourPricing?.[4]?.label || "4 hours – Extended Deep Clean (₹2,000 → ₹1,499)"}
+                        {hourPricing?.[4]?.label ||
+                          "4 hours – Extended Deep Clean (₹2,000 → ₹1,499)"}
+                      </option>
+                      <option value={5}>
+                        5 hours – Full Home Clean (₹2,400 → ₹1,799)
+                      </option>
+                      <option value={6}>
+                        6+ hours – Complete Deep Clean (₹2,800 → ₹2,099)
                       </option>
                     </select>
                     <div className="book-price-display">
@@ -351,19 +612,24 @@ export default function BookView({
                       value={form.date}
                       onChange={onChange}
                       className="book-input"
+                      min={new Date().toISOString().split("T")[0]}
                       required
                     />
                   </div>
 
                   <div className="book-field">
-                    <label className="book-label">Preferred Time Slot</label>
+                    <label className="book-label">Preferred Time Slot *</label>
                     <select
                       name="timeSlot"
                       value={form.timeSlot}
                       onChange={onChange}
                       className="book-input"
+                      required
                     >
-                      <option value="">Any time</option>
+                      <option value="">Select time slot</option>
+                      <option value="6-8am">
+                        6 – 8 AM (Early bird special)
+                      </option>
                       <option value="8-10am">8 – 10 AM</option>
                       <option value="10am-12pm">10 AM – 12 PM</option>
                       <option value="12-2pm">12 – 2 PM</option>
@@ -463,47 +729,60 @@ export default function BookView({
               </div>
             )}
 
-            {/* Step 4: Property Information */}
+            {/* Step 4: Property & Cleaner Preferences */}
             {currentStep === 4 && (
               <div className="book-form-step">
-                <h2 className="book-form-step-title">Property Details</h2>
+                <h2 className="book-form-step-title">
+                  Property & Cleaner Preferences
+                </h2>
                 <p className="book-form-step-desc">
-                  Help us understand your space better
+                  Help us match you with the perfect cleaner for your Coimbatore
+                  home
                 </p>
 
                 <div className="book-form-grid">
                   <div className="book-field">
-                    <label className="book-label">Property Type</label>
+                    <label className="book-label">Property Type *</label>
                     <select
                       name="propertyType"
                       value={form.propertyType}
                       onChange={onChange}
                       className="book-input"
+                      required
                     >
                       <option value="">Select type</option>
                       <option value="apartment">1BHK Apartment</option>
                       <option value="apartment-2bhk">2BHK Apartment</option>
                       <option value="apartment-3bhk">3BHK Apartment</option>
-                      <option value="independent-house">Independent house / villa</option>
-                      <option value="gated-community-villa">Gated community villa</option>
+                      <option value="apartment-4bhk">4BHK+ Apartment</option>
+                      <option value="independent-house">
+                        Independent house / villa
+                      </option>
+                      <option value="gated-community-villa">
+                        Gated community villa
+                      </option>
+                      <option value="duplex">Duplex / Penthouse</option>
                       <option value="row-house">Row house / townhouse</option>
                       <option value="office">Office</option>
                       <option value="shop">Shop / showroom</option>
                       <option value="warehouse">Warehouse / godown</option>
+                      <option value="pg-hostel">PG / Hostel</option>
                       <option value="other">Other</option>
                     </select>
                   </div>
 
                   {form.propertyType === "other" && (
                     <div className="book-field">
-                      <label className="book-label">Specify Property Type *</label>
+                      <label className="book-label">
+                        Specify Property Type *
+                      </label>
                       <input
                         type="text"
                         name="propertyTypeOther"
                         value={form.propertyTypeOther}
                         onChange={onChange}
                         className="book-input"
-                        placeholder="e.g. PG, clinic, small warehouse"
+                        placeholder="e.g. clinic, small warehouse, studio"
                         required
                       />
                     </div>
@@ -511,16 +790,18 @@ export default function BookView({
 
                   <div className="book-field">
                     <label className="book-label">Number of Floors</label>
-                    <input
-                      type="number"
-                      min="1"
-                      max="10"
+                    <select
                       name="floorCount"
-                      value={form.floorCount}
+                      value={form.floorCount || ""}
                       onChange={onChange}
                       className="book-input"
-                      placeholder="e.g. 1, 2"
-                    />
+                    >
+                      <option value="">Select</option>
+                      <option value="1">Ground floor / 1 floor</option>
+                      <option value="2">2 floors</option>
+                      <option value="3">3 floors</option>
+                      <option value="4+">4+ floors</option>
+                    </select>
                   </div>
 
                   <div className="book-field">
@@ -533,7 +814,7 @@ export default function BookView({
                       value={form.approxAreaSqft}
                       onChange={onChange}
                       className="book-input"
-                      placeholder="e.g. 800"
+                      placeholder="e.g. 800, 1200, 2000"
                     />
                   </div>
 
@@ -545,21 +826,165 @@ export default function BookView({
                       onChange={onChange}
                       className="book-input"
                     >
-                      <option value="no">No</option>
-                      <option value="yes">Yes</option>
+                      <option value="no">No pets</option>
+                      <option value="yes-dogs">Yes, Dogs</option>
+                      <option value="yes-cats">Yes, Cats</option>
+                      <option value="yes-both">Yes, Dogs & Cats</option>
+                      <option value="yes-other">Yes, Other pets</option>
+                    </select>
+                  </div>
+
+                  <div className="book-field">
+                    <label className="book-label">Property Access</label>
+                    <select
+                      name="propertyAccess"
+                      value={form.propertyAccess || "customer-present"}
+                      onChange={onChange}
+                      className="book-input"
+                    >
+                      <option value="customer-present">I'll be present</option>
+                      <option value="spare-key">Spare key available</option>
+                      <option value="security-available">
+                        Through security
+                      </option>
+                      <option value="family-present">
+                        Family member present
+                      </option>
+                    </select>
+                  </div>
+
+                  {/* Cleaner Preferences */}
+                  <div className="book-field book-field-full">
+                    <h3 className="book-subsection-title">
+                      🧹 Cleaner Preferences
+                    </h3>
+                  </div>
+
+                  <div className="book-field">
+                    <label className="book-label">
+                      Cleaner Gender Preference
+                    </label>
+                    <select
+                      name="cleanerGenderPreference"
+                      value={form.cleanerGenderPreference || "no-preference"}
+                      onChange={onChange}
+                      className="book-input"
+                    >
+                      <option value="no-preference">No preference</option>
+                      <option value="female">Female cleaner</option>
+                      <option value="male">Male cleaner</option>
+                    </select>
+                  </div>
+
+                  <div className="book-field">
+                    <label className="book-label">Experience Level</label>
+                    <select
+                      name="cleanerExperiencePreference"
+                      value={form.cleanerExperiencePreference || "any"}
+                      onChange={onChange}
+                      className="book-input"
+                    >
+                      <option value="any">Any experience level</option>
+                      <option value="experienced">
+                        Experienced (3+ years)
+                      </option>
+                      <option value="very-experienced">
+                        Highly experienced (5+ years)
+                      </option>
                     </select>
                   </div>
 
                   <div className="book-field book-field-full">
-                    <label className="book-label">Additional Notes (Optional)</label>
+                    <label className="book-label">Language Preference</label>
+                    <div className="book-checkbox-group">
+                      <label className="book-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="languageTamil"
+                          checked={form.languageTamil || false}
+                          onChange={(e) =>
+                            onChange({
+                              target: {
+                                name: e.target.name,
+                                value: e.target.checked,
+                              },
+                            })
+                          }
+                        />
+                        <span>Tamil</span>
+                      </label>
+                      <label className="book-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="languageEnglish"
+                          checked={form.languageEnglish || false}
+                          onChange={(e) =>
+                            onChange({
+                              target: {
+                                name: e.target.name,
+                                value: e.target.checked,
+                              },
+                            })
+                          }
+                        />
+                        <span>English</span>
+                      </label>
+                      <label className="book-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="languageHindi"
+                          checked={form.languageHindi || false}
+                          onChange={(e) =>
+                            onChange({
+                              target: {
+                                name: e.target.name,
+                                value: e.target.checked,
+                              },
+                            })
+                          }
+                        />
+                        <span>Hindi</span>
+                      </label>
+                      <label className="book-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="languageMalayalam"
+                          checked={form.languageMalayalam || false}
+                          onChange={(e) =>
+                            onChange({
+                              target: {
+                                name: e.target.name,
+                                value: e.target.checked,
+                              },
+                            })
+                          }
+                        />
+                        <span>Malayalam</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="book-field book-field-full">
+                    <label className="book-label">
+                      Special Instructions / Requirements
+                    </label>
                     <textarea
                       name="notes"
                       rows={4}
                       value={form.notes}
                       onChange={onChange}
                       className="book-input book-textarea"
-                      placeholder="Any special instructions or requirements..."
+                      placeholder="Any specific requirements for your Coimbatore property? E.g., 'Need cleaner to bring vacuum', 'Avoid using strong chemicals', 'Parking available inside', etc."
                     />
+                  </div>
+
+                  <div className="book-field book-field-full">
+                    <div className="book-info-box">
+                      <strong>📍 Serving Coimbatore:</strong> Our verified
+                      cleaners are available across all areas in Coimbatore. We
+                      ensure background-verified, trained professionals for your
+                      home.
+                    </div>
                   </div>
                 </div>
               </div>

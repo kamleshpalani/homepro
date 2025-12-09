@@ -4,7 +4,30 @@ import "./Footer.css";
 function Footer() {
   return (
     <footer className="footer-new">
+      <div className="footer-wave">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
+        </svg>
+      </div>
       <div className="footer-container">
+        <div className="footer-newsletter">
+          <div className="footer-newsletter-content">
+            <h3 className="footer-newsletter-title">
+              Get cleaning tips & exclusive offers
+            </h3>
+            <p className="footer-newsletter-desc">
+              Join 1,000+ subscribers receiving monthly updates
+            </p>
+          </div>
+          <div className="footer-newsletter-form">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="footer-newsletter-input"
+            />
+            <button className="footer-newsletter-btn">Subscribe</button>
+          </div>
+        </div>
         <div className="footer-top">
           <div className="footer-brand">
             <div className="footer-logo">
@@ -20,13 +43,16 @@ function Footer() {
             </p>
             <div className="footer-social">
               <a href="#" className="footer-social-link" aria-label="Facebook">
-                📘
+                <span className="footer-social-icon">f</span>
               </a>
               <a href="#" className="footer-social-link" aria-label="Instagram">
-                📸
+                <span className="footer-social-icon">📷</span>
               </a>
               <a href="#" className="footer-social-link" aria-label="Twitter">
-                🐦
+                <span className="footer-social-icon">𝕏</span>
+              </a>
+              <a href="#" className="footer-social-link" aria-label="LinkedIn">
+                <span className="footer-social-icon">in</span>
               </a>
             </div>
           </div>

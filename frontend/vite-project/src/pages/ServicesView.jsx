@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import "./Services.css";
 
 const SERVICES = [
@@ -133,13 +134,42 @@ const SERVICES = [
 ];
 
 export default function ServicesView() {
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  const categories = [
+    { id: "all", name: "All Services", icon: "🏠" },
+    { id: "residential", name: "Residential", icon: "🏡" },
+    { id: "specialized", name: "Specialized", icon: "✨" },
+    { id: "commercial", name: "Commercial", icon: "🏢" },
+  ];
+
+  const getFilteredServices = () => {
+    if (selectedCategory === "all") return SERVICES;
+    if (selectedCategory === "residential") return SERVICES.slice(0, 3);
+    if (selectedCategory === "specialized") return SERVICES.slice(3, 7);
+    if (selectedCategory === "commercial") return [SERVICES[5]];
+    return SERVICES;
+  };
+
   return (
     <div className="services-page-new">
+      {/* Animated Background */}
+      <div className="services-bg-shapes">
+        <div className="services-shape services-shape-1"></div>
+        <div className="services-shape services-shape-2"></div>
+      </div>
+
       {/* Hero Section */}
       <section className="services-hero">
         <div className="services-hero-content">
+          <div className="services-hero-badge">
+            <span className="services-badge-icon">✨</span>
+            <span>Professional Cleaning Services</span>
+          </div>
           <h1 className="services-hero-title">
-            Our <span className="services-gradient">cleaning services</span>
+            Transform your space with our
+            <br />
+            <span className="services-gradient">expert cleaning services</span>
           </h1>
           <p className="services-hero-desc">
             Professional home and office cleaning in Coimbatore. Choose from our
@@ -164,16 +194,45 @@ export default function ServicesView() {
         </div>
       </section>
 
+      {/* Category Filter */}
+      <section className="services-filter-section">
+        <div className="services-filter-container">
+          <h2 className="services-filter-title">Browse by category</h2>
+          <div className="services-filter-tabs">
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                className={`services-filter-tab ${
+                  selectedCategory === category.id ? "active" : ""
+                }`}
+                onClick={() => setSelectedCategory(category.id)}
+              >
+                <span className="services-filter-icon">{category.icon}</span>
+                <span>{category.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Services Grid */}
       <section className="services-grid-section">
         <div className="services-grid-new">
-          {SERVICES.map((service) => (
-            <div key={service.id} className="service-card-new">
+          {getFilteredServices().map((service, index) => (
+            <div
+              key={service.id}
+              className="service-card-new"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
               {service.popular && (
-                <div className="service-card-badge">Most Popular</div>
+                <div className="service-card-badge">
+                  <span>⭐</span> Most Popular
+                </div>
               )}
 
-              <div className="service-card-icon">{service.icon}</div>
+              <div className="service-card-icon-wrapper">
+                <div className="service-card-icon">{service.icon}</div>
+              </div>
 
               <h3 className="service-card-title">{service.name}</h3>
               <p className="service-card-tagline">{service.tagline}</p>
@@ -200,10 +259,67 @@ export default function ServicesView() {
               </ul>
 
               <Link to="/book" className="service-card-btn">
-                Book this service
+                <span>Book this service</span>
+                <span className="service-card-btn-arrow">→</span>
               </Link>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Process Section */}
+      <section className="services-process-section">
+        <h2 className="services-process-title">How our service works</h2>
+        <p className="services-process-subtitle">
+          Simple, transparent, and professional
+        </p>
+        <div className="services-process-timeline">
+          <div className="services-process-step">
+            <div className="services-process-number">1</div>
+            <div className="services-process-content">
+              <h3 className="services-process-heading">Choose Your Service</h3>
+              <p className="services-process-text">
+                Select from our range of cleaning packages that fit your needs
+                and budget
+              </p>
+            </div>
+          </div>
+          <div className="services-process-connector"></div>
+          <div className="services-process-step">
+            <div className="services-process-number">2</div>
+            <div className="services-process-content">
+              <h3 className="services-process-heading">Schedule & Confirm</h3>
+              <p className="services-process-text">
+                Pick your preferred date and time, then confirm your booking
+                instantly
+              </p>
+            </div>
+          </div>
+          <div className="services-process-connector"></div>
+          <div className="services-process-step">
+            <div className="services-process-number">3</div>
+            <div className="services-process-content">
+              <h3 className="services-process-heading">
+                Professional Cleaning
+              </h3>
+              <p className="services-process-text">
+                Our verified cleaners arrive on time with all necessary
+                equipment
+              </p>
+            </div>
+          </div>
+          <div className="services-process-connector"></div>
+          <div className="services-process-step">
+            <div className="services-process-number">4</div>
+            <div className="services-process-content">
+              <h3 className="services-process-heading">
+                Enjoy Your Clean Space
+              </h3>
+              <p className="services-process-text">
+                Relax in your spotless home with 100% satisfaction guaranteed
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

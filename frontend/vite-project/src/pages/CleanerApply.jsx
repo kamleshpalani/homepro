@@ -5,39 +5,95 @@ import CleanerApplyView from "./CleanerApplyView.jsx";
 
 export default function CleanerApply() {
   const [form, setForm] = useState({
+    // Step 1: Personal Information
     firstName: "",
     lastName: "",
     phone: "",
     email: "",
-    preferredContactMethod: "whatsapp",
-    preferredContactTime: "",
+
+    // Step 2: Location Details
     area: "",
     areaOther: "",
-    address1: "",
-    address2: "",
     city: "",
+    address1: "",
     state: "",
-    country: "",
     pincode: "",
+
+    // Step 3: Professional Details
     experienceYears: "",
-    typeOfWork: "",
-    languagesKnown: "",
+    educationLevel: "",
     expectedSalaryPerJob: "",
+    typeOfWork: "",
+    preferredContactMethod: "whatsapp",
+    gender: "",
+    dateOfBirth: "",
+    ownVehicle: "no",
     servicesOffered: "",
-    serviceOther: "",
+    languagesKnown: "",
+    previousEmployment: "",
+
+    // Step 4: Skills & Equipment
+    skillDeepCleaning: false,
+    skillCarpetCleaning: false,
+    skillWindowCleaning: false,
+    skillKitchenCleaning: false,
+    skillBathroomCleaning: false,
+    skillFloorPolishing: false,
+    equipmentVacuum: false,
+    equipmentMop: false,
+    equipmentCleaningSupplies: false,
+    equipmentSteamCleaner: false,
+    equipmentPressureWasher: false,
+    certifications: "",
+
+    // Step 5: Availability
+    availableFrom: "",
+    preferredShift: "",
+    availableMonday: false,
+    availableTuesday: false,
+    availableWednesday: false,
+    availableThursday: false,
+    availableFriday: false,
+    availableSaturday: false,
+    availableSunday: false,
+
+    // Step 6: Banking & References
+    bankName: "",
+    bankAccountNumber: "",
+    bankIFSC: "",
+    bankAccountHolderName: "",
+    reference1: "",
+    reference2: "",
+
+    // Step 7: Emergency Contact
+    emergencyContactName: "",
+    emergencyContactRelation: "",
+    emergencyContactPhone: "",
+    emergencyContactAddress: "",
+
+    // Step 8: Identity & Health
     idProofType: "",
     idProofNumber: "",
     idProofFile: null,
+    photoFile: null,
+    covidVaccinationStatus: "",
+    hasMedicalConditions: "no",
+    medicalConditionsDetails: "",
+    consentBackgroundCheck: false,
+    policeVerificationStatus: "",
     notes: "",
   });
+  const [currentStep, setCurrentStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
+    const { name, value, type, files, checked } = e.target;
     if (type === "file") {
       setForm((prev) => ({ ...prev, [name]: files[0] || null }));
+    } else if (type === "checkbox") {
+      setForm((prev) => ({ ...prev, [name]: checked }));
     } else {
       setForm((prev) => ({ ...prev, [name]: value }));
     }
@@ -72,41 +128,28 @@ export default function CleanerApply() {
 
       setMessage(
         data.message ||
-          "Thank you! Your application was submitted successfully."
+          "Thank you! Your application was submitted successfully. We'll review it within 24 hours."
       );
 
-      setForm({
-        firstName: "",
-        lastName: "",
-        phone: "",
-        email: "",
-        preferredContactMethod: "whatsapp",
-        preferredContactTime: "",
-        area: "",
-        areaOther: "",
-        address1: "",
-        address2: "",
-        city: "",
-        state: "",
-        country: "",
-        pincode: "",
-        experienceYears: "",
-        typeOfWork: "",
-        languagesKnown: "",
-        expectedSalaryPerJob: "",
-        servicesOffered: "",
-        serviceOther: "",
-        idProofType: "",
-        idProofNumber: "",
-        idProofFile: null,
-        notes: "",
-      });
+      // Reset form to initial state
+      setCurrentStep(1);
+      window.scrollTo(0, 0);
     } catch (err) {
       console.error("Cleaner apply error:", err);
       setError(err.message || "Something went wrong. Please try again.");
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleNext = () => {
+    if (currentStep < 8) setCurrentStep(currentStep + 1);
+    window.scrollTo(0, 0);
+  };
+
+  const handlePrev = () => {
+    if (currentStep > 1) setCurrentStep(currentStep - 1);
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -116,8 +159,11 @@ export default function CleanerApply() {
         message={message}
         error={error}
         submitting={submitting}
+        currentStep={currentStep}
         onChange={handleChange}
         onSubmit={handleSubmit}
+        onNext={handleNext}
+        onPrev={handlePrev}
       />
     </MainLayout>
   );

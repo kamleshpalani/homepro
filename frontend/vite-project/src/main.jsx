@@ -3,14 +3,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import App from "./App.jsx";
+import Home from "./pages/Home.jsx";
 import Services from "./pages/Services.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import Book from "./pages/Book.jsx";
 
-// Public cleaner registration page
+// Cleaner pages
 import CleanerApply from "./pages/CleanerApply.jsx";
+import CleanerLogin from "./pages/CleanerLogin.jsx";
 
 // Customer Account pages
 import Signup from "./pages/Signup.jsx";
@@ -31,13 +32,15 @@ root.render(
     <BrowserRouter>
       <Routes>
         {/* Public Pages */}
-        <Route path="/" element={<App />} />
+        <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/book" element={<Book />} />
 
-        {/* Public Cleaner Registration */}
+        {/* Cleaner Pages */}
+        <Route path="/cleaner/login" element={<CleanerLogin />} />
+        <Route path="/cleaner/apply" element={<CleanerApply />} />
         <Route path="/cleaners/apply" element={<CleanerApply />} />
 
         {/* Customer Account Pages */}
