@@ -21,7 +21,9 @@ body,
   margin: 0;
   padding: 0;
   height: 100%;
+  width: 100%;
   min-width: 320px;
+  overflow-x: hidden;
   background: radial-gradient(
     circle at top left,
     #e0f2fe,

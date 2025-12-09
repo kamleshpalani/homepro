@@ -5,8 +5,8 @@
   top: 0;
   z-index: 50;
   max-width: 1200px;
-  margin: 0 auto 20px;
-  padding: 12px 20px 0;
+  margin: 0 auto;
+  padding: 12px 20px;
 }
 
 /* Floating + glassmorphism navbar */

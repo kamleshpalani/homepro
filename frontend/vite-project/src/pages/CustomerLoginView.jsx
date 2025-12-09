@@ -23,7 +23,8 @@ export default function CustomerLoginView({
             Welcome <span className="auth-gradient">Back!</span>
           </h1>
           <p className="auth-tagline">
-            Login to your account to manage bookings and access exclusive features
+            Login to your account to manage bookings and access exclusive
+            features
           </p>
 
           {/* Benefits */}

@@ -4,32 +4,60 @@ import BookView from "./BookView.jsx";
 
 function Book() {
   const [form, setForm] = useState({
+    // Contact Information
     firstName: "",
     lastName: "",
     phone: "",
     email: "",
-    area: "",
-    areaOther: "",
+    preferredContactMethod: "whatsapp",
+    preferredContactTime: "",
+
+    // Service Details
     service: "",
     serviceOther: "",
+    area: "",
+    areaOther: "",
+    hours: 1,
+    estimatedPrice: 450,
     date: "",
     timeSlot: "",
+
+    // Enhanced Service Fields (Coimbatore specific)
+    numBedrooms: "",
+    numBathrooms: "",
+    serviceFrequency: "one-time",
+    cleaningMaterials: "cleaner-provides",
+    cleanBalcony: false,
+    cleanTerrace: false,
+    cleanStaircase: false,
+    cleanParking: false,
+
+    // Address
     address1: "",
     address2: "",
     city: "Coimbatore",
     state: "Tamil Nadu",
     country: "India",
     pincode: "",
-    preferredContactMethod: "whatsapp",
-    preferredContactTime: "",
+
+    // Property & Cleaner Preferences
     propertyType: "",
     propertyTypeOther: "",
     floorCount: "",
     approxAreaSqft: "",
     petsAtHome: "no",
+    propertyAccess: "customer-present",
+
+    // Cleaner Preferences
+    cleanerGenderPreference: "no-preference",
+    cleanerExperiencePreference: "any",
+    languageTamil: false,
+    languageEnglish: false,
+    languageHindi: false,
+    languageMalayalam: false,
+
+    // Additional
     notes: "",
-    hours: 1,
-    estimatedPrice: 450,
   });
 
   const [message, setMessage] = useState("");
@@ -39,18 +67,59 @@ function Book() {
     2: { label: "Standard Clean (2 hours)", original: 1200, offer: 849 },
     3: { label: "Deep Clean (3 hours)", original: 1600, offer: 1199 },
     4: { label: "Extended Deep Clean (4 hours)", original: 2000, offer: 1499 },
+    5: { label: "Full Home Clean (5 hours)", original: 2400, offer: 1799 },
+    6: { label: "Complete Deep Clean (6+ hours)", original: 2800, offer: 2099 },
   };
 
   function handleChange(e) {
-    const { name, value } = e.target;
-    // Special handling for hours so we can recalculate estimated price
+    const { name, value, type, checked } = e.target;
+
+    // Handle checkbox inputs (boolean values)
+    if (type === "checkbox") {
+      setForm((prev) => ({ ...prev, [name]: checked }));
+      return;
+    }
+
+    // Special handling for hours to recalculate estimated price
     if (name === "hours") {
       const hoursValue = Number(value);
       const priceInfo = HOUR_PRICING[hoursValue];
+      let finalPrice = priceInfo ? priceInfo.offer : 450;
+
+      // Apply frequency discount if applicable
+      if (form.serviceFrequency === "weekly") {
+        finalPrice = Math.round(finalPrice * 0.85); // 15% discount
+      } else if (form.serviceFrequency === "biweekly") {
+        finalPrice = Math.round(finalPrice * 0.9); // 10% discount
+      } else if (form.serviceFrequency === "monthly") {
+        finalPrice = Math.round(finalPrice * 0.92); // 8% discount
+      }
+
       setForm((prev) => ({
         ...prev,
         hours: hoursValue,
-        estimatedPrice: priceInfo ? priceInfo.offer : prev.estimatedPrice,
+        estimatedPrice: finalPrice,
+      }));
+    }
+    // Handle service frequency changes
+    else if (name === "serviceFrequency") {
+      const priceInfo = HOUR_PRICING[form.hours];
+      let basePrice = priceInfo ? priceInfo.offer : 450;
+
+      // Apply frequency discount
+      let finalPrice = basePrice;
+      if (value === "weekly") {
+        finalPrice = Math.round(basePrice * 0.85); // 15% discount
+      } else if (value === "biweekly") {
+        finalPrice = Math.round(basePrice * 0.9); // 10% discount
+      } else if (value === "monthly") {
+        finalPrice = Math.round(basePrice * 0.92); // 8% discount
+      }
+
+      setForm((prev) => ({
+        ...prev,
+        [name]: value,
+        estimatedPrice: finalPrice,
       }));
     } else {
       setForm((prev) => ({ ...prev, [name]: value }));

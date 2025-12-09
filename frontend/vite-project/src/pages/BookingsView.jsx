@@ -5,6 +5,18 @@ export default function BookingsView({ bookings, loading, error }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterService, setFilterService] = useState("all");
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleViewDetails = (booking) => {
+    setSelectedBooking(booking);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedBooking(null);
+  };
 
   // Filter bookings
   const filteredBookings = bookings.filter((booking) => {
@@ -162,17 +174,23 @@ export default function BookingsView({ bookings, loading, error }) {
           <div className="admin-empty-state">
             <div className="admin-empty-icon">📭</div>
             <h3>No Bookings Yet</h3>
-            <p>Booking requests will appear here once customers start booking services.</p>
+            <p>
+              Booking requests will appear here once customers start booking
+              services.
+            </p>
           </div>
         )}
 
-        {!loading && !error && bookings.length > 0 && filteredBookings.length === 0 && (
-          <div className="admin-empty-state">
-            <div className="admin-empty-icon">🔍</div>
-            <h3>No Results Found</h3>
-            <p>Try adjusting your search or filter criteria.</p>
-          </div>
-        )}
+        {!loading &&
+          !error &&
+          bookings.length > 0 &&
+          filteredBookings.length === 0 && (
+            <div className="admin-empty-state">
+              <div className="admin-empty-icon">🔍</div>
+              <h3>No Results Found</h3>
+              <p>Try adjusting your search or filter criteria.</p>
+            </div>
+          )}
 
         {!loading && !error && filteredBookings.length > 0 && (
           <div className="admin-table-container">
@@ -188,6 +206,7 @@ export default function BookingsView({ bookings, loading, error }) {
                     <th className="admin-th">Status</th>
                     <th className="admin-th">Price</th>
                     <th className="admin-th">Assigned To</th>
+                    <th className="admin-th">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -200,8 +219,12 @@ export default function BookingsView({ bookings, loading, error }) {
                             {b.name?.charAt(0)?.toUpperCase() || "?"}
                           </div>
                           <div className="admin-customer-info">
-                            <div className="admin-customer-name">{b.name || "N/A"}</div>
-                            <div className="admin-customer-email">{b.email || "-"}</div>
+                            <div className="admin-customer-name">
+                              {b.name || "N/A"}
+                            </div>
+                            <div className="admin-customer-email">
+                              {b.email || "-"}
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -219,7 +242,9 @@ export default function BookingsView({ bookings, loading, error }) {
                       </td>
                       <td className="admin-td">
                         <div className="admin-service-cell">
-                          <div className="admin-service-name">{b.service || "-"}</div>
+                          <div className="admin-service-name">
+                            {b.service || "-"}
+                          </div>
                           <div className="admin-service-meta">
                             {b.hours ? `${b.hours} hours` : "-"}
                           </div>
@@ -236,7 +261,11 @@ export default function BookingsView({ bookings, loading, error }) {
                         </div>
                       </td>
                       <td className="admin-td">
-                        <span className={`admin-status-badge ${getStatusClass(b.status)}`}>
+                        <span
+                          className={`admin-status-badge ${getStatusClass(
+                            b.status
+                          )}`}
+                        >
                           {b.status || "New"}
                         </span>
                       </td>
@@ -261,6 +290,14 @@ export default function BookingsView({ bookings, loading, error }) {
                           )}
                         </div>
                       </td>
+                      <td className="admin-td">
+                        <button
+                          onClick={() => handleViewDetails(b)}
+                          className="admin-view-details-btn"
+                        >
+                          👁️ View All
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -269,6 +306,419 @@ export default function BookingsView({ bookings, loading, error }) {
           </div>
         )}
       </div>
+
+      {/* Details Modal */}
+      {showModal && selectedBooking && (
+        <div className="admin-modal-overlay" onClick={handleCloseModal}>
+          <div
+            className="admin-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="admin-modal-header">
+              <h2 className="admin-modal-title">📋 Booking Details</h2>
+              <button onClick={handleCloseModal} className="admin-modal-close">
+                ✕
+              </button>
+            </div>
+
+            <div className="admin-modal-body">
+              {/* Customer Information */}
+              <div className="admin-detail-section">
+                <h3 className="admin-detail-section-title">
+                  👤 Customer Information
+                </h3>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">First Name:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.firstName || "-"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Last Name:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.lastName || "-"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Phone:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.phone || "-"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Email:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.email || "-"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">
+                      Preferred Contact:
+                    </span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.preferredContactMethod || "WhatsApp"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Contact Time:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.preferredContactTime || "-"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Service Details */}
+              <div className="admin-detail-section">
+                <h3 className="admin-detail-section-title">
+                  🧹 Service Details
+                </h3>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Service:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.service || "-"}
+                    </span>
+                  </div>
+                  {selectedBooking.serviceOther && (
+                    <div className="admin-detail-item">
+                      <span className="admin-detail-label">
+                        Service (Other):
+                      </span>
+                      <span className="admin-detail-value">
+                        {selectedBooking.serviceOther}
+                      </span>
+                    </div>
+                  )}
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Hours:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.hours || "-"} hours
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">
+                      Service Frequency:
+                    </span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.serviceFrequency || "One-time"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">
+                      Cleaning Materials:
+                    </span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.cleaningMaterials || "Cleaner Provides"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Bedrooms:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.numBedrooms || "-"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Bathrooms:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.numBathrooms || "-"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Special Areas */}
+                <div className="admin-detail-subsection">
+                  <h4 className="admin-detail-subtitle">
+                    Special Areas to Clean:
+                  </h4>
+                  <div className="admin-detail-tags">
+                    {selectedBooking.cleanBalcony && (
+                      <span className="admin-detail-tag">✓ Balcony</span>
+                    )}
+                    {selectedBooking.cleanTerrace && (
+                      <span className="admin-detail-tag">✓ Terrace</span>
+                    )}
+                    {selectedBooking.cleanStaircase && (
+                      <span className="admin-detail-tag">✓ Staircase</span>
+                    )}
+                    {selectedBooking.cleanParking && (
+                      <span className="admin-detail-tag">✓ Parking</span>
+                    )}
+                    {!selectedBooking.cleanBalcony &&
+                      !selectedBooking.cleanTerrace &&
+                      !selectedBooking.cleanStaircase &&
+                      !selectedBooking.cleanParking && (
+                        <span className="admin-detail-value-muted">
+                          No special areas selected
+                        </span>
+                      )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Location & Address */}
+              <div className="admin-detail-section">
+                <h3 className="admin-detail-section-title">
+                  📍 Location & Address
+                </h3>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Area:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.area || "-"}
+                    </span>
+                  </div>
+                  {selectedBooking.areaOther && (
+                    <div className="admin-detail-item">
+                      <span className="admin-detail-label">Area (Other):</span>
+                      <span className="admin-detail-value">
+                        {selectedBooking.areaOther}
+                      </span>
+                    </div>
+                  )}
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Address Line 1:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.address1 || "-"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Address Line 2:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.address2 || "-"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">City:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.city || "Coimbatore"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">State:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.state || "Tamil Nadu"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Country:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.country || "India"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Pincode:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.pincode || "-"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Schedule & Pricing */}
+              <div className="admin-detail-section">
+                <h3 className="admin-detail-section-title">
+                  📅 Schedule & Pricing
+                </h3>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Date:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.date || "-"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Time Slot:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.timeSlot || "-"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Estimated Price:</span>
+                    <span className="admin-detail-value admin-detail-value-price">
+                      ₹{selectedBooking.estimatedPrice || "-"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Status:</span>
+                    <span
+                      className={`admin-status-badge ${getStatusClass(
+                        selectedBooking.status
+                      )}`}
+                    >
+                      {selectedBooking.status || "New"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Property Details */}
+              <div className="admin-detail-section">
+                <h3 className="admin-detail-section-title">
+                  🏠 Property Details
+                </h3>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Property Type:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.propertyType || "-"}
+                    </span>
+                  </div>
+                  {selectedBooking.propertyTypeOther && (
+                    <div className="admin-detail-item">
+                      <span className="admin-detail-label">
+                        Property Type (Other):
+                      </span>
+                      <span className="admin-detail-value">
+                        {selectedBooking.propertyTypeOther}
+                      </span>
+                    </div>
+                  )}
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Floor Count:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.floorCount || "-"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">
+                      Approx Area (sqft):
+                    </span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.approxAreaSqft || "-"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Pets at Home:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.petsAtHome || "No"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Property Access:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.propertyAccess || "Customer Present"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Cleaner Preferences */}
+              <div className="admin-detail-section">
+                <h3 className="admin-detail-section-title">
+                  ⭐ Cleaner Preferences
+                </h3>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">
+                      Gender Preference:
+                    </span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.cleanerGenderPreference ||
+                        "No Preference"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">
+                      Experience Preference:
+                    </span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.cleanerExperiencePreference || "Any"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">
+                      Assigned Cleaner:
+                    </span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.assignedCleaner || "Unassigned"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="admin-detail-subsection">
+                  <h4 className="admin-detail-subtitle">
+                    Language Requirements:
+                  </h4>
+                  <div className="admin-detail-tags">
+                    {selectedBooking.languageTamil && (
+                      <span className="admin-detail-tag">✓ Tamil</span>
+                    )}
+                    {selectedBooking.languageEnglish && (
+                      <span className="admin-detail-tag">✓ English</span>
+                    )}
+                    {selectedBooking.languageHindi && (
+                      <span className="admin-detail-tag">✓ Hindi</span>
+                    )}
+                    {selectedBooking.languageMalayalam && (
+                      <span className="admin-detail-tag">✓ Malayalam</span>
+                    )}
+                    {!selectedBooking.languageTamil &&
+                      !selectedBooking.languageEnglish &&
+                      !selectedBooking.languageHindi &&
+                      !selectedBooking.languageMalayalam && (
+                        <span className="admin-detail-value-muted">
+                          No language preference specified
+                        </span>
+                      )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Notes */}
+              {selectedBooking.notes && (
+                <div className="admin-detail-section">
+                  <h3 className="admin-detail-section-title">
+                    📝 Additional Notes
+                  </h3>
+                  <div className="admin-detail-notes">
+                    {selectedBooking.notes}
+                  </div>
+                </div>
+              )}
+
+              {/* Metadata */}
+              <div className="admin-detail-section">
+                <h3 className="admin-detail-section-title">ℹ️ Metadata</h3>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Booking ID:</span>
+                    <span className="admin-detail-value admin-detail-value-mono">
+                      {selectedBooking._id}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Created At:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.createdAt
+                        ? new Date(selectedBooking.createdAt).toLocaleString()
+                        : "-"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Last Updated:</span>
+                    <span className="admin-detail-value">
+                      {selectedBooking.updatedAt
+                        ? new Date(selectedBooking.updatedAt).toLocaleString()
+                        : "-"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="admin-modal-footer">
+              <button
+                onClick={handleCloseModal}
+                className="admin-modal-btn admin-modal-btn-close"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

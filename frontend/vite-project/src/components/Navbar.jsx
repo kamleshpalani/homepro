@@ -50,6 +50,7 @@ function Navbar() {
 
   return (
     <header className="header-new">
+      <div className="header-backdrop"></div>
       <nav className="nav-container">
         <Link to="/" className="nav-logo">
           <div className="nav-logo-icon">🏠</div>
@@ -57,9 +58,16 @@ function Navbar() {
             <span className="nav-logo-name">HomeCare</span>
             <span className="nav-logo-pro">Pro</span>
           </div>
+          <div className="nav-logo-badge">Coimbatore</div>
         </Link>
 
         <div className="nav-menu">
+          <Link
+            to="/"
+            className={`nav-link ${isActive("/") ? "nav-link-active" : ""}`}
+          >
+            Home
+          </Link>
           <Link
             to="/services"
             className={`nav-link ${
@@ -84,12 +92,6 @@ function Navbar() {
           >
             Contact
           </Link>
-
-          {!isAdmin && (
-            <Link to="/cleaners/apply" className="nav-link">
-              Join as Cleaner
-            </Link>
-          )}
 
           {isAdmin && (
             <>
@@ -125,7 +127,9 @@ function Navbar() {
           ) : isCustomer ? (
             <>
               <Link to="/account/dashboard" className="nav-user-btn">
-                <span className="nav-user-avatar">{customerName?.charAt(0)}</span>
+                <span className="nav-user-avatar">
+                  {customerName?.charAt(0)}
+                </span>
                 <span className="nav-user-name">{customerName}</span>
               </Link>
               <Link to="/book" className="nav-btn-primary">
@@ -135,12 +139,16 @@ function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/account/login" className="nav-btn-login">
-                Login
+              <Link to="/cleaners/apply" className="nav-btn-secondary">
+                <span>Join as Cleaner</span>
+                <span className="nav-btn-arrow">→</span>
               </Link>
               <Link to="/book" className="nav-btn-primary">
                 <span>Book Now</span>
                 <span className="nav-btn-arrow">→</span>
+              </Link>
+              <Link to="/account/login" className="nav-btn-login">
+                Login
               </Link>
             </>
           )}

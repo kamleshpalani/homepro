@@ -19,10 +19,33 @@ export default function DashboardView({
   onDeleteAddress,
   onLogout,
   message,
+  // New props for expanded features
+  wallet,
+  transactions,
+  loyalty,
+  reviews,
+  notifications,
+  referralData,
+  tickets,
+  subscriptions,
+  onRedeemPoints,
+  onSubmitReview,
+  onMarkNotificationRead,
+  onMarkAllNotificationsRead,
+  onCreateTicket,
+  onCreateSubscription,
+  onUpdateSubscription,
 }) {
   const tabs = [
     { id: "overview", label: "Overview", icon: "📊" },
     { id: "bookings", label: "My Bookings", icon: "📅" },
+    { id: "wallet", label: "Wallet", icon: "💰" },
+    { id: "loyalty", label: "Rewards", icon: "🎁" },
+    { id: "reviews", label: "Reviews", icon: "⭐" },
+    { id: "notifications", label: "Notifications", icon: "🔔" },
+    { id: "referral", label: "Refer & Earn", icon: "🤝" },
+    { id: "support", label: "Support", icon: "💬" },
+    { id: "subscriptions", label: "Subscriptions", icon: "🔄" },
     { id: "addresses", label: "Addresses", icon: "📍" },
     { id: "profile", label: "Profile", icon: "👤" },
   ];
@@ -49,6 +72,9 @@ export default function DashboardView({
       (b) => b.status !== "Completed" && b.status !== "Cancelled"
     ).length,
     addresses: user?.addresses?.length || 0,
+    walletBalance: wallet?.balance || 0,
+    loyaltyPoints: loyalty?.points || 0,
+    notifications: notifications?.filter((n) => !n.isRead).length || 0,
   };
 
   return (
@@ -58,7 +84,8 @@ export default function DashboardView({
         <div className="dashboard-header-content">
           <div className="dashboard-welcome">
             <h1 className="dashboard-title">
-              Welcome back, <span className="dashboard-gradient">{user?.firstName}!</span>
+              Welcome back,{" "}
+              <span className="dashboard-gradient">{user?.firstName}!</span>
             </h1>
             <p className="dashboard-subtitle">
               Manage your bookings, addresses, and account settings
@@ -81,10 +108,13 @@ export default function DashboardView({
         <div className="dashboard-sidebar">
           <div className="dashboard-user-card">
             <div className="dashboard-user-avatar">
-              {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
+              {user?.firstName?.charAt(0)}
+              {user?.lastName?.charAt(0)}
             </div>
             <div className="dashboard-user-info">
-              <h3>{user?.firstName} {user?.lastName}</h3>
+              <h3>
+                {user?.firstName} {user?.lastName}
+              </h3>
               <p>{user?.email}</p>
             </div>
           </div>
@@ -93,7 +123,9 @@ export default function DashboardView({
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                className={`dashboard-nav-item ${activeTab === tab.id ? "active" : ""}`}
+                className={`dashboard-nav-item ${
+                  activeTab === tab.id ? "active" : ""
+                }`}
                 onClick={() => setActiveTab(tab.id)}
               >
                 <span className="dashboard-nav-icon">{tab.icon}</span>
@@ -106,7 +138,9 @@ export default function DashboardView({
         {/* Main Area */}
         <div className="dashboard-main">
           {message.text && (
-            <div className={`dashboard-message dashboard-message-${message.type}`}>
+            <div
+              className={`dashboard-message dashboard-message-${message.type}`}
+            >
               {message.type === "success" ? "✅" : "⚠️"} {message.text}
             </div>
           )}
@@ -115,7 +149,7 @@ export default function DashboardView({
           {activeTab === "overview" && (
             <div className="dashboard-tab">
               <h2 className="dashboard-section-title">📊 Overview</h2>
-              
+
               <div className="dashboard-stats-grid">
                 <div className="dashboard-stat-card stat-total">
                   <div className="stat-icon">📋</div>
@@ -132,10 +166,20 @@ export default function DashboardView({
                   <div className="stat-value">{stats.completed}</div>
                   <div className="stat-label">Completed</div>
                 </div>
-                <div className="dashboard-stat-card stat-addresses">
-                  <div className="stat-icon">📍</div>
-                  <div className="stat-value">{stats.addresses}</div>
-                  <div className="stat-label">Saved Addresses</div>
+                <div className="dashboard-stat-card stat-wallet">
+                  <div className="stat-icon">💰</div>
+                  <div className="stat-value">₹{stats.walletBalance}</div>
+                  <div className="stat-label">Wallet Balance</div>
+                </div>
+                <div className="dashboard-stat-card stat-loyalty">
+                  <div className="stat-icon">⭐</div>
+                  <div className="stat-value">{stats.loyaltyPoints}</div>
+                  <div className="stat-label">Loyalty Points</div>
+                </div>
+                <div className="dashboard-stat-card stat-notifications">
+                  <div className="stat-icon">🔔</div>
+                  <div className="stat-value">{stats.notifications}</div>
+                  <div className="stat-label">Unread Notifications</div>
                 </div>
               </div>
 
@@ -147,15 +191,23 @@ export default function DashboardView({
                     <div className="empty-icon">📭</div>
                     <h4>No bookings yet</h4>
                     <p>Book your first cleaning service today!</p>
-                    <Link to="/book" className="empty-cta">Book Now →</Link>
+                    <Link to="/book" className="empty-cta">
+                      Book Now →
+                    </Link>
                   </div>
                 ) : (
                   <div className="dashboard-recent-list">
                     {bookings.slice(0, 3).map((booking) => (
                       <div key={booking._id} className="dashboard-booking-card">
                         <div className="booking-card-header">
-                          <div className="booking-service">{booking.service}</div>
-                          <span className={`booking-status ${getStatusClass(booking.status)}`}>
+                          <div className="booking-service">
+                            {booking.service}
+                          </div>
+                          <span
+                            className={`booking-status ${getStatusClass(
+                              booking.status
+                            )}`}
+                          >
                             {booking.status || "New"}
                           </span>
                         </div>
@@ -177,7 +229,9 @@ export default function DashboardView({
             <div className="dashboard-tab">
               <div className="dashboard-section-header">
                 <h2 className="dashboard-section-title">📅 My Bookings</h2>
-                <Link to="/book" className="section-action-btn">+ New Booking</Link>
+                <Link to="/book" className="section-action-btn">
+                  + New Booking
+                </Link>
               </div>
 
               {bookings.length === 0 ? (
@@ -185,7 +239,9 @@ export default function DashboardView({
                   <div className="empty-icon">📭</div>
                   <h4>No bookings yet</h4>
                   <p>Book your first cleaning service today!</p>
-                  <Link to="/book" className="empty-cta">Book Now →</Link>
+                  <Link to="/book" className="empty-cta">
+                    Book Now →
+                  </Link>
                 </div>
               ) : (
                 <div className="dashboard-bookings-list">
@@ -193,42 +249,65 @@ export default function DashboardView({
                     <div key={booking._id} className="booking-full-card">
                       <div className="booking-full-header">
                         <div>
-                          <div className="booking-full-service">{booking.service}</div>
+                          <div className="booking-full-service">
+                            {booking.service}
+                          </div>
                           <div className="booking-full-date">
-                            Booked on {new Date(booking.createdAt).toLocaleDateString()}
+                            Booked on{" "}
+                            {new Date(booking.createdAt).toLocaleDateString()}
                           </div>
                         </div>
-                        <span className={`booking-status ${getStatusClass(booking.status)}`}>
+                        <span
+                          className={`booking-status ${getStatusClass(
+                            booking.status
+                          )}`}
+                        >
                           {booking.status || "New"}
                         </span>
                       </div>
                       <div className="booking-full-grid">
                         <div className="booking-full-item">
                           <span className="booking-full-label">📅 Date</span>
-                          <span className="booking-full-value">{booking.date}</span>
+                          <span className="booking-full-value">
+                            {booking.date}
+                          </span>
                         </div>
                         <div className="booking-full-item">
                           <span className="booking-full-label">🕐 Time</span>
-                          <span className="booking-full-value">{booking.timeSlot || "-"}</span>
+                          <span className="booking-full-value">
+                            {booking.timeSlot || "-"}
+                          </span>
                         </div>
                         <div className="booking-full-item">
                           <span className="booking-full-label">📍 Area</span>
-                          <span className="booking-full-value">{booking.area}</span>
+                          <span className="booking-full-value">
+                            {booking.area}
+                          </span>
                         </div>
                         <div className="booking-full-item">
-                          <span className="booking-full-label">⏱️ Duration</span>
-                          <span className="booking-full-value">{booking.hours || "-"} hours</span>
+                          <span className="booking-full-label">
+                            ⏱️ Duration
+                          </span>
+                          <span className="booking-full-value">
+                            {booking.hours || "-"} hours
+                          </span>
                         </div>
                         {booking.assignedCleaner && (
                           <div className="booking-full-item">
-                            <span className="booking-full-label">👷 Cleaner</span>
-                            <span className="booking-full-value">{booking.assignedCleaner}</span>
+                            <span className="booking-full-label">
+                              👷 Cleaner
+                            </span>
+                            <span className="booking-full-value">
+                              {booking.assignedCleaner}
+                            </span>
                           </div>
                         )}
                         {booking.estimatedPrice && (
                           <div className="booking-full-item">
                             <span className="booking-full-label">💰 Price</span>
-                            <span className="booking-full-value booking-price">₹{booking.estimatedPrice}</span>
+                            <span className="booking-full-value booking-price">
+                              ₹{booking.estimatedPrice}
+                            </span>
                           </div>
                         )}
                       </div>
@@ -342,12 +421,16 @@ export default function DashboardView({
                 </form>
               )}
 
-              {(!user?.addresses || user.addresses.length === 0) && !showAddressForm ? (
+              {(!user?.addresses || user.addresses.length === 0) &&
+              !showAddressForm ? (
                 <div className="dashboard-empty">
                   <div className="empty-icon">📍</div>
                   <h4>No addresses saved</h4>
                   <p>Add addresses for faster booking</p>
-                  <button className="empty-cta" onClick={() => setShowAddressForm(true)}>
+                  <button
+                    className="empty-cta"
+                    onClick={() => setShowAddressForm(true)}
+                  >
                     Add Address →
                   </button>
                 </div>
@@ -357,12 +440,16 @@ export default function DashboardView({
                     <div key={addr._id} className="address-card">
                       <div className="address-card-header">
                         <span className="address-label">{addr.label}</span>
-                        {addr.isDefault && <span className="address-default">Default</span>}
+                        {addr.isDefault && (
+                          <span className="address-default">Default</span>
+                        )}
                       </div>
                       <div className="address-content">
                         <p>{addr.address1}</p>
                         {addr.address2 && <p>{addr.address2}</p>}
-                        <p>{addr.city}, {addr.state} - {addr.pincode}</p>
+                        <p>
+                          {addr.city}, {addr.state} - {addr.pincode}
+                        </p>
                       </div>
                       <button
                         className="address-delete-btn"
@@ -377,13 +464,436 @@ export default function DashboardView({
             </div>
           )}
 
+          {/* Wallet Tab */}
+          {activeTab === "wallet" && (
+            <div className="dashboard-tab">
+              <h2 className="dashboard-section-title">💰 My Wallet</h2>
+
+              <div className="wallet-balance-card">
+                <div className="wallet-balance-header">
+                  <span>Available Balance</span>
+                  <span className="wallet-balance-amount">
+                    ₹{wallet?.balance || 0}
+                  </span>
+                </div>
+              </div>
+
+              <div className="dashboard-section-header">
+                <h3 className="dashboard-section-subtitle">
+                  Transaction History
+                </h3>
+              </div>
+
+              {!transactions || transactions.length === 0 ? (
+                <div className="dashboard-empty">
+                  <div className="empty-icon">💳</div>
+                  <h4>No transactions yet</h4>
+                  <p>Your wallet transactions will appear here</p>
+                </div>
+              ) : (
+                <div className="transactions-list">
+                  {transactions.map((txn) => (
+                    <div key={txn._id} className="transaction-item">
+                      <div className="transaction-info">
+                        <div className="transaction-type">{txn.type}</div>
+                        <div className="transaction-desc">
+                          {txn.description}
+                        </div>
+                        <div className="transaction-date">
+                          {new Date(txn.createdAt).toLocaleString()}
+                        </div>
+                      </div>
+                      <div
+                        className={`transaction-amount ${
+                          txn.type === "credit" ? "credit" : "debit"
+                        }`}
+                      >
+                        {txn.type === "credit" ? "+" : "-"}₹{txn.amount}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Loyalty & Rewards Tab */}
+          {activeTab === "loyalty" && (
+            <div className="dashboard-tab">
+              <h2 className="dashboard-section-title">🎁 Loyalty & Rewards</h2>
+
+              <div className="loyalty-stats-grid">
+                <div className="loyalty-stat-card">
+                  <div className="loyalty-stat-icon">⭐</div>
+                  <div className="loyalty-stat-value">
+                    {loyalty?.points || 0}
+                  </div>
+                  <div className="loyalty-stat-label">Available Points</div>
+                </div>
+                <div className="loyalty-stat-card">
+                  <div className="loyalty-stat-icon">🏆</div>
+                  <div className="loyalty-stat-value">
+                    {loyalty?.tier || "Bronze"}
+                  </div>
+                  <div className="loyalty-stat-label">Current Tier</div>
+                </div>
+                <div className="loyalty-stat-card">
+                  <div className="loyalty-stat-icon">💎</div>
+                  <div className="loyalty-stat-value">
+                    {loyalty?.lifetimePoints || 0}
+                  </div>
+                  <div className="loyalty-stat-label">Lifetime Points</div>
+                </div>
+              </div>
+
+              <div className="rewards-catalog">
+                <h3 className="dashboard-section-subtitle">Redeem Rewards</h3>
+                <div className="rewards-grid">
+                  <div className="reward-card">
+                    <div className="reward-icon">🎫</div>
+                    <div className="reward-title">₹50 Off</div>
+                    <div className="reward-points">100 Points</div>
+                    <button
+                      className="reward-redeem-btn"
+                      onClick={() => onRedeemPoints(100, "₹50 Off")}
+                    >
+                      Redeem
+                    </button>
+                  </div>
+                  <div className="reward-card">
+                    <div className="reward-icon">🎁</div>
+                    <div className="reward-title">₹100 Off</div>
+                    <div className="reward-points">200 Points</div>
+                    <button
+                      className="reward-redeem-btn"
+                      onClick={() => onRedeemPoints(200, "₹100 Off")}
+                    >
+                      Redeem
+                    </button>
+                  </div>
+                  <div className="reward-card">
+                    <div className="reward-icon">💝</div>
+                    <div className="reward-title">Free Service</div>
+                    <div className="reward-points">500 Points</div>
+                    <button
+                      className="reward-redeem-btn"
+                      onClick={() => onRedeemPoints(500, "Free Service")}
+                    >
+                      Redeem
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Reviews Tab */}
+          {activeTab === "reviews" && (
+            <div className="dashboard-tab">
+              <h2 className="dashboard-section-title">⭐ My Reviews</h2>
+
+              {!reviews || reviews.length === 0 ? (
+                <div className="dashboard-empty">
+                  <div className="empty-icon">⭐</div>
+                  <h4>No reviews yet</h4>
+                  <p>Share your experience with our services</p>
+                </div>
+              ) : (
+                <div className="reviews-list">
+                  {reviews.map((review) => (
+                    <div key={review._id} className="review-card">
+                      <div className="review-header">
+                        <div className="review-rating">
+                          {"⭐".repeat(review.rating)}
+                        </div>
+                        <div className="review-date">
+                          {new Date(review.createdAt).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className="review-comment">{review.comment}</div>
+                      {review.adminResponse && (
+                        <div className="review-response">
+                          <strong>Admin Response:</strong>{" "}
+                          {review.adminResponse}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Notifications Tab */}
+          {activeTab === "notifications" && (
+            <div className="dashboard-tab">
+              <div className="dashboard-section-header">
+                <h2 className="dashboard-section-title">🔔 Notifications</h2>
+                {notifications && notifications.some((n) => !n.isRead) && (
+                  <button
+                    className="section-action-btn"
+                    onClick={onMarkAllNotificationsRead}
+                  >
+                    Mark All as Read
+                  </button>
+                )}
+              </div>
+
+              {!notifications || notifications.length === 0 ? (
+                <div className="dashboard-empty">
+                  <div className="empty-icon">🔔</div>
+                  <h4>No notifications</h4>
+                  <p>You're all caught up!</p>
+                </div>
+              ) : (
+                <div className="notifications-list">
+                  {notifications.map((notif) => (
+                    <div
+                      key={notif._id}
+                      className={`notification-item ${
+                        notif.isRead ? "read" : "unread"
+                      }`}
+                    >
+                      <div className="notification-header">
+                        <span className="notification-type">{notif.type}</span>
+                        <span className="notification-date">
+                          {new Date(notif.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="notification-title">{notif.title}</div>
+                      <div className="notification-message">
+                        {notif.message}
+                      </div>
+                      {!notif.isRead && (
+                        <button
+                          className="notification-mark-read"
+                          onClick={() => onMarkNotificationRead(notif._id)}
+                        >
+                          Mark as Read
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Referral Tab */}
+          {activeTab === "referral" && (
+            <div className="dashboard-tab">
+              <h2 className="dashboard-section-title">🤝 Refer & Earn</h2>
+
+              <div className="referral-hero">
+                <h3>Share the Love, Earn Rewards!</h3>
+                <p>
+                  Refer friends and earn ₹100 for each successful referral. Your
+                  friend gets ₹50 too!
+                </p>
+              </div>
+
+              <div className="referral-code-card">
+                <div className="referral-code-label">Your Referral Code</div>
+                <div className="referral-code-value">
+                  {referralData?.referralCode || "Loading..."}
+                </div>
+                <button
+                  className="referral-copy-btn"
+                  onClick={() =>
+                    navigator.clipboard.writeText(referralData?.referralCode)
+                  }
+                >
+                  📋 Copy Code
+                </button>
+              </div>
+
+              <div className="referral-stats-grid">
+                <div className="referral-stat">
+                  <div className="referral-stat-value">
+                    {referralData?.totalReferrals || 0}
+                  </div>
+                  <div className="referral-stat-label">Total Referrals</div>
+                </div>
+                <div className="referral-stat">
+                  <div className="referral-stat-value">
+                    {referralData?.completedReferrals || 0}
+                  </div>
+                  <div className="referral-stat-label">Successful</div>
+                </div>
+                <div className="referral-stat">
+                  <div className="referral-stat-value">
+                    ₹{referralData?.earnings || 0}
+                  </div>
+                  <div className="referral-stat-label">Total Earnings</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Support Tab */}
+          {activeTab === "support" && (
+            <div className="dashboard-tab">
+              <h2 className="dashboard-section-title">💬 Support</h2>
+
+              <div className="support-create-card">
+                <h3>Create New Ticket</h3>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    onCreateTicket({
+                      subject: formData.get("subject"),
+                      message: formData.get("message"),
+                      priority: formData.get("priority"),
+                    });
+                    e.target.reset();
+                  }}
+                  className="support-form"
+                >
+                  <input
+                    type="text"
+                    name="subject"
+                    placeholder="Subject"
+                    required
+                    className="form-input"
+                  />
+                  <textarea
+                    name="message"
+                    placeholder="Describe your issue..."
+                    required
+                    className="form-input"
+                    rows="4"
+                  ></textarea>
+                  <select name="priority" className="form-input">
+                    <option value="low">Low Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="high">High Priority</option>
+                  </select>
+                  <button type="submit" className="support-submit-btn">
+                    Submit Ticket
+                  </button>
+                </form>
+              </div>
+
+              <h3 className="dashboard-section-subtitle">My Tickets</h3>
+              {!tickets || tickets.length === 0 ? (
+                <div className="dashboard-empty">
+                  <div className="empty-icon">💬</div>
+                  <h4>No support tickets</h4>
+                  <p>Create a ticket if you need help</p>
+                </div>
+              ) : (
+                <div className="tickets-list">
+                  {tickets.map((ticket) => (
+                    <div key={ticket._id} className="ticket-card">
+                      <div className="ticket-header">
+                        <div className="ticket-subject">{ticket.subject}</div>
+                        <span
+                          className={`ticket-status status-${ticket.status}`}
+                        >
+                          {ticket.status}
+                        </span>
+                      </div>
+                      <div className="ticket-message">{ticket.message}</div>
+                      <div className="ticket-footer">
+                        <span className="ticket-priority">
+                          Priority: {ticket.priority}
+                        </span>
+                        <span className="ticket-date">
+                          {new Date(ticket.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Subscriptions Tab */}
+          {activeTab === "subscriptions" && (
+            <div className="dashboard-tab">
+              <h2 className="dashboard-section-title">🔄 Subscriptions</h2>
+
+              {!subscriptions || subscriptions.length === 0 ? (
+                <div className="dashboard-empty">
+                  <div className="empty-icon">🔄</div>
+                  <h4>No active subscriptions</h4>
+                  <p>Subscribe to our services for regular cleaning</p>
+                  <Link to="/services" className="empty-cta">
+                    Browse Services →
+                  </Link>
+                </div>
+              ) : (
+                <div className="subscriptions-grid">
+                  {subscriptions.map((sub) => (
+                    <div key={sub._id} className="subscription-card">
+                      <div className="subscription-header">
+                        <div className="subscription-plan">{sub.planName}</div>
+                        <span
+                          className={`subscription-status status-${sub.status}`}
+                        >
+                          {sub.status}
+                        </span>
+                      </div>
+                      <div className="subscription-details">
+                        <div>Service: {sub.service}</div>
+                        <div>Frequency: {sub.frequency}</div>
+                        <div>
+                          Price: ₹{sub.price}/{sub.frequency}
+                        </div>
+                        <div>
+                          Next Service:{" "}
+                          {new Date(sub.nextServiceDate).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className="subscription-actions">
+                        {sub.status === "active" && (
+                          <button
+                            className="subscription-pause-btn"
+                            onClick={() =>
+                              onUpdateSubscription(sub._id, "paused")
+                            }
+                          >
+                            Pause
+                          </button>
+                        )}
+                        {sub.status === "paused" && (
+                          <button
+                            className="subscription-resume-btn"
+                            onClick={() =>
+                              onUpdateSubscription(sub._id, "active")
+                            }
+                          >
+                            Resume
+                          </button>
+                        )}
+                        <button
+                          className="subscription-cancel-btn"
+                          onClick={() =>
+                            onUpdateSubscription(sub._id, "cancelled")
+                          }
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Profile Tab */}
           {activeTab === "profile" && (
             <div className="dashboard-tab">
               <div className="dashboard-section-header">
                 <h2 className="dashboard-section-title">👤 Profile Settings</h2>
                 {!editMode && (
-                  <button className="section-action-btn" onClick={() => setEditMode(true)}>
+                  <button
+                    className="section-action-btn"
+                    onClick={() => setEditMode(true)}
+                  >
                     ✏️ Edit Profile
                   </button>
                 )}
@@ -437,7 +947,11 @@ export default function DashboardView({
                       </div>
                     </div>
                     <div className="profile-form-actions">
-                      <button type="button" className="btn-cancel" onClick={() => setEditMode(false)}>
+                      <button
+                        type="button"
+                        className="btn-cancel"
+                        onClick={() => setEditMode(false)}
+                      >
                         Cancel
                       </button>
                       <button type="submit" className="btn-save">
@@ -448,7 +962,8 @@ export default function DashboardView({
                 ) : (
                   <div className="profile-view">
                     <div className="profile-avatar-large">
-                      {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
+                      {user?.firstName?.charAt(0)}
+                      {user?.lastName?.charAt(0)}
                     </div>
                     <div className="profile-details">
                       <div className="profile-item">
@@ -459,11 +974,15 @@ export default function DashboardView({
                       </div>
                       <div className="profile-item">
                         <span className="profile-item-label">Email</span>
-                        <span className="profile-item-value">{user?.email}</span>
+                        <span className="profile-item-value">
+                          {user?.email}
+                        </span>
                       </div>
                       <div className="profile-item">
                         <span className="profile-item-label">Phone</span>
-                        <span className="profile-item-value">{user?.phone}</span>
+                        <span className="profile-item-value">
+                          {user?.phone}
+                        </span>
                       </div>
                       <div className="profile-item">
                         <span className="profile-item-label">Member Since</span>
