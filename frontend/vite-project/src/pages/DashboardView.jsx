@@ -592,6 +592,45 @@ export default function DashboardView({
             <div className="dashboard-tab">
               <h2 className="dashboard-section-title">⭐ My Reviews</h2>
 
+              <div className="dashboard-card">
+                <h3 className="dashboard-section-subtitle">
+                  Share your feedback
+                </h3>
+                <form
+                  className="support-form"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    onSubmitReview?.({
+                      rating: Number(formData.get("rating")),
+                      comment: formData.get("comment"),
+                    });
+                    e.target.reset();
+                  }}
+                >
+                  <label className="dashboard-input-label">Rating</label>
+                  <select name="rating" defaultValue="5" className="form-input">
+                    {[5, 4, 3, 2, 1].map((star) => (
+                      <option key={star} value={star}>
+                        {star} Star{star > 1 ? "s" : ""}
+                      </option>
+                    ))}
+                  </select>
+
+                  <label className="dashboard-input-label">Comments</label>
+                  <textarea
+                    name="comment"
+                    placeholder="Tell us about your experience"
+                    className="form-textarea"
+                    required
+                  ></textarea>
+
+                  <button type="submit" className="section-action-btn">
+                    Submit Review
+                  </button>
+                </form>
+              </div>
+
               {!reviews || reviews.length === 0 ? (
                 <div className="dashboard-empty">
                   <div className="empty-icon">⭐</div>
@@ -814,6 +853,56 @@ export default function DashboardView({
           {activeTab === "subscriptions" && (
             <div className="dashboard-tab">
               <h2 className="dashboard-section-title">🔄 Subscriptions</h2>
+
+              <div className="dashboard-card">
+                <h3 className="dashboard-section-subtitle">Create a plan</h3>
+                <form
+                  className="support-form"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    onCreateSubscription?.({
+                      service: formData.get("service"),
+                      frequency: formData.get("frequency"),
+                      notes: formData.get("notes"),
+                    });
+                    e.target.reset();
+                  }}
+                >
+                  <label className="dashboard-input-label">Service</label>
+                  <input
+                    type="text"
+                    name="service"
+                    placeholder="e.g., Weekly Home Cleaning"
+                    className="form-input"
+                    required
+                  />
+
+                  <label className="dashboard-input-label">Frequency</label>
+                  <select
+                    name="frequency"
+                    defaultValue="monthly"
+                    className="form-input"
+                  >
+                    <option value="weekly">Weekly</option>
+                    <option value="biweekly">Bi-weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
+
+                  <label className="dashboard-input-label">
+                    Notes (optional)
+                  </label>
+                  <textarea
+                    name="notes"
+                    placeholder="Share any preferences or schedule notes"
+                    className="form-textarea"
+                  ></textarea>
+
+                  <button type="submit" className="section-action-btn">
+                    Create Subscription
+                  </button>
+                </form>
+              </div>
 
               {!subscriptions || subscriptions.length === 0 ? (
                 <div className="dashboard-empty">

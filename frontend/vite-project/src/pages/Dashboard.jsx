@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import DashboardView from "./DashboardView";
@@ -35,31 +35,15 @@ export default function Dashboard() {
   const [tickets, setTickets] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
 
-  // Check auth on mount
-  useEffect(() => {
-    const token = localStorage.getItem("customerToken");
-    if (!token) {
-      navigate("/account/login");
-      return;
-    }
-    fetchProfile();
-    fetchBookings();
-    fetchWallet();
-    fetchTransactions();
-    fetchLoyalty();
-    fetchReviews();
-    fetchNotifications();
-    fetchReferralData();
-    fetchTickets();
-    fetchSubscriptions();
-  }, [navigate]);
+  const getAuthHeaders = useCallback(
+    () => ({
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("customerToken")}`,
+    }),
+    []
+  );
 
-  const getAuthHeaders = () => ({
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem("customerToken")}`,
-  });
-
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/auth/profile`, {
         headers: getAuthHeaders(),
@@ -73,15 +57,16 @@ export default function Dashboard() {
         phone: data.phone,
       });
     } catch (err) {
+      console.error("Error fetching profile:", err);
       localStorage.removeItem("customerToken");
       localStorage.removeItem("customerUser");
       navigate("/account/login");
     } finally {
       setLoading(false);
     }
-  };
+  }, [getAuthHeaders, navigate]);
 
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/auth/bookings`, {
         headers: getAuthHeaders(),
@@ -93,7 +78,7 @@ export default function Dashboard() {
     } catch (err) {
       console.error("Error fetching bookings:", err);
     }
-  };
+  }, [getAuthHeaders]);
 
   const handleLogout = () => {
     localStorage.removeItem("customerToken");
@@ -186,7 +171,7 @@ export default function Dashboard() {
   };
 
   // Wallet & Transactions
-  const fetchWallet = async () => {
+  const fetchWallet = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/wallet`, {
         headers: getAuthHeaders(),
@@ -198,9 +183,9 @@ export default function Dashboard() {
     } catch (err) {
       console.error("Error fetching wallet:", err);
     }
-  };
+  }, [getAuthHeaders]);
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/transactions`, {
         headers: getAuthHeaders(),
@@ -212,10 +197,10 @@ export default function Dashboard() {
     } catch (err) {
       console.error("Error fetching transactions:", err);
     }
-  };
+  }, [getAuthHeaders]);
 
   // Loyalty & Rewards
-  const fetchLoyalty = async () => {
+  const fetchLoyalty = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/loyalty`, {
         headers: getAuthHeaders(),
@@ -227,7 +212,7 @@ export default function Dashboard() {
     } catch (err) {
       console.error("Error fetching loyalty:", err);
     }
-  };
+  }, [getAuthHeaders]);
 
   const handleRedeemPoints = async (points, reward) => {
     try {
@@ -250,7 +235,7 @@ export default function Dashboard() {
   };
 
   // Reviews
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/reviews`, {
         headers: getAuthHeaders(),
@@ -262,7 +247,7 @@ export default function Dashboard() {
     } catch (err) {
       console.error("Error fetching reviews:", err);
     }
-  };
+  }, [getAuthHeaders]);
 
   const handleSubmitReview = async (reviewData) => {
     try {
@@ -285,7 +270,7 @@ export default function Dashboard() {
   };
 
   // Notifications
-  const fetchNotifications = async () => {
+  const fetchNotifications = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/notifications`, {
         headers: getAuthHeaders(),
@@ -297,7 +282,7 @@ export default function Dashboard() {
     } catch (err) {
       console.error("Error fetching notifications:", err);
     }
-  };
+  }, [getAuthHeaders]);
 
   const handleMarkNotificationRead = async (notifId) => {
     try {
@@ -330,7 +315,7 @@ export default function Dashboard() {
   };
 
   // Referrals
-  const fetchReferralData = async () => {
+  const fetchReferralData = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/referral`, {
         headers: getAuthHeaders(),
@@ -342,10 +327,10 @@ export default function Dashboard() {
     } catch (err) {
       console.error("Error fetching referral data:", err);
     }
-  };
+  }, [getAuthHeaders]);
 
   // Support Tickets
-  const fetchTickets = async () => {
+  const fetchTickets = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/tickets`, {
         headers: getAuthHeaders(),
@@ -357,7 +342,7 @@ export default function Dashboard() {
     } catch (err) {
       console.error("Error fetching tickets:", err);
     }
-  };
+  }, [getAuthHeaders]);
 
   const handleCreateTicket = async (ticketData) => {
     try {
@@ -380,7 +365,7 @@ export default function Dashboard() {
   };
 
   // Subscriptions
-  const fetchSubscriptions = async () => {
+  const fetchSubscriptions = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/subscriptions`, {
         headers: getAuthHeaders(),
@@ -392,7 +377,39 @@ export default function Dashboard() {
     } catch (err) {
       console.error("Error fetching subscriptions:", err);
     }
-  };
+  }, [getAuthHeaders]);
+
+  // Check auth on mount and load data
+  useEffect(() => {
+    const token = localStorage.getItem("customerToken");
+    if (!token) {
+      navigate("/account/login");
+      return;
+    }
+
+    fetchProfile();
+    fetchBookings();
+    fetchWallet();
+    fetchTransactions();
+    fetchLoyalty();
+    fetchReviews();
+    fetchNotifications();
+    fetchReferralData();
+    fetchTickets();
+    fetchSubscriptions();
+  }, [
+    navigate,
+    fetchProfile,
+    fetchBookings,
+    fetchWallet,
+    fetchTransactions,
+    fetchLoyalty,
+    fetchReviews,
+    fetchNotifications,
+    fetchReferralData,
+    fetchTickets,
+    fetchSubscriptions,
+  ]);
 
   const handleCreateSubscription = async (subData) => {
     try {

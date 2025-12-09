@@ -1,6 +1,5 @@
 // src/components/Navbar.jsx
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
 import "./Navbar.css";
 
 const TOKEN_KEY = "HOMECAREPRO_ADMIN_TOKEN";
@@ -12,38 +11,27 @@ function Navbar() {
   const token = localStorage.getItem(TOKEN_KEY);
   const isAdmin = !!token;
 
-  // Check for customer login
-  const [isCustomer, setIsCustomer] = useState(false);
-  const [customerName, setCustomerName] = useState("");
-
-  useEffect(() => {
+  const getCustomerInfo = () => {
     const customerToken = localStorage.getItem("customerToken");
     const customerUser = localStorage.getItem("customerUser");
+
     if (customerToken && customerUser) {
-      setIsCustomer(true);
       try {
         const user = JSON.parse(customerUser);
-        setCustomerName(user.firstName);
+        return { isCustomer: true, customerName: user.firstName || "User" };
       } catch {
-        setCustomerName("User");
+        return { isCustomer: true, customerName: "User" };
       }
-    } else {
-      setIsCustomer(false);
-      setCustomerName("");
     }
-  }, [location]);
+
+    return { isCustomer: false, customerName: "" };
+  };
+
+  const { isCustomer, customerName } = getCustomerInfo();
 
   const handleLogout = () => {
     localStorage.removeItem(TOKEN_KEY);
     navigate("/admin/login");
-  };
-
-  const handleCustomerLogout = () => {
-    localStorage.removeItem("customerToken");
-    localStorage.removeItem("customerUser");
-    setIsCustomer(false);
-    setCustomerName("");
-    navigate("/");
   };
 
   const isActive = (path) => location.pathname === path;

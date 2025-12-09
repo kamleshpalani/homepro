@@ -87,6 +87,7 @@ const CleanerApplyView = ({
   submitting,
   currentStep,
   onChange,
+  onToggleMulti,
   onSubmit,
   onNext,
   onPrev,
@@ -117,7 +118,7 @@ const CleanerApplyView = ({
   // Calculate filled fields percentage
   const calculateProgress = () => {
     const allFields = Object.entries(form);
-    const filledFields = allFields.filter(([key, value]) => {
+    const filledFields = allFields.filter(([, value]) => {
       if (typeof value === "boolean") return true; // Checkboxes count as filled
       if (typeof value === "string") return value.trim() !== "";
       return value !== null && value !== undefined;
@@ -297,6 +298,20 @@ const CleanerApplyView = ({
 
                   <div className="cleaner-apply-field">
                     <label className="cleaner-apply-label">
+                      WhatsApp Number
+                    </label>
+                    <input
+                      type="tel"
+                      name="whatsappNumber"
+                      value={form.whatsappNumber}
+                      onChange={onChange}
+                      className="cleaner-apply-input"
+                      placeholder="If different from phone"
+                    />
+                  </div>
+
+                  <div className="cleaner-apply-field">
+                    <label className="cleaner-apply-label">
                       Email <span className="required">*</span>
                     </label>
                     <input
@@ -399,6 +414,21 @@ const CleanerApplyView = ({
                     />
                   </div>
 
+                  <div className="cleaner-apply-field">
+                    <label className="cleaner-apply-label">
+                      Service Radius (km) <span className="required">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      name="serviceRadiusKm"
+                      value={form.serviceRadiusKm}
+                      onChange={onChange}
+                      className="cleaner-apply-input"
+                      required
+                    />
+                  </div>
+
                   <div className="cleaner-apply-field cleaner-apply-field-full">
                     <label className="cleaner-apply-label">
                       Address <span className="required">*</span>
@@ -484,7 +514,7 @@ const CleanerApplyView = ({
 
                   <div className="cleaner-apply-field">
                     <label className="cleaner-apply-label">
-                      Expected Salary Per Job{" "}
+                      Expected Salary Per Hour{" "}
                       <span className="required">*</span>
                     </label>
                     <input
@@ -502,19 +532,32 @@ const CleanerApplyView = ({
                     <label className="cleaner-apply-label">
                       Type of Work <span className="required">*</span>
                     </label>
-                    <select
-                      name="typeOfWork"
-                      value={form.typeOfWork}
-                      onChange={onChange}
-                      className="cleaner-apply-input"
-                      required
-                    >
-                      <option value="">Select Type</option>
-                      <option value="full-time">Full Time</option>
-                      <option value="part-time">Part Time</option>
-                      <option value="contract">Contract</option>
-                      <option value="freelance">Freelance</option>
-                    </select>
+                    <div className="cleaner-apply-checkbox-group">
+                      {[
+                        { key: "full-time", label: "Full Time" },
+                        { key: "part-time", label: "Part Time" },
+                        { key: "contract", label: "Contract" },
+                        { key: "freelance", label: "Freelance" },
+                      ].map((opt) => (
+                        <label
+                          key={opt.key}
+                          className="cleaner-apply-checkbox-label"
+                        >
+                          <input
+                            type="checkbox"
+                            name="typeOfWork"
+                            checked={form.typeOfWork?.includes(opt.key)}
+                            onChange={() =>
+                              onToggleMulti?.("typeOfWork", opt.key)
+                            }
+                          />
+                          {opt.label}
+                        </label>
+                      ))}
+                    </div>
+                    <p className="cleaner-apply-hint">
+                      Pick all engagement types you are open to.
+                    </p>
                   </div>
 
                   <div className="cleaner-apply-field">
@@ -550,22 +593,46 @@ const CleanerApplyView = ({
 
                   <div className="cleaner-apply-field">
                     <label className="cleaner-apply-label">
-                      Services Offered <span className="required">*</span>
+                      Transportation Mode
                     </label>
                     <select
-                      name="servicesOffered"
-                      value={form.servicesOffered}
+                      name="transportationMode"
+                      value={form.transportationMode}
                       onChange={onChange}
                       className="cleaner-apply-input"
-                      required
                     >
-                      <option value="">Select Service</option>
-                      {SERVICES.map((service) => (
-                        <option key={service} value={service}>
-                          {service}
-                        </option>
-                      ))}
+                      <option value="">Select</option>
+                      <option value="bike">Bike</option>
+                      <option value="public">Public transport</option>
+                      <option value="none">None</option>
                     </select>
+                  </div>
+
+                  <div className="cleaner-apply-field cleaner-apply-field-full">
+                    <label className="cleaner-apply-label">
+                      Services Offered <span className="required">*</span>
+                    </label>
+                    <div className="cleaner-apply-checkbox-group">
+                      {SERVICES.map((service) => (
+                        <label
+                          key={service}
+                          className="cleaner-apply-checkbox-label"
+                        >
+                          <input
+                            type="checkbox"
+                            name="servicesOffered"
+                            checked={form.servicesOffered?.includes(service)}
+                            onChange={() =>
+                              onToggleMulti?.("servicesOffered", service)
+                            }
+                          />
+                          {service}
+                        </label>
+                      ))}
+                    </div>
+                    <p className="cleaner-apply-hint">
+                      Select all services you can perform.
+                    </p>
                   </div>
 
                   <div className="cleaner-apply-field">
@@ -581,6 +648,40 @@ const CleanerApplyView = ({
                       placeholder="e.g., Tamil, English, Hindi"
                       required
                     />
+                  </div>
+
+                  <div className="cleaner-apply-field cleaner-apply-field-full">
+                    <label className="cleaner-apply-label">
+                      Language Preference
+                    </label>
+                    <div className="cleaner-apply-checkbox-group">
+                      {[
+                        { key: "languageTamil", label: "Tamil" },
+                        { key: "languageEnglish", label: "English" },
+                        { key: "languageHindi", label: "Hindi" },
+                        { key: "languageMalayalam", label: "Malayalam" },
+                      ].map((lang) => (
+                        <label
+                          key={lang.key}
+                          className="cleaner-apply-checkbox-label"
+                        >
+                          <input
+                            type="checkbox"
+                            name={lang.key}
+                            checked={form[lang.key] || false}
+                            onChange={(e) =>
+                              onChange({
+                                target: {
+                                  name: e.target.name,
+                                  value: e.target.checked,
+                                },
+                              })
+                            }
+                          />
+                          <span>{lang.label}</span>
+                        </label>
+                      ))}
+                    </div>
                   </div>
 
                   <div className="cleaner-apply-field cleaner-apply-field-full">
@@ -722,6 +823,24 @@ const CleanerApplyView = ({
                         />
                         Pressure Washer
                       </label>
+                      <label className="cleaner-apply-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="equipmentPPE"
+                          checked={form.equipmentPPE}
+                          onChange={handleCheckboxChange}
+                        />
+                        PPE (gloves, masks)
+                      </label>
+                      <label className="cleaner-apply-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="equipmentLadder"
+                          checked={form.equipmentLadder}
+                          onChange={handleCheckboxChange}
+                        />
+                        Ladder/step stool
+                      </label>
                     </div>
                   </div>
 
@@ -850,6 +969,48 @@ const CleanerApplyView = ({
                           onChange={handleCheckboxChange}
                         />
                         Sunday
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="cleaner-apply-field cleaner-apply-field-full">
+                    <label className="cleaner-apply-label">Time Blocks</label>
+                    <div className="cleaner-apply-checkbox-group">
+                      <label className="cleaner-apply-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="availableMorning"
+                          checked={form.availableMorning}
+                          onChange={handleCheckboxChange}
+                        />
+                        Morning
+                      </label>
+                      <label className="cleaner-apply-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="availableAfternoon"
+                          checked={form.availableAfternoon}
+                          onChange={handleCheckboxChange}
+                        />
+                        Afternoon
+                      </label>
+                      <label className="cleaner-apply-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="availableEvening"
+                          checked={form.availableEvening}
+                          onChange={handleCheckboxChange}
+                        />
+                        Evening
+                      </label>
+                      <label className="cleaner-apply-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="availableOvernight"
+                          checked={form.availableOvernight}
+                          onChange={handleCheckboxChange}
+                        />
+                        Overnight
                       </label>
                     </div>
                   </div>

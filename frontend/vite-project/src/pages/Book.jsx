@@ -11,6 +11,9 @@ function Book() {
     email: "",
     preferredContactMethod: "whatsapp",
     preferredContactTime: "",
+    onsiteContactName: "",
+    onsiteContactPhone: "",
+    quietHours: "",
 
     // Service Details
     service: "",
@@ -31,6 +34,7 @@ function Book() {
     cleanTerrace: false,
     cleanStaircase: false,
     cleanParking: false,
+    flexibilityWindow: "",
 
     // Address
     address1: "",
@@ -47,6 +51,12 @@ function Book() {
     approxAreaSqft: "",
     petsAtHome: "no",
     propertyAccess: "customer-present",
+    elevatorAvailable: "",
+    parkingAvailability: "",
+    accessInstructions: "",
+    powerWaterConstraints: "",
+    doNotCleanAreas: "",
+    onsiteContactNotes: "",
 
     // Cleaner Preferences
     cleanerGenderPreference: "no-preference",
@@ -57,6 +67,8 @@ function Book() {
     languageMalayalam: false,
 
     // Additional
+    budgetRange: "",
+    postServiceProof: false,
     notes: "",
   });
 
