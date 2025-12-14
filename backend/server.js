@@ -94,7 +94,7 @@ const bookingSchema = new mongoose.Schema(
     languageMalayalam: { type: Boolean, default: false },
 
     // Additional
-    notes: { type: String },
+    notes: { type: String, default: "" },
 
     // Admin-side management fields
     status: {
@@ -110,9 +110,23 @@ const bookingSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+
+    // Dynamic fields support - allows future field additions without schema changes
+    customFields: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
+
+    // Schema version for tracking changes
+    schemaVersion: {
+      type: Number,
+      default: 1,
+    },
   },
   {
     timestamps: true, // createdAt & updatedAt
+    strict: false, // Allow fields not defined in schema for future flexibility
+    minimize: false, // Keep empty objects
   }
 );
 
@@ -134,6 +148,7 @@ const cleanerSchema = new mongoose.Schema(
     // Location Details (Step 2)
     area: { type: String, required: true },
     areaOther: { type: String },
+    areasServed: { type: [String], default: [] }, // NEW: Multi-area support
     city: { type: String },
     address1: { type: String },
     state: { type: String },
@@ -143,10 +158,33 @@ const cleanerSchema = new mongoose.Schema(
     experienceYears: { type: String, default: "0-1" },
     educationLevel: { type: String },
     expectedSalaryPerJob: { type: String },
-    typeOfWork: { type: String },
+    typeOfWork: {
+      type: mongoose.Schema.Types.Mixed, // Support both string and array
+      default: [],
+      get: function (val) {
+        // Convert to array for consistency
+        if (typeof val === "string") {
+          return val ? val.split(",").map((s) => s.trim()) : [];
+        }
+        if (Array.isArray(val)) {
+          return val;
+        }
+        return [];
+      },
+    },
     preferredContactMethod: { type: String, default: "whatsapp" },
     ownVehicle: { type: String, default: "no" },
-    servicesOffered: { type: String, default: "" },
+    servicesOffered: {
+      type: mongoose.Schema.Types.Mixed, // NEW: Support both string (legacy) and array
+      default: [],
+      get: function (val) {
+        // Backward compatibility: convert string to array on read
+        if (typeof val === "string") {
+          return val ? val.split(",").map((s) => s.trim()) : [];
+        }
+        return val || [];
+      },
+    },
     languagesKnown: { type: String },
     previousEmployment: { type: String },
 
@@ -175,6 +213,18 @@ const cleanerSchema = new mongoose.Schema(
     availableSaturday: { type: Boolean, default: false },
     availableSunday: { type: Boolean, default: false },
 
+    // NEW: Structured Availability
+    availability: {
+      days: { type: [String], default: [] }, // ["Mon","Tue","Wed",...]
+      timeWindows: [
+        {
+          start: { type: String }, // "09:00"
+          end: { type: String }, // "13:00"
+        },
+      ],
+      maxJobsPerDay: { type: Number, default: 3 },
+    },
+
     // Banking & References (Step 6)
     bankName: { type: String },
     bankAccountNumber: { type: String },
@@ -201,12 +251,49 @@ const cleanerSchema = new mongoose.Schema(
     consentBackgroundCheck: { type: Boolean, default: false },
     notes: { type: String, default: "" },
 
+    // NEW: Application Management
+    applicationStatus: {
+      type: String,
+      enum: ["Pending", "Approved", "Rejected", "Hold"],
+      default: "Pending",
+    },
+    reviewNotes: { type: String, default: "" },
+    reviewedAt: { type: Date },
+    reviewedBy: { type: String }, // Admin email/name who reviewed
+
     // System fields
     isActive: { type: Boolean, default: false },
     source: { type: String, default: "public_form" },
+
+    // Dynamic fields support - allows future field additions without schema changes
+    customFields: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
+
+    // Performance tracking (extensible)
+    performance: {
+      totalJobsCompleted: { type: Number, default: 0 },
+      averageRating: { type: Number, default: 0 },
+      totalRatings: { type: Number, default: 0 },
+      customMetrics: {
+        type: mongoose.Schema.Types.Mixed,
+        default: {},
+      },
+    },
+
+    // Schema version for tracking changes
+    schemaVersion: {
+      type: Number,
+      default: 1,
+    },
   },
   {
     timestamps: true,
+    strict: false, // Allow fields not defined in schema for future flexibility
+    minimize: false, // Keep empty objects
+    toJSON: { getters: true }, // Enable getters for servicesOffered
+    toObject: { getters: true },
   }
 );
 
@@ -241,9 +328,23 @@ const userSchema = new mongoose.Schema(
       },
     ],
     isActive: { type: Boolean, default: true },
+
+    // Dynamic fields support
+    preferences: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
+
+    // Schema version
+    schemaVersion: {
+      type: Number,
+      default: 1,
+    },
   },
   {
     timestamps: true,
+    strict: false, // Allow fields not defined in schema
+    minimize: false,
   }
 );
 
@@ -958,6 +1059,17 @@ app.patch("/api/bookings/:id", requireAdmin, async (req, res) => {
     if (timeSlot !== undefined) updateFields.timeSlot = timeSlot;
     if (adminNotes !== undefined) updateFields.adminNotes = adminNotes;
 
+    // Auto-update status from "New" to "Assigned" when a cleaner is assigned
+    if (assignedCleaner !== undefined && assignedCleaner !== "") {
+      const currentBooking = await Booking.findById(id);
+      if (currentBooking && currentBooking.status === "New") {
+        updateFields.status = "Assigned";
+        console.log(
+          `📌 Auto-updating status from "New" to "Assigned" for booking ${id}`
+        );
+      }
+    }
+
     const booking = await Booking.findByIdAndUpdate(id, updateFields, {
       new: true,
       runValidators: true,
@@ -1046,6 +1158,7 @@ app.post("/api/cleaners/apply", async (req, res) => {
     email,
     phone,
     area,
+    areasServed, // NEW: comma-separated or array
     city,
     address1,
     state,
@@ -1054,72 +1167,188 @@ app.post("/api/cleaners/apply", async (req, res) => {
     expectedSalaryPerJob,
     typeOfWork,
     preferredContactMethod,
-    servicesOffered,
+    servicesOffered, // NEW: comma-separated or array
     languagesKnown,
     idProofType,
     idProofNumber,
     notes,
     areaOther,
+    // NEW: Availability fields
+    availabilityDays,
+    availabilityTimeWindows,
+    maxJobsPerDay,
   } = req.body || {};
 
-  if (!firstName || !lastName || !email || !phone || !area) {
+  // Debug logging
+  console.log("📝 Cleaner application received:", {
+    firstName,
+    lastName,
+    phone,
+    area,
+    email,
+  });
+
+  // Trim values and check for required fields
+  const trimmedFirstName = (firstName || "").trim();
+  const trimmedLastName = (lastName || "").trim();
+  const trimmedPhone = (phone || "").trim();
+  const trimmedArea = (area || "").trim();
+
+  if (!trimmedFirstName || !trimmedLastName || !trimmedPhone || !trimmedArea) {
     return res.status(400).json({
-      message: "First name, last name, email, phone, and area are required",
+      message: "First name, last name, phone, and area are required",
+      received: {
+        firstName: !!trimmedFirstName,
+        lastName: !!trimmedLastName,
+        phone: !!trimmedPhone,
+        area: !!trimmedArea,
+      },
     });
   }
 
   try {
-    // Check if email already exists
-    const existingCleaner = await Cleaner.findOne({ email });
-    if (existingCleaner) {
+    // Check for duplicate phone
+    const existingByPhone = await Cleaner.findOne({ phone: trimmedPhone });
+    if (existingByPhone) {
       return res.status(400).json({
-        message:
-          "Email already registered. Please login or use a different email.",
+        message: "Phone number already registered.",
       });
     }
 
-    const fullName = `${firstName} ${lastName}`;
-    const finalArea = area === "Others / Not listed" ? areaOther : area;
+    // Check for duplicate email (if provided)
+    const trimmedEmail = email ? email.trim() : "";
+    if (trimmedEmail) {
+      const existingByEmail = await Cleaner.findOne({ email: trimmedEmail });
+      if (existingByEmail) {
+        return res.status(400).json({
+          message:
+            "Email already registered. Please login or use a different email.",
+        });
+      }
+    }
 
-    // Create cleaner account with temporary password (can be set later)
-    const tempPassword = `${firstName}${phone.slice(-4)}`;
+    const fullName = `${trimmedFirstName} ${trimmedLastName}`;
+    const finalArea =
+      trimmedArea === "Others / Not listed"
+        ? (areaOther || "").trim()
+        : trimmedArea;
+
+    // Convert servicesOffered to array
+    let servicesArray = [];
+    if (Array.isArray(servicesOffered)) {
+      servicesArray = servicesOffered;
+    } else if (typeof servicesOffered === "string" && servicesOffered) {
+      servicesArray = servicesOffered
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+
+    // Convert areasServed to array
+    let areasArray = [finalArea];
+    if (Array.isArray(areasServed)) {
+      areasArray = areasServed;
+    } else if (typeof areasServed === "string" && areasServed) {
+      areasArray = areasServed
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+
+    // Parse availability
+    let availabilityData = {
+      days: [],
+      timeWindows: [],
+      maxJobsPerDay: maxJobsPerDay || 3,
+    };
+
+    if (availabilityDays) {
+      availabilityData.days = Array.isArray(availabilityDays)
+        ? availabilityDays
+        : availabilityDays
+            .split(",")
+            .map((d) => d.trim())
+            .filter(Boolean);
+    }
+
+    if (availabilityTimeWindows) {
+      availabilityData.timeWindows = Array.isArray(availabilityTimeWindows)
+        ? availabilityTimeWindows
+        : [];
+    }
+
+    // Create temp password if email provided
+    const tempPassword = trimmedEmail
+      ? `${trimmedFirstName}${trimmedPhone.slice(-4)}`
+      : undefined;
 
     const cleaner = await Cleaner.create({
-      firstName,
-      lastName,
+      firstName: trimmedFirstName,
+      lastName: trimmedLastName,
       name: fullName,
-      email,
+      email: trimmedEmail || undefined,
       password: tempPassword, // Will be hashed by pre-save hook
-      phone,
+      phone: trimmedPhone,
       area: finalArea,
+      areasServed: areasArray,
       city: city || "",
       address1: address1 || "",
       state: state || "",
       pincode: pincode || "",
-      experienceYears: experienceYears ? Number(experienceYears) : 0,
+      experienceYears: experienceYears || "0-1",
       expectedSalaryPerJob: expectedSalaryPerJob || "",
       typeOfWork: typeOfWork || "",
       preferredContactMethod: preferredContactMethod || "whatsapp",
-      servicesOffered: servicesOffered || "",
+      servicesOffered: servicesArray,
       languagesKnown: languagesKnown || "",
       idProofType: idProofType || "",
       idProofNumber: idProofNumber || "",
       notes: notes || "",
-      isActive: false, // applicants start as inactive
+      availability: availabilityData,
+      applicationStatus: "Pending",
+      isActive: false, // Will be set to true only after admin approval
       source: "public_form",
     });
 
-    console.log("🧹 New cleaner application:", cleaner);
+    console.log("🧹 New cleaner application:", cleaner.name, cleaner.phone);
 
-    return res.status(201).json({
-      message: `Thank you for applying! Your application has been received. Your temporary password is "${tempPassword}". We'll review your application and activate your account within 24 hours.`,
+    // Log credentials server-side (will be sent via email in production)
+    if (tempPassword) {
+      console.log("📧 [EMAIL WOULD BE SENT] To:", cleaner.email);
+      console.log(
+        "   Credentials - Email:",
+        cleaner.email,
+        "Password:",
+        tempPassword
+      );
+      console.log("   Application ID:", cleaner._id);
+
+      // TODO: Send email here
+      // Example: await sendEmail({
+      //   to: cleaner.email,
+      //   subject: 'HomeCare Pro - Application Received',
+      //   text: `Thank you for applying! Your login credentials:
+      //          Email: ${cleaner.email}
+      //          Password: ${tempPassword}
+      //          We'll review your application within 24 hours.`
+      // });
+    }
+
+    const response = {
+      message: `Thank you for applying! Your application has been received and is pending review. Login credentials have been sent to ${cleaner.email}. We'll review your application within 24 hours.`,
       cleanerId: cleaner._id,
-      tempPassword,
-    });
+      applicationStatus: cleaner.applicationStatus,
+    };
+
+    return res.status(201).json(response);
   } catch (err) {
-    console.error("Error creating cleaner application:", err);
+    console.error("❌ Error creating cleaner application:", err);
+    console.error("Error details:", err.message);
+    console.error("Stack trace:", err.stack);
     return res.status(500).json({
       message: "Failed to submit cleaner application",
+      error: err.message,
+      details: process.env.NODE_ENV === "development" ? err.stack : undefined,
     });
   }
 });
@@ -1162,11 +1391,159 @@ app.post("/api/cleaners", requireAdmin, async (req, res) => {
 // Admin-only: list all cleaners
 app.get("/api/cleaners", requireAdmin, async (req, res) => {
   try {
-    const cleaners = await Cleaner.find().sort({ createdAt: -1 });
+    // Only return approved + active cleaners for booking assignment
+    const cleaners = await Cleaner.find({
+      applicationStatus: "Approved",
+      isActive: true,
+    }).sort({ name: 1 });
     return res.json(cleaners);
   } catch (err) {
     console.error("Error loading cleaners:", err);
     return res.status(500).json({ message: "Failed to load cleaners" });
+  }
+});
+
+// NEW: Admin-only list with metrics
+app.get("/api/admin/cleaners", requireAdmin, async (req, res) => {
+  try {
+    console.log("📞 GET /api/admin/cleaners called");
+    const cleaners = await Cleaner.find().sort({ createdAt: -1 }).lean();
+    console.log(`✅ Found ${cleaners.length} cleaners in database`);
+
+    // Fetch all bookings to compute metrics
+    const bookings = await Booking.find().lean();
+
+    // Compute metrics for each cleaner
+    const cleanersWithMetrics = cleaners.map((cleaner) => {
+      // Find bookings assigned to this cleaner
+      const assignedBookings = bookings.filter(
+        (b) =>
+          b.assignedCleaner === cleaner.name ||
+          b.assignedCleaner === cleaner._id.toString()
+      );
+
+      const totalAssigned = assignedBookings.length;
+      const completed = assignedBookings.filter(
+        (b) => b.status === "Completed"
+      ).length;
+      const cancelled = assignedBookings.filter(
+        (b) => b.status === "Cancelled"
+      ).length;
+
+      // Find last assigned date
+      const sortedByDate = assignedBookings.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      const lastAssignedDate = sortedByDate[0]?.createdAt || null;
+
+      // Completion rate
+      const completionRate =
+        totalAssigned > 0 ? Math.round((completed / totalAssigned) * 100) : 0;
+
+      return {
+        ...cleaner,
+        metrics: {
+          totalAssigned,
+          completed,
+          cancelled,
+          completionRate,
+          lastAssignedDate,
+          averageRating: 0, // Placeholder for future rating system
+        },
+      };
+    });
+
+    console.log(
+      `📤 Returning ${cleanersWithMetrics.length} cleaners with metrics`
+    );
+    return res.json(cleanersWithMetrics);
+  } catch (err) {
+    console.error("❌ Error loading cleaners with metrics:", err);
+    return res.status(500).json({ message: "Failed to load cleaners" });
+  }
+});
+
+// NEW: Admin-only - Approve/Reject/Hold cleaner application
+app.patch("/api/admin/cleaners/:id/status", requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { applicationStatus, reviewNotes } = req.body;
+
+  const validStatuses = ["Pending", "Approved", "Rejected", "Hold"];
+  if (!applicationStatus || !validStatuses.includes(applicationStatus)) {
+    return res.status(400).json({
+      message: `Invalid status. Must be one of: ${validStatuses.join(", ")}`,
+    });
+  }
+
+  try {
+    const updateData = {
+      applicationStatus,
+      reviewedAt: new Date(),
+      reviewedBy: req.admin.email || "admin",
+    };
+
+    if (reviewNotes !== undefined) {
+      updateData.reviewNotes = reviewNotes;
+    }
+
+    // Auto-activate if approved
+    if (applicationStatus === "Approved") {
+      updateData.isActive = true;
+    }
+
+    // Auto-deactivate if rejected
+    if (applicationStatus === "Rejected") {
+      updateData.isActive = false;
+    }
+
+    const cleaner = await Cleaner.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!cleaner) {
+      return res.status(404).json({ message: "Cleaner not found" });
+    }
+
+    console.log(
+      `✅ Cleaner ${cleaner.name} status updated to ${applicationStatus} by ${req.admin.email}`
+    );
+    return res.json(cleaner);
+  } catch (err) {
+    console.error("Error updating cleaner status:", err);
+    return res.status(500).json({ message: "Failed to update status" });
+  }
+});
+
+// NEW: Admin-only - Toggle cleaner active status
+app.patch("/api/admin/cleaners/:id/active", requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { isActive } = req.body;
+
+  if (typeof isActive !== "boolean") {
+    return res.status(400).json({ message: "isActive must be a boolean" });
+  }
+
+  try {
+    const cleaner = await Cleaner.findByIdAndUpdate(
+      id,
+      { isActive },
+      { new: true, runValidators: true }
+    );
+
+    if (!cleaner) {
+      return res.status(404).json({ message: "Cleaner not found" });
+    }
+
+    console.log(
+      `✅ Cleaner ${cleaner.name} ${
+        isActive ? "activated" : "deactivated"
+      } by ${req.admin.email}`
+    );
+    return res.json(cleaner);
+  } catch (err) {
+    console.error("Error toggling cleaner active status:", err);
+    return res.status(500).json({ message: "Failed to update active status" });
   }
 });
 

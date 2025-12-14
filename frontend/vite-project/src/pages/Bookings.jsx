@@ -1,10 +1,16 @@
 // src/pages/Bookings.jsx
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout.jsx";
 
 const TOKEN_KEY = "HOMECAREPRO_ADMIN_TOKEN";
 const API_BASE = "http://localhost:4000";
+
+// Inline styles for expanded details
+const detailRowStyle = {
+  padding: "5px 0",
+  borderBottom: "1px solid #eee",
+};
 
 const VALID_STATUSES = [
   "New",
@@ -26,6 +32,7 @@ function Bookings() {
   const [filterArea, setFilterArea] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [searchText, setSearchText] = useState("");
+  const [expandedRow, setExpandedRow] = useState(null); // For showing full details
 
   const navigate = useNavigate();
 
@@ -117,19 +124,30 @@ function Bookings() {
     }
   };
 
-  // Filter logic (client-side)
+  // Filter logic (client-side) - safely handle missing fields
   const filteredBookings = bookings.filter((booking) => {
-    if (filterDate && booking.date !== filterDate) return false;
+    if (filterDate && getFieldValue(booking, "date", "") !== filterDate)
+      return false;
     if (
       filterArea &&
-      !booking.area.toLowerCase().includes(filterArea.toLowerCase())
+      !getFieldValue(booking, "area", "")
+        .toLowerCase()
+        .includes(filterArea.toLowerCase())
     )
       return false;
-    if (filterStatus && booking.status !== filterStatus) return false;
+    if (
+      filterStatus &&
+      getFieldValue(booking, "status", "New") !== filterStatus
+    )
+      return false;
     if (searchText) {
       const search = searchText.toLowerCase();
-      const name = `${booking.firstName} ${booking.lastName}`.toLowerCase();
-      const phone = booking.phone.toLowerCase();
+      const name = `${getFieldValue(booking, "firstName", "")} ${getFieldValue(
+        booking,
+        "lastName",
+        ""
+      )}`.toLowerCase();
+      const phone = getFieldValue(booking, "phone", "").toLowerCase();
       if (!name.includes(search) && !phone.includes(search)) return false;
     }
     return true;
@@ -273,166 +291,439 @@ function Bookings() {
                     borderBottom: "2px solid #ddd",
                   }}
                 >
+                  <th style={thStyle}>Details</th>
                   <th style={thStyle}>Name</th>
                   <th style={thStyle}>Phone</th>
-                  <th style={thStyle}>Area</th>
                   <th style={thStyle}>Service</th>
                   <th style={thStyle}>Date</th>
-                  <th style={thStyle}>Time Slot</th>
                   <th style={thStyle}>Status</th>
-                  <th style={thStyle}>Assigned Cleaner</th>
-                  <th style={thStyle}>Admin Notes</th>
-                  <th style={thStyle}>Created At</th>
+                  <th style={thStyle}>Assigned</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredBookings.map((booking) => {
                   const isSaving = savingRows[booking._id];
+                  const isExpanded = expandedRow === booking._id;
+
                   return (
-                    <tr
-                      key={booking._id}
-                      style={{
-                        borderBottom: "1px solid #eee",
-                        opacity: isSaving ? 0.6 : 1,
-                        position: "relative",
-                      }}
-                    >
-                      <td style={tdStyle}>
-                        {booking.firstName} {booking.lastName}
-                      </td>
-                      <td style={tdStyle}>{booking.phone}</td>
-                      <td style={tdStyle}>{booking.area}</td>
-                      <td style={tdStyle}>{booking.service}</td>
+                    <React.Fragment key={booking._id}>
+                      <tr
+                        style={{
+                          borderBottom: "1px solid #eee",
+                          opacity: isSaving ? 0.6 : 1,
+                          backgroundColor: isExpanded
+                            ? "#f0f8ff"
+                            : "transparent",
+                        }}
+                      >
+                        {/* Expand/Collapse Button */}
+                        <td style={tdStyle}>
+                          <button
+                            onClick={() =>
+                              setExpandedRow(isExpanded ? null : booking._id)
+                            }
+                            style={{
+                              padding: "4px 8px",
+                              fontSize: "12px",
+                              cursor: "pointer",
+                              border: "1px solid #ccc",
+                              borderRadius: "3px",
+                              backgroundColor: isExpanded ? "#007bff" : "#fff",
+                              color: isExpanded ? "#fff" : "#333",
+                            }}
+                          >
+                            {isExpanded ? "▼" : "►"}
+                          </button>
+                        </td>
+                        <td style={tdStyle}>
+                          {booking.firstName} {booking.lastName}
+                        </td>
+                        <td style={tdStyle}>{booking.phone}</td>
+                        <td style={tdStyle}>{booking.service}</td>
+                        <td style={tdStyle}>{booking.date}</td>
 
-                      {/* Editable Date */}
-                      <td style={tdStyle}>
-                        <input
-                          type="date"
-                          value={booking.date || ""}
-                          onChange={(e) =>
-                            updateBooking(booking._id, "date", e.target.value)
-                          }
-                          disabled={isSaving}
-                          style={inputStyle}
-                        />
-                      </td>
-
-                      {/* Editable Time Slot */}
-                      <td style={tdStyle}>
-                        <input
-                          type="text"
-                          value={booking.timeSlot || ""}
-                          onChange={(e) =>
-                            updateBooking(
-                              booking._id,
-                              "timeSlot",
-                              e.target.value
-                            )
-                          }
-                          disabled={isSaving}
-                          placeholder="e.g. 9-11 AM"
-                          style={inputStyle}
-                        />
-                      </td>
-
-                      {/* Editable Status */}
-                      <td style={tdStyle}>
-                        <select
-                          value={booking.status || "New"}
-                          onChange={(e) =>
-                            updateBooking(booking._id, "status", e.target.value)
-                          }
-                          disabled={isSaving}
-                          style={{
-                            ...inputStyle,
-                            backgroundColor: getStatusColor(booking.status),
-                            fontWeight: "600",
-                            color: "#fff",
-                          }}
-                        >
-                          {VALID_STATUSES.map((s) => (
-                            <option key={s} value={s}>
-                              {s}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
-
-                      {/* Editable Assigned Cleaner */}
-                      <td style={tdStyle}>
-                        <select
-                          value={booking.assignedCleaner || ""}
-                          onChange={(e) =>
-                            updateBooking(
-                              booking._id,
-                              "assignedCleaner",
-                              e.target.value
-                            )
-                          }
-                          disabled={isSaving}
-                          style={inputStyle}
-                        >
-                          <option value="">-- Unassigned --</option>
-                          {cleaners.map((cleaner) => (
-                            <option key={cleaner._id} value={cleaner.name}>
-                              {cleaner.name} ({cleaner.area})
-                            </option>
-                          ))}
-                        </select>
-                      </td>
-
-                      {/* Editable Admin Notes */}
-                      <td style={tdStyle}>
-                        <textarea
-                          value={booking.adminNotes || ""}
-                          onChange={(e) =>
-                            updateBooking(
-                              booking._id,
-                              "adminNotes",
-                              e.target.value
-                            )
-                          }
-                          onBlur={(e) => {
-                            // Only update on blur to avoid too many requests
-                            if (e.target.value !== (booking.adminNotes || "")) {
+                        {/* Editable Status */}
+                        <td style={tdStyle}>
+                          <select
+                            value={booking.status || "New"}
+                            onChange={(e) =>
                               updateBooking(
                                 booking._id,
-                                "adminNotes",
+                                "status",
                                 e.target.value
-                              );
+                              )
                             }
-                          }}
-                          disabled={isSaving}
-                          placeholder="Internal notes..."
-                          style={{
-                            ...inputStyle,
-                            minHeight: "50px",
-                            resize: "vertical",
-                            fontFamily: "inherit",
-                          }}
-                        />
-                      </td>
-
-                      <td style={tdStyle}>
-                        {new Date(booking.createdAt).toLocaleDateString()}
-                      </td>
-
-                      {isSaving && (
-                        <td
-                          style={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            fontWeight: "bold",
-                            color: "#007bff",
-                            pointerEvents: "none",
-                          }}
-                        >
-                          Saving...
+                            disabled={isSaving}
+                            style={{
+                              ...inputStyle,
+                              backgroundColor: getStatusColor(booking.status),
+                              fontWeight: "600",
+                              color: "#fff",
+                            }}
+                          >
+                            {VALID_STATUSES.map((s) => (
+                              <option key={s} value={s}>
+                                {s}
+                              </option>
+                            ))}
+                          </select>
                         </td>
+
+                        {/* Editable Assigned Cleaner */}
+                        <td style={tdStyle}>
+                          <select
+                            value={booking.assignedCleaner || ""}
+                            onChange={(e) =>
+                              updateBooking(
+                                booking._id,
+                                "assignedCleaner",
+                                e.target.value
+                              )
+                            }
+                            disabled={isSaving}
+                            style={inputStyle}
+                          >
+                            <option value="">-- Unassigned --</option>
+                            {cleaners.map((cleaner) => (
+                              <option key={cleaner._id} value={cleaner.name}>
+                                {cleaner.name}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
+                      </tr>
+
+                      {/* Expanded Details Row */}
+                      {isExpanded && (
+                        <tr>
+                          <td
+                            colSpan="7"
+                            style={{
+                              padding: "20px",
+                              backgroundColor: "#f9f9f9",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "grid",
+                                gridTemplateColumns: "1fr 1fr 1fr",
+                                gap: "20px",
+                              }}
+                            >
+                              {/* Contact Information */}
+                              <div>
+                                <h4 style={{ marginTop: 0, color: "#007bff" }}>
+                                  Contact Information
+                                </h4>
+                                <div style={detailRowStyle}>
+                                  <strong>Full Name:</strong>{" "}
+                                  {booking.firstName} {booking.lastName}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Phone:</strong>{" "}
+                                  {booking.phone || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Email:</strong>{" "}
+                                  {booking.email || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Preferred Contact:</strong>{" "}
+                                  {booking.preferredContactMethod || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Preferred Time:</strong>{" "}
+                                  {booking.preferredContactTime || "N/A"}
+                                </div>
+                              </div>
+
+                              {/* Service Details */}
+                              <div>
+                                <h4 style={{ marginTop: 0, color: "#007bff" }}>
+                                  Service Details
+                                </h4>
+                                <div style={detailRowStyle}>
+                                  <strong>Service:</strong>{" "}
+                                  {booking.service || "N/A"}
+                                  {booking.serviceOther &&
+                                    ` (${booking.serviceOther})`}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Area:</strong> {booking.area || "N/A"}
+                                  {booking.areaOther &&
+                                    ` (${booking.areaOther})`}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Hours:</strong>{" "}
+                                  {booking.hours || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Estimated Price:</strong> ₹
+                                  {booking.estimatedPrice || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Date:</strong> {booking.date || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Time Slot:</strong>
+                                  <input
+                                    type="text"
+                                    value={booking.timeSlot || ""}
+                                    onChange={(e) =>
+                                      updateBooking(
+                                        booking._id,
+                                        "timeSlot",
+                                        e.target.value
+                                      )
+                                    }
+                                    placeholder="e.g. 9-11 AM"
+                                    style={{
+                                      ...inputStyle,
+                                      marginLeft: "10px",
+                                      width: "150px",
+                                    }}
+                                  />
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Frequency:</strong>{" "}
+                                  {booking.serviceFrequency || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Cleaning Materials:</strong>{" "}
+                                  {booking.cleaningMaterials || "N/A"}
+                                </div>
+                              </div>
+
+                              {/* Address */}
+                              <div>
+                                <h4 style={{ marginTop: 0, color: "#007bff" }}>
+                                  Address
+                                </h4>
+                                <div style={detailRowStyle}>
+                                  <strong>Address 1:</strong>{" "}
+                                  {booking.address1 || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Address 2:</strong>{" "}
+                                  {booking.address2 || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>City:</strong> {booking.city || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>State:</strong>{" "}
+                                  {booking.state || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Pincode:</strong>{" "}
+                                  {booking.pincode || "N/A"}
+                                </div>
+                              </div>
+
+                              {/* Property Details */}
+                              <div>
+                                <h4 style={{ marginTop: 0, color: "#007bff" }}>
+                                  Property Details
+                                </h4>
+                                <div style={detailRowStyle}>
+                                  <strong>Bedrooms:</strong>{" "}
+                                  {booking.numBedrooms || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Bathrooms:</strong>{" "}
+                                  {booking.numBathrooms || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Property Type:</strong>{" "}
+                                  {booking.propertyType || "N/A"}
+                                  {booking.propertyTypeOther &&
+                                    ` (${booking.propertyTypeOther})`}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Floor Count:</strong>{" "}
+                                  {booking.floorCount || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Area (sqft):</strong>{" "}
+                                  {booking.approxAreaSqft || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Pets:</strong>{" "}
+                                  {booking.petsAtHome || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Access:</strong>{" "}
+                                  {booking.propertyAccess || "N/A"}
+                                </div>
+                              </div>
+
+                              {/* Additional Services */}
+                              <div>
+                                <h4 style={{ marginTop: 0, color: "#007bff" }}>
+                                  Additional Services
+                                </h4>
+                                <div style={detailRowStyle}>
+                                  <strong>Clean Balcony:</strong>{" "}
+                                  {booking.cleanBalcony ? "Yes" : "No"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Clean Terrace:</strong>{" "}
+                                  {booking.cleanTerrace ? "Yes" : "No"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Clean Staircase:</strong>{" "}
+                                  {booking.cleanStaircase ? "Yes" : "No"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Clean Parking:</strong>{" "}
+                                  {booking.cleanParking ? "Yes" : "No"}
+                                </div>
+                              </div>
+
+                              {/* Cleaner Preferences */}
+                              <div>
+                                <h4 style={{ marginTop: 0, color: "#007bff" }}>
+                                  Cleaner Preferences
+                                </h4>
+                                <div style={detailRowStyle}>
+                                  <strong>Gender:</strong>{" "}
+                                  {booking.cleanerGenderPreference || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Experience:</strong>{" "}
+                                  {booking.cleanerExperiencePreference || "N/A"}
+                                </div>
+                                <div style={detailRowStyle}>
+                                  <strong>Languages:</strong>{" "}
+                                  {[
+                                    booking.languageTamil && "Tamil",
+                                    booking.languageEnglish && "English",
+                                    booking.languageHindi && "Hindi",
+                                    booking.languageMalayalam && "Malayalam",
+                                  ]
+                                    .filter(Boolean)
+                                    .join(", ") || "N/A"}
+                                </div>
+                              </div>
+
+                              {/* Admin Management */}
+                              <div style={{ gridColumn: "1 / -1" }}>
+                                <h4 style={{ marginTop: 0, color: "#007bff" }}>
+                                  Admin Management
+                                </h4>
+                                <div
+                                  style={{
+                                    display: "grid",
+                                    gridTemplateColumns: "1fr 1fr 1fr",
+                                    gap: "15px",
+                                  }}
+                                >
+                                  <div>
+                                    <strong>Status:</strong>
+                                    <select
+                                      value={booking.status || "New"}
+                                      onChange={(e) =>
+                                        updateBooking(
+                                          booking._id,
+                                          "status",
+                                          e.target.value
+                                        )
+                                      }
+                                      style={{
+                                        ...inputStyle,
+                                        marginLeft: "10px",
+                                        backgroundColor: getStatusColor(
+                                          booking.status
+                                        ),
+                                        color: "#fff",
+                                        fontWeight: "600",
+                                      }}
+                                    >
+                                      {VALID_STATUSES.map((s) => (
+                                        <option key={s} value={s}>
+                                          {s}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <strong>Assigned Cleaner:</strong>
+                                    <select
+                                      value={booking.assignedCleaner || ""}
+                                      onChange={(e) =>
+                                        updateBooking(
+                                          booking._id,
+                                          "assignedCleaner",
+                                          e.target.value
+                                        )
+                                      }
+                                      style={{
+                                        ...inputStyle,
+                                        marginLeft: "10px",
+                                      }}
+                                    >
+                                      <option value="">-- Unassigned --</option>
+                                      {cleaners.map((cleaner) => (
+                                        <option
+                                          key={cleaner._id}
+                                          value={cleaner.name}
+                                        >
+                                          {cleaner.name} ({cleaner.area})
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <strong>Created:</strong>{" "}
+                                    {new Date(
+                                      booking.createdAt
+                                    ).toLocaleString()}
+                                  </div>
+                                </div>
+                                <div style={{ marginTop: "15px" }}>
+                                  <strong>Admin Notes:</strong>
+                                  <textarea
+                                    value={booking.adminNotes || ""}
+                                    onChange={(e) =>
+                                      updateBooking(
+                                        booking._id,
+                                        "adminNotes",
+                                        e.target.value
+                                      )
+                                    }
+                                    placeholder="Internal admin notes..."
+                                    style={{
+                                      ...inputStyle,
+                                      width: "100%",
+                                      minHeight: "80px",
+                                      marginTop: "5px",
+                                      fontFamily: "inherit",
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Customer Notes */}
+                            {booking.notes && (
+                              <div
+                                style={{
+                                  marginTop: "15px",
+                                  padding: "10px",
+                                  backgroundColor: "#fff",
+                                  borderRadius: "4px",
+                                }}
+                              >
+                                <strong>Customer Notes:</strong>
+                                <p style={{ margin: "5px 0 0 0" }}>
+                                  {booking.notes}
+                                </p>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
                       )}
-                    </tr>
+                    </React.Fragment>
                   );
                 })}
               </tbody>

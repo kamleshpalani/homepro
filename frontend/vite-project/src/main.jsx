@@ -21,7 +21,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 // Admin pages
 import Bookings from "./pages/Bookings.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
-import Cleaners from "./pages/Cleaners.jsx";
+import AdminCleaners from "./pages/AdminCleaners.jsx";
 
 import "./index.css";
 
@@ -51,7 +51,7 @@ root.render(
         {/* Admin Pages */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/bookings" element={<Bookings />} />
-        <Route path="/admin/cleaners" element={<Cleaners />} />
+        <Route path="/admin/cleaners" element={<AdminCleaners />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
