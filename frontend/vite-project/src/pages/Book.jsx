@@ -142,17 +142,29 @@ function Book() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    // very simple validation
+    console.log("📋 Form submission attempt");
+    console.log("Form data:", form);
+    console.log("Required fields check:");
+    console.log("  firstName:", form.firstName, form.firstName ? "✓" : "✗");
+    console.log("  phone:", form.phone, form.phone ? "✓" : "✗");
+    console.log("  area:", form.area, form.area ? "✓" : "✗");
+    console.log("  service:", form.service, form.service ? "✓" : "✗");
+    console.log("  date:", form.date, form.date ? "✓" : "✗");
+
+    // very simple validation - trim values to handle whitespace
     if (
-      !form.firstName ||
-      !form.phone ||
-      !form.area ||
-      !form.service ||
-      !form.date
+      !form.firstName?.trim() ||
+      !form.phone?.trim() ||
+      !form.area?.trim() ||
+      !form.service?.trim() ||
+      !form.date?.trim()
     ) {
+      console.error("❌ Validation failed - missing required fields");
       setMessage("Please fill all required fields (marked *).");
       return;
     }
+
+    console.log("✅ Validation passed, submitting to backend...");
 
     try {
       const response = await fetch("http://localhost:4000/api/bookings", {

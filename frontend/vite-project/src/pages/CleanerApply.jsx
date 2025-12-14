@@ -132,19 +132,12 @@ export default function CleanerApply() {
     try {
       console.log("➡ Sending cleaner application:", form);
 
-      const formData = new FormData();
-      Object.entries(form).forEach(([key, value]) => {
-        if (value === undefined || value === null) return;
-        if (Array.isArray(value)) {
-          formData.append(key, JSON.stringify(value));
-        } else {
-          formData.append(key, value);
-        }
-      });
-
       const res = await fetch("http://localhost:4000/api/cleaners/apply", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
       });
 
       const data = await res.json().catch(() => ({}));
