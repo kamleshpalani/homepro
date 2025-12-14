@@ -1,6 +1,10 @@
 import "react-native-gesture-handler";
 import { useEffect, useState } from "react";
-import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  DefaultTheme,
+  LinkingOptions,
+} from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
@@ -62,7 +66,13 @@ export default function App() {
 
   useEffect(() => {
     Notifications.setNotificationHandler({
-      handleNotification: async () => ({ shouldShowAlert: true }),
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+        shouldShowBanner: true,
+        shouldShowList: true,
+      }),
     });
 
     const bootstrap = async () => {
@@ -75,7 +85,12 @@ export default function App() {
     bootstrap();
   }, []);
 
-  const linking = {
+  type RootStackParamList = {
+    Auth: undefined;
+    Main: undefined;
+  };
+
+  const linking: LinkingOptions<RootStackParamList> = {
     prefixes: [Linking.createURL("/"), "homepro://"],
     config: {
       screens: {
@@ -90,7 +105,7 @@ export default function App() {
         },
       },
     },
-  } as const;
+  };
 
   if (!tokenLoaded) {
     return null;

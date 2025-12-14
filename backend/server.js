@@ -106,6 +106,10 @@ const bookingSchema = new mongoose.Schema(
       type: String, // for now we store cleaner NAME; later can be ObjectId
       default: "",
     },
+    adminNotes: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true, // createdAt & updatedAt
@@ -929,22 +933,41 @@ app.get("/api/bookings", requireAdmin, async (req, res) => {
 // Admin-only: update booking status / assigned cleaner
 app.patch("/api/bookings/:id", requireAdmin, async (req, res) => {
   const { id } = req.params;
-  const { status, assignedCleaner } = req.body;
+  const { status, assignedCleaner, date, timeSlot, adminNotes } = req.body;
+
+  // Validate status if provided
+  const validStatuses = [
+    "New",
+    "Assigned",
+    "In Progress",
+    "Completed",
+    "Cancelled",
+  ];
+  if (status && !validStatuses.includes(status)) {
+    return res.status(400).json({
+      message: `Invalid status. Must be one of: ${validStatuses.join(", ")}`,
+    });
+  }
 
   try {
-    const booking = await Booking.findByIdAndUpdate(
-      id,
-      {
-        ...(status && { status }),
-        ...(assignedCleaner && { assignedCleaner }),
-      },
-      { new: true }
-    );
+    const updateFields = {};
+    if (status !== undefined) updateFields.status = status;
+    if (assignedCleaner !== undefined)
+      updateFields.assignedCleaner = assignedCleaner;
+    if (date !== undefined) updateFields.date = date;
+    if (timeSlot !== undefined) updateFields.timeSlot = timeSlot;
+    if (adminNotes !== undefined) updateFields.adminNotes = adminNotes;
+
+    const booking = await Booking.findByIdAndUpdate(id, updateFields, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
     }
 
+    console.log(`✅ Booking ${id} updated by admin:`, updateFields);
     return res.json(booking);
   } catch (err) {
     console.error("Error updating booking:", err);
