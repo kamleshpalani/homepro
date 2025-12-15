@@ -1,5 +1,5 @@
 // src/pages/Bookings.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout.jsx";
 
@@ -10,6 +10,15 @@ const API_BASE = "http://localhost:4000";
 const detailRowStyle = {
   padding: "5px 0",
   borderBottom: "1px solid #eee",
+};
+
+// Helper to safely access fields with fallback
+const getFieldValue = (obj, field, fallback = "N/A") => {
+  const value = obj?.[field];
+  if (value === undefined || value === null || value === "") {
+    return fallback;
+  }
+  return value;
 };
 
 const VALID_STATUSES = [
@@ -68,7 +77,7 @@ function Bookings() {
   };
 
   // Load bookings
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
@@ -80,17 +89,19 @@ function Bookings() {
     } finally {
       setLoading(false);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate]);
 
   // Load cleaners for dropdown
-  const fetchCleaners = async () => {
+  const fetchCleaners = useCallback(async () => {
     try {
       const data = await apiFetch("/api/cleaners");
       setCleaners(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error fetching cleaners:", err);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate]);
 
   useEffect(() => {
     const token = localStorage.getItem(TOKEN_KEY);
@@ -100,7 +111,7 @@ function Bookings() {
     }
     fetchBookings();
     fetchCleaners();
-  }, [navigate]);
+  }, [navigate, fetchBookings, fetchCleaners]);
 
   // Update booking field
   const updateBooking = async (bookingId, field, value) => {

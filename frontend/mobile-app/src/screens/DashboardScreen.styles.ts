@@ -10,6 +10,12 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: colors.background,
   },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 12,
+  },
   title: { fontSize: 22, fontWeight: "700", color: colors.text },
   subtitle: { fontSize: 16, fontWeight: "600", color: colors.text },
   muted: { color: colors.muted },
@@ -23,4 +29,26 @@ export const styles = StyleSheet.create({
   },
   cardTitle: { fontSize: 16, fontWeight: "700", color: colors.text },
   error: { color: colors.danger, fontSize: 16 },
+  detailHeader: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: colors.primary,
+    marginBottom: 4,
+  },
+  detailText: {
+    fontSize: 13,
+    color: colors.text,
+    marginBottom: 2,
+  },
+  logoutButton: {
+    backgroundColor: colors.error,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 6,
+  },
+  logoutText: {
+    color: colors.white,
+    fontWeight: "600",
+    fontSize: 14,
+  },
 });
