@@ -312,7 +312,7 @@ const bcrypt = require("bcryptjs");
 const userSchema = new mongoose.Schema(
   {
     firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    lastName: { type: String }, // Business requirement: last name is optional to accommodate users who may not have a last name or prefer not to provide it during registration.
     email: { type: String, required: true, unique: true, lowercase: true },
     phone: { type: String, required: true },
     password: { type: String, required: true },
@@ -575,7 +575,11 @@ const Subscription = mongoose.model("Subscription", subscriptionSchema);
 // allow both Vite ports while developing
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:8081",
+    ],
   })
 );
 app.use(express.json());
@@ -654,8 +658,10 @@ app.post("/api/auth/signup", async (req, res) => {
     phone,
   });
 
-  if (!firstName || !lastName || !email || !phone || !password) {
-    return res.status(400).json({ message: "All fields are required" });
+  if (!firstName || !email || !phone || !password) {
+    return res
+      .status(400)
+      .json({ message: "Required fields: firstName, email, phone, password" });
   }
 
   if (password.length < 6) {
