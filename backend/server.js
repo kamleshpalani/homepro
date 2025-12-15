@@ -312,7 +312,7 @@ const bcrypt = require("bcryptjs");
 const userSchema = new mongoose.Schema(
   {
     firstName: { type: String, required: true },
-    lastName: { type: String }, // Made optional
+    lastName: { type: String }, // Business requirement: last name is optional to accommodate users who may not have a last name or prefer not to provide it during registration.
     email: { type: String, required: true, unique: true, lowercase: true },
     phone: { type: String, required: true },
     password: { type: String, required: true },
