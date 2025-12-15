@@ -10,45 +10,13 @@ The HomeCarePro mobile app has been significantly enhanced to align with the web
 
 **File**: `src/theme/colors.ts`
 
-- **Primary Colors**: #2563eb (web blue), #1d4ed8 (hover)
+- **Primary Colors**: #10b981 (emerald green), #059669 (hover)
 - **Status Colors**: Success, error, warning, info with light variants
 - **Comprehensive Gray Scale**: gray50 to gray900
 - **UI-Specific Colors**: Input, button, border colors
 - **Total**: 40+ color definitions matching web exactly
 
-### 2. Separate Admin & Customer Authentication
-
-**New Files Created**:
-
-- `src/screens/AuthSelectionScreen.tsx` - Role selection screen
-- `src/screens/CustomerLoginScreen.tsx` - Customer login/signup
-- `src/screens/AdminLoginScreen.tsx` - Admin-only portal
-
-**Features**:
-
-- Visual card-based role selection (Customer 👤 / Admin 🔐)
-- Separate login flows with distinct styling
-- Admin login validates email (admin@homecarepro.com)
-- Customer signup with all required fields
-- Secure password handling
-- Professional UI with icons and descriptive text
-
-### 3. Admin Management Screens
-
-**New Files Created**:
-
-- `src/screens/AdminDashboardScreen.tsx` - Booking management
-- `src/screens/AdminCleanersScreen.tsx` - Cleaner application management
-
-**Admin Dashboard Features**:
-
-- **Statistics Cards**: Total, Pending, Confirmed, Completed bookings
-- **Booking List**: All bookings with customer details
-- **Status Badges**: Color-coded (pending, confirmed, completed)
-- **Quick Actions**: Navigate to Cleaner Management
-- **Logout**: Secure logout with confirmation
-- **Pull-to-Refresh**: Real-time data updates
-
+<!-- The following sections about admin and authentication flows have been removed from the implementation and are no longer relevant. -->
 **Admin Cleaners Features**:
 
 - **Cleaner Applications List**: All submitted applications
