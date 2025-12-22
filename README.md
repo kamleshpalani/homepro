@@ -1,80 +1,126 @@
-HomeCarePro – Cleaning Service Platform
+# HomeCarePro – Cleaning Service Platform
 
 HomeCarePro is a full-stack web application for managing home cleaning service bookings.
 It includes a customer booking form, admin dashboard, cleaner registration, and secure authentication.
 
-Technologies Used
-Frontend
+## 🚀 Deploy from GitHub to Vercel
 
-React (Vite)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/kamleshpalani/homepro)
 
-React Router DOM
+### 📖 Deployment Guides
 
-Tailwind / Custom CSS
+**Start Here:** [START_HERE.md](START_HERE.md) - Overview & quick links
 
-Backend
+**Step-by-Step:** [GITHUB_VERCEL_DEPLOYMENT.md](GITHUB_VERCEL_DEPLOYMENT.md) - Complete guide (30 min)
 
-Node.js + Express
+**Quick Checklist:** [DEPLOYMENT_QUICK_CHECKLIST.md](DEPLOYMENT_QUICK_CHECKLIST.md) - Printable checklist
 
-MongoDB + Mongoose
+**More Resources:**
 
-JSON Web Token (JWT)
+- 📚 [Full Technical Guide](VERCEL_DEPLOYMENT.md) - Detailed documentation
+- 🏗️ [Architecture Overview](ARCHITECTURE.md) - System design
+- ⚡ [Quick Start](QUICK_START.md) - 5-minute overview
 
-CORS
+## Technologies Used
 
-Project Structure
+### Frontend
+
+- React (Vite)
+- React Router DOM
+- React Native (Expo) for Mobile App
+- Tailwind / Custom CSS
+
+### Backend
+
+- Node.js + Express
+- MongoDB + Mongoose
+- JSON Web Token (JWT)
+- CORS
+- Vercel Serverless Functions (Production)
+
+## Project Structure
+
+```
 homecarepro/
 │
-├── backend/
-│ ├── server.js
-│ ├── models/
-│ ├── controllers/
-│ ├── .env
-│ └── package.json
+├── backend/                    # Express.js API
+│   ├── api/
+│   │   └── index.js           # Vercel serverless entry
+│   ├── server.js              # Main Express app
+│   ├── .env                   # Environment variables (local)
+│   ├── vercel.json            # Vercel configuration
+│   └── package.json
 │
 ├── frontend/
-│ ├── src/
-│ ├── public/
-│ ├── index.html
-│ ├── .env
-│ ├── package.json
-│ └── vite.config.js
+│   ├── vite-project/          # React web app
+│   │   ├── src/
+│   │   ├── dist/              # Build output
+│   │   ├── package.json
+│   │   └── vite.config.js
+│   │
+│   └── mobile-app/            # React Native (Expo)
+│       ├── src/
+│       ├── App.tsx
+│       └── package.json
 │
+├── vercel.json                # Root Vercel config
+├── VERCEL_DEPLOYMENT.md       # Deployment guide
+├── QUICK_START.md             # Quick deploy guide
 └── README.md
+```
 
-Environment Variables
+## Environment Variables
 
-Create a .env file inside backend/:
+Create a `.env` file inside `backend/`:
 
+```env
 PORT=4000
 MONGODB_URI=your_mongodb_connection_string
 ADMIN_EMAIL=admin@homecarepro.com
 ADMIN_PASSWORD=your_admin_password
 JWT_SECRET=super_secret_key
+NODE_ENV=development
+```
 
-Optional .env inside frontend/:
+Optional `.env` inside `frontend/vite-project/`:
 
+```env
 VITE_API_URL=http://localhost:4000
+```
 
-Running the Project Locally
+**📝 Note**: For production deployment, see [environment variables guide](VERCEL_DEPLOYMENT.md#environment-variables-setup)
 
-1. Backend
-   cd backend
-   npm install
-   npm start
+## Running the Project Locally
 
-Backend runs on:
+### 1. Backend
 
-http://localhost:4000
+```bash
+cd backend
+npm install
+npm start
+```
 
-2. Frontend
-   cd frontend
-   npm install
-   npm run dev
+Backend runs on: `http://localhost:4000`
 
-Frontend runs on:
+### 2. Frontend (Web)
 
-http://localhost:5173
+```bash
+cd frontend/vite-project
+npm install
+npm run dev
+```
+
+Frontend runs on: `http://localhost:5173`
+
+### 3. Mobile App (Optional)
+
+```bash
+cd frontend/mobile-app
+npm install
+npm start
+```
+
+Follow Expo instructions to run on iOS/Android simulator or device.
 
 Admin Login
 
@@ -84,69 +130,117 @@ http://localhost:5173/admin/login
 
 Credentials come from .env.
 
-Features
-Customer Features
+## Features
 
-Book cleaning services
+### Customer Features
 
-View service details
+- ✅ Book cleaning services
+- ✅ View service details
+- ✅ User authentication & profiles
+- ✅ Booking history
+- ✅ Fully responsive UI
+- ✅ Mobile app support
 
-Fully responsive UI
+### Admin Features
 
-Admin Features
+- ✅ Secure login using JWT
+- ✅ View all bookings
+- ✅ Update booking status
+- ✅ Assign cleaners
+- ✅ View registered cleaners
+- ✅ Approve/reject cleaner applications
+- ✅ Performance metrics
 
-Secure login using JWT
+### Cleaner Features
 
-View all bookings
+- ✅ Public cleaner registration form
+- ✅ Multi-step application process
+- ✅ Profile management
+- ✅ Cleaner data saved to MongoDB
 
-Update booking status
+## API Endpoints
 
-Assign cleaners
+### Auth
 
-View registered cleaners
+- `POST /api/admin/login` - Admin login
+- `POST /api/auth/login` - Customer login
+- `POST /api/auth/signup` - Customer registration
+- `GET /api/auth/profile` - Get user profile
 
-Cleaner Features
+### Bookings
 
-Public cleaner registration form
+- `POST /api/bookings` - Create booking
+- `GET /api/bookings` - List all bookings (admin only)
+- `PATCH /api/bookings/:id` - Update booking (admin only)
 
-Cleaner data saved to MongoDB
+### Cleaners
 
-API Endpoints
-Auth
+- `POST /api/cleaners/apply` - Cleaner application (public)
+- `POST /api/cleaners` - Add cleaner (admin only)
+- `GET /api/cleaners` - List cleaners (admin only)
+- `GET /api/admin/cleaners` - List with metrics (admin only)
+- `PATCH /api/admin/cleaners/:id/status` - Approve/reject (admin only)
 
-POST /api/admin/login
+## Deployment
 
-Bookings
+### 🚀 Vercel (Recommended)
 
-POST /api/bookings
-GET /api/bookings
-PATCH /api/bookings/:id
+**Quick Deploy:**
 
-Cleaners
+```bash
+# Windows
+deploy-to-vercel.bat
 
-POST /api/cleaners/apply
-POST /api/cleaners
-GET /api/cleaners
+# Mac/Linux
+chmod +x deploy-to-vercel.sh
+./deploy-to-vercel.sh
+```
 
-Deployment
+**Or manually:**
 
-Frontend can be deployed on:
+```bash
+# Install Vercel CLI
+npm install -g vercel
 
-Vercel
+# Deploy backend
+cd backend
+vercel --prod
 
-Netlify
+# Deploy frontend
+cd ../frontend/vite-project
+vercel --prod
+```
 
-GitHub Pages
+📚 **Full Guide**: [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md)
 
-Backend can be deployed on:
+### Other Platforms
 
-Render
+**Frontend:**
 
-Railway
+- Vercel (Recommended)
+- Netlify
+- GitHub Pages
 
-DigitalOcean
+**Backend:**
 
-AWS EC2
+- Vercel Serverless (Recommended)
+- Render
+- Railway
+- DigitalOcean
+- AWS EC2
+
+**Mobile App:**
+
+- Expo Application Services (EAS)
+- App Store (iOS)
+- Google Play Store (Android)
+
+## 📚 Documentation
+
+- [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md) - Complete deployment guide
+- [QUICK_START.md](QUICK_START.md) - 5-minute deployment
+- [ARCHITECTURE.md](ARCHITECTURE.md) - System architecture
+- [DEPLOYMENT_CHANGES.md](DEPLOYMENT_CHANGES.md) - What changed for deployment
 
 Contributing
 

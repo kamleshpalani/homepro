@@ -1,0 +1,39 @@
+{
+  "name": "homecarepro",
+  "version": "1.0.0",
+  "description": "HomeCare Pro - Cleaning Service Platform",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend/vite-project && npm install --prefix frontend/mobile-app",
+    "dev:backend": "npm start --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend/vite-project",
+    "dev:mobile": "npm start --prefix frontend/mobile-app",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build:backend": "echo 'Backend build not required'",
+    "build:frontend": "npm run build --prefix frontend/vite-project",
+    "deploy:backend": "cd backend && vercel --prod",
+    "deploy:frontend": "cd frontend/vite-project && vercel --prod",
+    "deploy": "npm run deploy:backend && npm run deploy:frontend",
+    "test:backend": "curl http://localhost:4000",
+    "clean": "rm -rf backend/node_modules frontend/vite-project/node_modules frontend/mobile-app/node_modules backend/.vercel frontend/vite-project/.vercel"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kamleshpalani/homepro"
+  },
+  "keywords": [
+    "cleaning",
+    "service",
+    "booking",
+    "homecare",
+    "vercel",
+    "react",
+    "express",
+    "mongodb"
+  ],
+  "author": "Kamlesh Palani",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

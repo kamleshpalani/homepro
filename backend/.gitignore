@@ -10,6 +10,11 @@ build/
 # Env files
 .env
 **/.env
+.env.local
+.env.production.local
+
+# Vercel
+.vercel
 
 # Logs
 npm-debug.log*
@@ -24,3 +29,4 @@ Thumbs.db
 
 # VS Code
 .vscode/
+.env*.local
