@@ -9,11 +9,15 @@ It includes a customer booking form, admin dashboard, cleaner registration, and 
 
 ### 📖 Deployment Guides
 
-**Start Here:** [START_HERE.md](START_HERE.md) - Overview & quick links
+**Web Deployment:**
 
-**Step-by-Step:** [GITHUB_VERCEL_DEPLOYMENT.md](GITHUB_VERCEL_DEPLOYMENT.md) - Complete guide (30 min)
+- 🚀 [START_HERE.md](START_HERE.md) - Overview & quick links
+- 📋 [GITHUB_VERCEL_DEPLOYMENT.md](GITHUB_VERCEL_DEPLOYMENT.md) - Complete guide (30 min)
+- ✅ [DEPLOYMENT_QUICK_CHECKLIST.md](DEPLOYMENT_QUICK_CHECKLIST.md) - Printable checklist
 
-**Quick Checklist:** [DEPLOYMENT_QUICK_CHECKLIST.md](DEPLOYMENT_QUICK_CHECKLIST.md) - Printable checklist
+**Mobile Deployment:**
+
+- 📱 [MOBILE_DEPLOYMENT_GUIDE.md](MOBILE_DEPLOYMENT_GUIDE.md) - iOS & Android deployment
 
 **More Resources:**
 
