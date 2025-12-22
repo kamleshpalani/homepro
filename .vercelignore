@@ -1,0 +1,29 @@
+# Ignore mobile app (not deployable to Vercel)
+frontend/mobile-app/
+
+# Ignore documentation (except what's needed)
+*.md
+!README.md
+
+# Ignore development files
+.git/
+.github/
+.vscode/
+.idea/
+
+# Ignore logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Ignore test files
+**/*.test.js
+**/*.spec.js
+__tests__/
+coverage/
+
+# Ignore development configs
+.eslintrc*
+.prettierrc*
+tsconfig.json
+jsconfig.json

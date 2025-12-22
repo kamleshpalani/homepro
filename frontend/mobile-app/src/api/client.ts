@@ -1,7 +1,13 @@
 import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
+import Constants from "expo-constants";
 
-const API_URL = "http://localhost:4000"; // localhost for browser testing
+// Use environment variable or fallback to localhost
+const API_URL =
+  Constants.expoConfig?.extra?.apiUrl ||
+  process.env.EXPO_PUBLIC_API_URL ||
+  "http://localhost:4000";
+
 const TOKEN_KEY = "HOMECAREPRO_CUSTOMER_TOKEN";
 
 let authToken: string | null = null;

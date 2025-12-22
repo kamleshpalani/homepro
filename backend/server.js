@@ -572,14 +572,31 @@ const subscriptionSchema = new mongoose.Schema(
 const Subscription = mongoose.model("Subscription", subscriptionSchema);
 
 // ---- MIDDLEWARES ----
-// allow both Vite ports while developing
+// Dynamic CORS configuration for Vercel deployment
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:8081",
+  process.env.FRONTEND_URL, // Add your Vercel frontend URL in env
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:8081",
-    ],
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+
+      // Allow if origin is in allowedOrigins or matches Vercel preview URLs
+      if (
+        allowedOrigins.indexOf(origin) !== -1 ||
+        origin.includes(".vercel.app")
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
   })
 );
 app.use(express.json());
@@ -1888,6 +1905,12 @@ app.put("/api/subscriptions/:id", requireCustomer, async (req, res) => {
 });
 
 // ---- START SERVER ----
-app.listen(PORT, () => {
-  console.log(`🚀 Backend server running on http://localhost:${PORT}`);
-});
+// For local development
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`🚀 Backend server running on http://localhost:${PORT}`);
+  });
+}
+
+// Export for Vercel serverless functions
+module.exports = app;
