@@ -2,20 +2,32 @@
   "expo": {
     "name": "HomePro Mobile",
     "slug": "homepro-mobile",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "homepro",
     "userInterfaceStyle": "light",
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.homepro.mobile",
+      "buildNumber": "1"
     },
     "android": {
-      "package": "com.homepro.mobile"
+      "package": "com.homepro.mobile",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#10b981"
+      }
     },
     "web": {
       "bundler": "metro",
       "output": "single"
+    },
+    "owner": "kamleshpalani",
+    "extra": {
+      "eas": {
+        "projectId": "40055468-2fca-44c4-8006-1b9c8489de0f"
+      }
     }
   }
 }
